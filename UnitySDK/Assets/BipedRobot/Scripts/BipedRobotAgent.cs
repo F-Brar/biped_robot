@@ -11,9 +11,9 @@ public class BipedRobotAgent : Agent
     /**< \brief Last set of Actions*/
     public List<float> Actions;
 
-    [Header("Specific to Walker")]
+    //[Header("Specific to Walker")]
     [Header("Target To Walk Towards")]
-    [Space(10)]
+    //[Space(10)]
     public Transform target;
     
 
@@ -31,6 +31,7 @@ public class BipedRobotAgent : Agent
     public Transform forearmR;
     public Transform handR;
     */
+    public Transform hips;
     public Transform body;
     //public Transform body;
     public Transform thighL;
@@ -48,10 +49,12 @@ public class BipedRobotAgent : Agent
     public override void InitializeAgent()
     {
         jdController = GetComponent<RobotJointDriveController>();
+        //Debug.Log("body: " + body.name);
         jdController.SetupBodyPart(body);
         //jdController.SetupBodyPart(chest);
         //jdController.SetupBodyPart(spine);
         //jdController.SetupBodyPart(head);
+        jdController.SetupBodyPart(hips);
         jdController.SetupBodyPart(thighL);
         jdController.SetupBodyPart(shinL);
         jdController.SetupBodyPart(footL);
@@ -95,11 +98,11 @@ public class BipedRobotAgent : Agent
         jdController.GetCurrentJointForces();
 
         AddVectorObs(dirToTarget.normalized);
-        AddVectorObs(jdController.bodyPartsDict[body].rb.position);
+        AddVectorObs(jdController.robotBodyPartsDict[body].rb.position);
         AddVectorObs(body.forward);
         AddVectorObs(body.up);
 
-        foreach (var bodyPart in jdController.bodyPartsDict.Values)
+        foreach (var bodyPart in jdController.robotBodyPartsDict.Values)
         {
             CollectObservationBodyPart(bodyPart);
         }
@@ -110,17 +113,17 @@ public class BipedRobotAgent : Agent
         Actions = vectorAction
                 .Select(x => x)
                 .ToList();
-        dirToTarget = target.position - jdController.bodyPartsDict[body].rb.position;
+        dirToTarget = target.position - jdController.robotBodyPartsDict[hips].rb.position;
 
         // Apply action to all relevant body parts. 
         if (isNewDecisionStep)
         {
-            var bpDict = jdController.bodyPartsDict;
+            var bpDict = jdController.robotBodyPartsDict;
             int i = -1;
 
             //bpDict[chest].SetJointTargetRotation(vectorAction[++i], vectorAction[++i], vectorAction[++i]);
             //bpDict[spine].SetJointTargetRotation(vectorAction[++i], vectorAction[++i], vectorAction[++i]);
-
+            bpDict[body].SetJointTargetRotation(vectorAction[++i], 0, 0);
             bpDict[thighL].SetJointTargetRotation(vectorAction[++i], vectorAction[++i], 0);
             bpDict[thighR].SetJointTargetRotation(vectorAction[++i], vectorAction[++i], 0);
             bpDict[shinL].SetJointTargetRotation(vectorAction[++i], 0, 0);
@@ -139,6 +142,7 @@ public class BipedRobotAgent : Agent
             //bpDict[chest].SetJointStrength(vectorAction[++i]);
             //bpDict[spine].SetJointStrength(vectorAction[++i]);
             //bpDict[head].SetJointStrength(vectorAction[++i]);
+            bpDict[body].SetJointStrength(vectorAction[++i]);
             bpDict[thighL].SetJointStrength(vectorAction[++i]);
             bpDict[shinL].SetJointStrength(vectorAction[++i]);
             bpDict[footL].SetJointStrength(vectorAction[++i]);
@@ -149,6 +153,7 @@ public class BipedRobotAgent : Agent
             //bpDict[forearmL].SetJointStrength(vectorAction[++i]);
             //bpDict[armR].SetJointStrength(vectorAction[++i]);
             //bpDict[forearmR].SetJointStrength(vectorAction[++i]);
+
         }
 
         IncrementDecisionTimer();
@@ -159,10 +164,10 @@ public class BipedRobotAgent : Agent
         // c. Encourage head height.
         // d. Discourage head movement.
         AddReward(
-            +0.03f * Vector3.Dot(dirToTarget.normalized, jdController.bodyPartsDict[body].rb.velocity)
+            +0.03f * Vector3.Dot(dirToTarget.normalized, jdController.robotBodyPartsDict[body].rb.velocity)
             + 0.01f * Vector3.Dot(dirToTarget.normalized, body.forward)
-            + 0.02f * (body.position.y - body.root.position.y)
-            - 0.01f * GetEffort()
+            + 0.02f * (jdController.robotBodyPartsDict[body].rb.centerOfMass.y - 1)//(body.position.y - body.root.position.y)
+            //- 0.0001f// * GetEffort()
             //- 0.01f * Vector3.Distance(jdController.bodyPartsDict[head].rb.velocity,jdController.bodyPartsDict[body].rb.velocity)
         );
     }
@@ -185,6 +190,16 @@ public class BipedRobotAgent : Agent
 
         return (float)effort;
     }
+    /*
+    internal float GetUprightBonus(string bodyPart)
+    {
+        var toFocalAngle = BodyPartsToFocalRoation[bodyPart] * -BodyParts[bodyPart].transform.forward;
+        var angleFromUp = Vector3.Angle(toFocalAngle, Vector3.up);
+        var qpos2 = (angleFromUp % 180) / 180;
+        var uprightBonus = 0.5f * (2 - (Mathf.Abs(qpos2) * 2) - 1);
+        return uprightBonus;
+    }*/
+
 
     /// <summary>
     /// Only change the joint settings based on decision frequency.
@@ -213,8 +228,8 @@ public class BipedRobotAgent : Agent
         {
             transform.rotation = Quaternion.LookRotation(dirToTarget);
         }
-
-        foreach (var bodyPart in jdController.bodyPartsDict.Values)
+        
+        foreach (var bodyPart in jdController.robotBodyPartsDict.Values)
         {
             bodyPart.Reset(bodyPart);
         }

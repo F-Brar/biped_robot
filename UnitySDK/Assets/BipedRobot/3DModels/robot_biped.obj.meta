@@ -1,0 +1,276 @@
+fileFormatVersion: 2
+guid: fc24ed4251d15de4cab03eddee81d9c4
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: ancle_L_Sphere.006_M_joint
+    100002: ancle_R_Sphere.011_M_joint
+    100004: blendBack_Circle.002_M_blends
+    100006: blendHead_Sphere.000_M_blends
+    100008: blendShin_L_Plane_M_blends
+    100010: blendShin_R_Plane.005_M_blends
+    100012: blendThigh_L_Plane.003_M_blends
+    100014: blendThigh_R_Plane.004_M_blends
+    100016: eye_Sphere.003_M_eye
+    100018: eye_Sphere.003_M_eye_ring
+    100020: foot_L_Torus_M_feet
+    100022: foot_R_Torus.002_M_feet
+    100024: head_Sphere.002_M_eye
+    100026: head_Sphere.002_M_head
+    100028: knee_L_Sphere.009_M_joint
+    100030: knee_R_Sphere.010_M_joint
+    100032: leg_L_Sphere.008_M_joint
+    100034: leg_R_Sphere.007_M_joint
+    100036: leg_socket_L_Torus.001_M_blends
+    100038: leg_socket_R_Torus.003_M_blends
+    100040: legBlend_L_Plane.006_M_blends
+    100042: legBlend_R_Plane.001_M_blends
+    100044: pupil_Circle_m_pupil
+    100046: //RootNode
+    100048: shin_L_Cylinder.001_M_leg
+    100050: shin_R_Cylinder.003_M_leg
+    100052: thigh_L_Cylinder_M_leg
+    100054: thigh_R_Cylinder.002_M_leg
+    400000: ancle_L_Sphere.006_M_joint
+    400002: ancle_R_Sphere.011_M_joint
+    400004: blendBack_Circle.002_M_blends
+    400006: blendHead_Sphere.000_M_blends
+    400008: blendShin_L_Plane_M_blends
+    400010: blendShin_R_Plane.005_M_blends
+    400012: blendThigh_L_Plane.003_M_blends
+    400014: blendThigh_R_Plane.004_M_blends
+    400016: eye_Sphere.003_M_eye
+    400018: eye_Sphere.003_M_eye_ring
+    400020: foot_L_Torus_M_feet
+    400022: foot_R_Torus.002_M_feet
+    400024: head_Sphere.002_M_eye
+    400026: head_Sphere.002_M_head
+    400028: knee_L_Sphere.009_M_joint
+    400030: knee_R_Sphere.010_M_joint
+    400032: leg_L_Sphere.008_M_joint
+    400034: leg_R_Sphere.007_M_joint
+    400036: leg_socket_L_Torus.001_M_blends
+    400038: leg_socket_R_Torus.003_M_blends
+    400040: legBlend_L_Plane.006_M_blends
+    400042: legBlend_R_Plane.001_M_blends
+    400044: pupil_Circle_m_pupil
+    400046: //RootNode
+    400048: shin_L_Cylinder.001_M_leg
+    400050: shin_R_Cylinder.003_M_leg
+    400052: thigh_L_Cylinder_M_leg
+    400054: thigh_R_Cylinder.002_M_leg
+    2100000: M_joint
+    2100002: M_blends
+    2100004: M_eye
+    2100006: M_eye_ring
+    2100008: M_feet
+    2100010: M_head
+    2100012: m_pupil
+    2100014: M_leg
+    2300000: ancle_L_Sphere.006_M_joint
+    2300002: ancle_R_Sphere.011_M_joint
+    2300004: blendBack_Circle.002_M_blends
+    2300006: blendHead_Sphere.000_M_blends
+    2300008: blendShin_L_Plane_M_blends
+    2300010: blendShin_R_Plane.005_M_blends
+    2300012: blendThigh_L_Plane.003_M_blends
+    2300014: blendThigh_R_Plane.004_M_blends
+    2300016: eye_Sphere.003_M_eye
+    2300018: eye_Sphere.003_M_eye_ring
+    2300020: foot_L_Torus_M_feet
+    2300022: foot_R_Torus.002_M_feet
+    2300024: head_Sphere.002_M_eye
+    2300026: head_Sphere.002_M_head
+    2300028: knee_L_Sphere.009_M_joint
+    2300030: knee_R_Sphere.010_M_joint
+    2300032: leg_L_Sphere.008_M_joint
+    2300034: leg_R_Sphere.007_M_joint
+    2300036: leg_socket_L_Torus.001_M_blends
+    2300038: leg_socket_R_Torus.003_M_blends
+    2300040: legBlend_L_Plane.006_M_blends
+    2300042: legBlend_R_Plane.001_M_blends
+    2300044: pupil_Circle_m_pupil
+    2300046: shin_L_Cylinder.001_M_leg
+    2300048: shin_R_Cylinder.003_M_leg
+    2300050: thigh_L_Cylinder_M_leg
+    2300052: thigh_R_Cylinder.002_M_leg
+    3300000: ancle_L_Sphere.006_M_joint
+    3300002: ancle_R_Sphere.011_M_joint
+    3300004: blendBack_Circle.002_M_blends
+    3300006: blendHead_Sphere.000_M_blends
+    3300008: blendShin_L_Plane_M_blends
+    3300010: blendShin_R_Plane.005_M_blends
+    3300012: blendThigh_L_Plane.003_M_blends
+    3300014: blendThigh_R_Plane.004_M_blends
+    3300016: eye_Sphere.003_M_eye
+    3300018: eye_Sphere.003_M_eye_ring
+    3300020: foot_L_Torus_M_feet
+    3300022: foot_R_Torus.002_M_feet
+    3300024: head_Sphere.002_M_eye
+    3300026: head_Sphere.002_M_head
+    3300028: knee_L_Sphere.009_M_joint
+    3300030: knee_R_Sphere.010_M_joint
+    3300032: leg_L_Sphere.008_M_joint
+    3300034: leg_R_Sphere.007_M_joint
+    3300036: leg_socket_L_Torus.001_M_blends
+    3300038: leg_socket_R_Torus.003_M_blends
+    3300040: legBlend_L_Plane.006_M_blends
+    3300042: legBlend_R_Plane.001_M_blends
+    3300044: pupil_Circle_m_pupil
+    3300046: shin_L_Cylinder.001_M_leg
+    3300048: shin_R_Cylinder.003_M_leg
+    3300050: thigh_L_Cylinder_M_leg
+    3300052: thigh_R_Cylinder.002_M_leg
+    4300000: ancle_L_Sphere.006_M_joint
+    4300002: ancle_R_Sphere.011_M_joint
+    4300004: blendBack_Circle.002_M_blends
+    4300006: blendHead_Sphere.000_M_blends
+    4300008: blendShin_L_Plane_M_blends
+    4300010: blendShin_R_Plane.005_M_blends
+    4300012: blendThigh_L_Plane.003_M_blends
+    4300014: blendThigh_R_Plane.004_M_blends
+    4300016: eye_Sphere.003_M_eye
+    4300018: eye_Sphere.003_M_eye_ring
+    4300020: foot_L_Torus_M_feet
+    4300022: foot_R_Torus.002_M_feet
+    4300024: head_Sphere.002_M_eye
+    4300026: head_Sphere.002_M_head
+    4300028: knee_L_Sphere.009_M_joint
+    4300030: knee_R_Sphere.010_M_joint
+    4300032: leg_L_Sphere.008_M_joint
+    4300034: leg_R_Sphere.007_M_joint
+    4300036: leg_socket_L_Torus.001_M_blends
+    4300038: leg_socket_R_Torus.003_M_blends
+    4300040: legBlend_L_Plane.006_M_blends
+    4300042: legBlend_R_Plane.001_M_blends
+    4300044: pupil_Circle_m_pupil
+    4300046: shin_L_Cylinder.001_M_leg
+    4300048: shin_R_Cylinder.003_M_leg
+    4300050: thigh_L_Cylinder_M_leg
+    4300052: thigh_R_Cylinder.002_M_leg
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_blends
+    second: {fileID: 2100000, guid: 15bb4d8f8a3ed6e4eaaa9b8b8a34d78f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_eye
+    second: {fileID: 2100000, guid: 9dfc30931f5a3a746b8aacfc452c35aa, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_eye_ring
+    second: {fileID: 2100000, guid: a6d319872d9219946b40bbc721802351, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_feet
+    second: {fileID: 2100000, guid: 7f342b1af176cf04e836b98287dead78, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_head
+    second: {fileID: 2100000, guid: dcc979bd99eab364bbea9bd489ec750a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_joint
+    second: {fileID: 2100000, guid: 1249330a38f8d7847aee7a51cb00b901, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_leg
+    second: {fileID: 2100000, guid: 4dda5375050381243a135e9694a63c93, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: m_pupil
+    second: {fileID: 2100000, guid: cef8ffe1b887f524da7e8963d88a5330, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

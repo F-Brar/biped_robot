@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BipedRobotBrain
   m_EditorClassIdentifier: 
   brainParameters:
-    vectorObservationSize: 100
+    vectorObservationSize: 116
     numStackedVectorObservations: 5
     vectorActionSize: 14000000
     cameraResolutions: []
@@ -39,5 +39,5 @@ MonoBehaviour:
     - 
     - 
     vectorActionSpaceType: 1
-  model: {fileID: 0}
+  model: {fileID: 11400000, guid: d2988b0e19fbe554388746ed6932c2be, type: 3}
   inferenceDevice: 0
