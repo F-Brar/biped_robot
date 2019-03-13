@@ -18,7 +18,7 @@ namespace MLAgents
 
         [Header("Ground & Target Contact")]
         [Space(10)]
-        public GroundContact groundContact;
+        public RobotGroundContact groundContact;
         public TargetContact targetContact;
 
         [HideInInspector] public RobotJointDriveController thisRobotJDController;
@@ -126,15 +126,15 @@ namespace MLAgents
             bp.rb.maxAngularVelocity = 100;
 
             // Add & setup the ground contact script
-            bp.groundContact = t.GetComponent<GroundContact>();
+            bp.groundContact = t.GetComponent<RobotGroundContact>();
             if (!bp.groundContact)
             {
-                bp.groundContact = t.gameObject.AddComponent<GroundContact>();
-                //bp.groundContact.agent = gameObject.GetComponent<Agent>();
+                bp.groundContact = t.gameObject.AddComponent<RobotGroundContact>();
+                bp.groundContact.agent = gameObject.GetComponent<BipedRobotAgent>();
             }
             else
             {
-                //bp.groundContact.agent = gameObject.GetComponent<Agent>();
+                bp.groundContact.agent = gameObject.GetComponent<BipedRobotAgent>();
             }
 
             // Add & setup the target contact script
