@@ -19,7 +19,7 @@ public class SteerBipedRobotAgent : Agent
     public bool ShouldJump;
     public float CurrentVelocityZ;
     public int StepsUntilNextTarget;
-
+    public Transform ground;
 
     public Transform hips;
     public Transform body;
@@ -42,6 +42,10 @@ public class SteerBipedRobotAgent : Agent
 
     public override void InitializeAgent()
     {
+        if (!ground)
+        {
+            ground = GameObject.FindGameObjectWithTag("ground").transform;
+        }
         jdController = GetComponent<SteerRobotJointDriveController>();
         jdController.SetupBodyPart(body);
         jdController.SetupBodyPart(hips);
@@ -149,39 +153,65 @@ public class SteerBipedRobotAgent : Agent
         // d. Discourage head movement.
 
         //  var jumpBonus = ShouldJump ? GetRewardJump() : 0f;
-
+        float speed = 1;
+        TargetVelocityZ = TargetVelocityZ * speed;
         CurrentVelocityZ = GetAverageVelocity(hips);
         //float velocityReward = 1f - (Mathf.Abs(TargetVelocityZ - CurrentVelocityZ) * 1.2f);
-        float velocityDiff = TargetVelocityZ - CurrentVelocityZ;
+        float velocityDiff = Mathf.Abs(CurrentVelocityZ - TargetVelocityZ);
+
         currentVelocityField = CurrentVelocityZ.ToString();
         velocityRewardField = velocityDiff.ToString();
         //velocityReward = Mathf.Clamp(velocityReward, -1f, 1f);
 
 
-        //float effort = GetEffort();
-        // var effortPenality = 1e-2f * (float)effort;
-        //var effortPenality = 3e-1f * (float)effort;
-        Vector3 direction = new Vector3(0, 0, TargetVelocityZ);
-
+        float effort = GetEffort();
+         //var effortPenality = 1e-2f * (float)effort;
+        //var effortPenality = (float)effort;
+        //Vector3 direction = new Vector3(0, 0, TargetVelocityZ);
+        float aliveBonus = 0.001f;
 
         AddReward(
-            - velocityDiff   //encourage agent to match velocity
-            + 0.02f * (body.position.y - hips.position.y)       //encourage body height
-            + 0.03f * Vector3.Dot(direction, jdController.robotBodyPartsDict[body].rb.velocity)
+            //- 0.03f * velocityDiff   //encourage agent to match velocity
+            //+ 0.02f * (jdController.robotBodyPartsDict[body].rb.centerOfMass.y - ground.position.y)       //encourage body height
+            + 0.03f * Vector3.Dot(Vector3.forward, jdController.robotBodyPartsDict[body].rb.velocity)
             + 0.01f * Vector3.Dot(Vector3.forward, body.forward)
-            - 0.01f * Vector3.Distance(jdController.robotBodyPartsDict[body].rb.velocity,
-                jdController.robotBodyPartsDict[hips].rb.velocity)      //discourage head movement
-
-        //+0.03f * Vector3.Dot(dirToTarget.normalized, jdController.robotBodyPartsDict[body].rb.velocity)
-        //+ 0.01f * Vector3.Dot(dirToTarget.normalized, body.forward)     //dotproduct ist positiv wenn der Winkel spitz ist, also in dieselbe Richtung zeigt.
-        //+ jumpBonus
-        //- effortPenality
-        //+ 0.02f * (jdController.robotBodyPartsDict[body].rb.centerOfMass.y - 1)//(body.position.y - body.root.position.y)
-        //- 1f / agentParameters.maxStep  //// Penalty given each step to encourage agent to finish task quickly
-        //- 0.01f * Vector3.Distance(jdController.bodyPartsDict[head].rb.velocity,jdController.bodyPartsDict[body].rb.velocity)
-        );
+            //+ 0.01f * Vector3.Dot(Vector3.up, body.up);   //encourage body to stay upward
+            //- 0.01f * Vector3.Distance(jdController.robotBodyPartsDict[body].rb.velocity,
+            //    jdController.robotBodyPartsDict[hips].rb.velocity)      //discourage head movement
+                                                                        //+0.03f * Vector3.Dot(dirToTarget.normalized, jdController.robotBodyPartsDict[body].rb.velocity)
+                                                                        //+ 0.01f * Vector3.Dot(dirToTarget.normalized, body.forward)     //dotproduct ist positiv wenn der Winkel spitz ist, also in dieselbe Richtung zeigt.
+                                                                        //+ jumpBonus
+            //- 0.01f * effort
+            //+ aliveBonus
+            //+ 0.02f * (jdController.robotBodyPartsDict[body].rb.centerOfMass.y - 1)//(body.position.y - body.root.position.y)
+            //- 1f / agentParameters.maxStep  //// Penalty given each step to encourage agent to finish task quickly
+            //- 0.01f * Vector3.Distance(jdController.bodyPartsDict[head].rb.velocity,jdController.bodyPartsDict[body].rb.velocity)
+            );
         //controllerAgent.LowerStepReward(CurrentVelocityZ);
     }
+
+    internal float GetAverageVelocity(Transform bodyPart = null)
+    {
+        var v = GetVelocity(bodyPart);
+        recentVelocity.Add(v);
+        if (recentVelocity.Count >= 20)
+            recentVelocity.RemoveAt(0);
+        return recentVelocity.Average();
+    }
+
+    internal float GetVelocity(Transform bodyPart = null)
+    {
+        float rawVelocity = 0f;
+        if (bodyPart != null)
+            rawVelocity = jdController.robotBodyPartsDict[bodyPart].rb.velocity.z;
+        else
+            rawVelocity = jdController.robotBodyPartsDict[hips].rb.velocity.z;
+
+        //var maxSpeed = 4f; // velocity = meters per second : 4
+        var velocity = rawVelocity; // /maxSpeed;
+        return velocity;
+    }
+
 
     internal float GetEffort(string[] ignorJoints = null)
     {
@@ -260,27 +290,7 @@ public class SteerBipedRobotAgent : Agent
     }
 
 
-    internal float GetAverageVelocity(Transform bodyPart = null)
-    {
-        var v = GetVelocity(bodyPart);
-        recentVelocity.Add(v);
-        if (recentVelocity.Count >= 10)
-            recentVelocity.RemoveAt(0);
-        return recentVelocity.Average();
-    }
 
-    internal float GetVelocity(Transform bodyPart = null)
-    {
-        float rawVelocity = 0f;
-        if (bodyPart != null)
-            rawVelocity = jdController.robotBodyPartsDict[bodyPart].rb.velocity.z;
-        else
-            rawVelocity = jdController.robotBodyPartsDict[hips].rb.velocity.z;
-
-        //var maxSpeed = 4f; // meters per second 4
-        var velocity = rawVelocity;// / maxSpeed;
-        return velocity;
-    }
 }
 
 

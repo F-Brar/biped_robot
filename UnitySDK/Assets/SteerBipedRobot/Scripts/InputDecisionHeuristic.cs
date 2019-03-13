@@ -42,6 +42,7 @@ public class InputDecisionHeuristic : Decision
         Action = (int)memory[1];
         JumpAction = (int)memory[2];
 
+        
         memory[0]--;
         if (memory[0] <= 0)
         {
@@ -71,7 +72,8 @@ public class InputDecisionHeuristic : Decision
             memory[1] = (float)Action;
             memory[2] = (float)JumpAction;
         }
-        float[] ActionList = new float[2] { Action, JumpAction };
+        //float[] ActionList = new float[2] { Action, JumpAction };
+        float[] ActionList = new float[2] { 1, JumpAction };
         return ActionList;
     }
 
