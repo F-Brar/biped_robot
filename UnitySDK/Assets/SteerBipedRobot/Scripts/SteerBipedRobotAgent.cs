@@ -6,27 +6,20 @@ using System.Linq;
 
 public class SteerBipedRobotAgent : Agent
 {
+    public string currentVelocityField;
+    public string velocityRewardField;
 
     [Tooltip("Last set of Actions")]
     /**< \brief Last set of Actions*/
     public List<float> Actions;
 
-    //[Header("Specific to Walker")]
-    [Header("Target To Walk Towards")]
-    //[Space(10)]
-    public Transform target;
-
-    [Tooltip("continouos walking speed - 0 = standing")]
-    public float desiredSpeed;
-    //or
-    public float TargetVelocityX;
+    public float TargetVelocityZ;
 
 
     public bool ShouldJump;
-    public float CurrentVelocityX;
+    public float CurrentVelocityZ;
     public int StepsUntilNextTarget;
 
-    Vector3 dirToTarget;
 
     public Transform hips;
     public Transform body;
@@ -37,9 +30,15 @@ public class SteerBipedRobotAgent : Agent
     public Transform shinR;
     public Transform footR;
 
+    public bool feetTouchingGround;
+
     SteerRobotJointDriveController jdController;
     bool isNewDecisionStep;
     int currentDecisionStep;
+    ControllerAgent controllerAgent;
+    List<float> recentVelocity;
+
+
 
     public override void InitializeAgent()
     {
@@ -73,6 +72,11 @@ public class SteerBipedRobotAgent : Agent
             AddVectorObs(bp.currentZNormalizedRot);
             AddVectorObs(bp.currentStrength / jdController.maxJointForceLimit);
         }
+        else
+        {
+            AddVectorObs(footL.position.y);
+            AddVectorObs(footR.position.y);
+        }
     }
 
     /// <summary>
@@ -80,19 +84,27 @@ public class SteerBipedRobotAgent : Agent
     /// </summary>
     public override void CollectObservations()
     {
+        //Observe input
+        TargetVelocityZ = controllerAgent.AxisX;
+        ShouldJump = controllerAgent.Jump;
+
+        AddVectorObs(TargetVelocityZ);
+        AddVectorObs(CurrentVelocityZ);
+        AddVectorObs(ShouldJump);
+
         jdController.GetCurrentJointForces();
 
-        AddVectorObs(dirToTarget.normalized);
 
         //AddVectorObs(jdController.robotBodyPartsDict[body].rb.position);
         AddVectorObs(body.forward);
         AddVectorObs(body.up);
 
-        AddVectorObs(ShouldJump);
+
 
         foreach (var bodyPart in jdController.robotBodyPartsDict.Values)
         {
             CollectObservationBodyPart(bodyPart);
+
         }
     }
 
@@ -102,8 +114,6 @@ public class SteerBipedRobotAgent : Agent
         Actions = vectorAction
                 .Select(x => x)
                 .ToList();
-
-        dirToTarget = target.position - jdController.robotBodyPartsDict[hips].rb.position;
 
         // Apply action to all relevant body parts. 
         if (isNewDecisionStep)
@@ -138,16 +148,38 @@ public class SteerBipedRobotAgent : Agent
         // c. Encourage head height.
         // d. Discourage head movement.
 
-        var jumpBonus = ShouldJump ? GetRewardJump() : 0f;
+        //  var jumpBonus = ShouldJump ? GetRewardJump() : 0f;
+
+        //CurrentVelocityZ = GetAverageVelocity(hips);
+        //float velocityReward = 1f - (Mathf.Abs(TargetVelocityZ - CurrentVelocityZ) * 1.2f);
+        //currentVelocityField = CurrentVelocityZ.ToString();
+        //velocityRewardField = velocityReward.ToString();
+        //velocityReward = Mathf.Clamp(velocityReward, -1f, 1f);
+
+
+        //float effort = GetEffort();
+        // var effortPenality = 1e-2f * (float)effort;
+        //var effortPenality = 3e-1f * (float)effort;
+        Vector3 direction = new Vector3(0, 0, TargetVelocityZ);
+
 
         AddReward(
-            +0.03f * Vector3.Dot(dirToTarget.normalized, jdController.robotBodyPartsDict[body].rb.velocity)
-            + 0.01f * Vector3.Dot(dirToTarget.normalized, body.forward)     //dotproduct ist positiv wenn der Winkel spitz ist, also in dieselbe Richtung zeigt.
-            + jumpBonus
-            //+ 0.02f * (jdController.robotBodyPartsDict[body].rb.centerOfMass.y - 1)//(body.position.y - body.root.position.y)
-            //- 1f / agentParameters.maxStep  //// Penalty given each step to encourage agent to finish task quickly
-            //- 0.01f * Vector3.Distance(jdController.bodyPartsDict[head].rb.velocity,jdController.bodyPartsDict[body].rb.velocity)
+            //velocityReward
+            + 0.02f * (body.position.y - hips.position.y)       //encourage body height
+            + 0.03f * Vector3.Dot(direction.normalized, jdController.robotBodyPartsDict[body].rb.velocity)
+            + 0.01f * Vector3.Dot(Vector3.forward, body.forward)
+            - 0.01f * Vector3.Distance(jdController.robotBodyPartsDict[body].rb.velocity,
+                jdController.robotBodyPartsDict[hips].rb.velocity)      //discourage head movement
+
+        //+0.03f * Vector3.Dot(dirToTarget.normalized, jdController.robotBodyPartsDict[body].rb.velocity)
+        //+ 0.01f * Vector3.Dot(dirToTarget.normalized, body.forward)     //dotproduct ist positiv wenn der Winkel spitz ist, also in dieselbe Richtung zeigt.
+        //+ jumpBonus
+        //- effortPenality
+        //+ 0.02f * (jdController.robotBodyPartsDict[body].rb.centerOfMass.y - 1)//(body.position.y - body.root.position.y)
+        //- 1f / agentParameters.maxStep  //// Penalty given each step to encourage agent to finish task quickly
+        //- 0.01f * Vector3.Distance(jdController.bodyPartsDict[head].rb.velocity,jdController.bodyPartsDict[body].rb.velocity)
         );
+        //controllerAgent.LowerStepReward(CurrentVelocityZ);
     }
 
     internal float GetEffort(string[] ignorJoints = null)
@@ -192,10 +224,11 @@ public class SteerBipedRobotAgent : Agent
     /// </summary>
     public override void AgentReset()
     {
-        if (dirToTarget != Vector3.zero)
-        {
-            transform.rotation = Quaternion.LookRotation(dirToTarget);
-        }
+
+        if (controllerAgent == null)
+            controllerAgent = GetComponent<ControllerAgent>();
+        //else
+            //controllerAgent.LowerEpisodeEnd(this);
         
         foreach (var bodyPart in jdController.robotBodyPartsDict.Values)
         {
@@ -204,31 +237,49 @@ public class SteerBipedRobotAgent : Agent
 
         isNewDecisionStep = true;
         currentDecisionStep = 1;
+
+        recentVelocity = new List<float>();
     }
 
     /// <summary>
-    /// returns reward if both feet off ground
+    /// returns reward if both feet off ground + jump height
     /// </summary>
     /// <returns></returns>
     float GetRewardJump()
     {
-        var footL = jdController.robotBodyPartsDict[this.footL];
-        var footHeightL = this.footL.position.y;
-
-        var footR = jdController.robotBodyPartsDict[this.footR];
-        var footHeightR = this.footR.position.y;
-
         var jumpReward = 0f;
-        /*
-        if (SensorIsInTouch[0] == 0)
+        var footHeight = Mathf.Min(this.footR.position.y, this.footL.position.y);
+
+        if (feetTouchingGround == false)
         {
             jumpReward += 1f;
             jumpReward += footHeight;
-        }*/
+        }
         return jumpReward;
     }
 
 
+    internal float GetAverageVelocity(Transform bodyPart = null)
+    {
+        var v = GetVelocity(bodyPart);
+        recentVelocity.Add(v);
+        if (recentVelocity.Count >= 10)
+            recentVelocity.RemoveAt(0);
+        return recentVelocity.Average();
+    }
+
+    internal float GetVelocity(Transform bodyPart = null)
+    {
+        float rawVelocity = 0f;
+        if (bodyPart != null)
+            rawVelocity = jdController.robotBodyPartsDict[bodyPart].rb.velocity.z;
+        else
+            rawVelocity = jdController.robotBodyPartsDict[hips].rb.velocity.z;
+
+        //var maxSpeed = 4f; // meters per second 4
+        var velocity = rawVelocity;// / maxSpeed;
+        return velocity;
+    }
 }
 
 

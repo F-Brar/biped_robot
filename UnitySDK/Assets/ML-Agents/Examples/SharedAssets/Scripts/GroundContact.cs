@@ -12,7 +12,7 @@ namespace MLAgents
     [DisallowMultipleComponent]
     public class GroundContact : MonoBehaviour
     {
-        [HideInInspector] public Agent agent;
+        [HideInInspector] public SteerBipedRobotAgent agent;
 
         [Header("Ground Check")] public bool agentDoneOnGroundContact; // Whether to reset agent on ground contact.
         public bool penalizeGroundContact; // Whether to penalize on contact.
@@ -32,6 +32,11 @@ namespace MLAgents
                 {
                     agent.SetReward(groundContactPenalty);
                 }
+                //currently only feet have no penalty so:
+                else
+                {
+                    agent.feetTouchingGround = true;
+                }
 
                 if (agentDoneOnGroundContact)
                 {
@@ -48,6 +53,10 @@ namespace MLAgents
             if (other.transform.CompareTag(Ground))
             {
                 touchingGround = false;
+                if(penalizeGroundContact == false)
+                {
+                    agent.feetTouchingGround = false;
+                }
             }
         }
     }

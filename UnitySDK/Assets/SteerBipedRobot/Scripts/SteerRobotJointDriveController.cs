@@ -130,11 +130,11 @@ namespace MLAgents
             if (!bp.groundContact)
             {
                 bp.groundContact = t.gameObject.AddComponent<GroundContact>();
-                bp.groundContact.agent = gameObject.GetComponent<Agent>();
+                bp.groundContact.agent = gameObject.GetComponent<SteerBipedRobotAgent>();
             }
             else
             {
-                bp.groundContact.agent = gameObject.GetComponent<Agent>();
+                bp.groundContact.agent = gameObject.GetComponent<SteerBipedRobotAgent>();
             }
 
             // Add & setup the target contact script

@@ -8,28 +8,30 @@ public class ControllerAgent : Agent
 {
     public float AxisX;
     public bool Jump;
-    float lastLowerStepReward;
+
+    //float lastLowerStepReward;
 
     // List<float> actionEntropies = new List<float>();
-    List<float> lowerRewards = new List<float>();
-    List<float> myRewards = new List<float>();
+    //List<float> lowerRewards = new List<float>();
+    //List<float> myRewards = new List<float>();
 
     public override void AgentReset()
     {
         AxisX = 0f;
         // actionEntropies = new List<float>();
-        lowerRewards = new List<float>();
-        myRewards = new List<float>();
+        //lowerRewards = new List<float>();
+        //myRewards = new List<float>();
     }
     public override void CollectObservations()
     {
-        AddVectorObs(AxisX);
-        AddVectorObs(lastLowerStepReward);
+        //AddVectorObs(AxisX);
+        //AddVectorObs(lastLowerStepReward);
     }
     public override void AgentAction(float[] vectorAction, string textAction)
     {
-        int action = (int)vectorAction[0];
-        switch (action)
+        int walkAction = (int)vectorAction[0];
+        int jumpAction = (int)vectorAction[1];
+        switch (walkAction + jumpAction)
         {
             case 0:
                 AxisX = 0f;
@@ -58,8 +60,9 @@ public class ControllerAgent : Agent
             default:
                 throw new NotImplementedException();
         }
-    }
 
+    }
+    /*
     public void LowerStepReward(float stepReward)
     {
         lastLowerStepReward = stepReward;
@@ -93,7 +96,7 @@ public class ControllerAgent : Agent
 
         // SetReward(reward);
         Done();
-    }
+    }*/
 }
 /*
 void Update()
