@@ -122,7 +122,7 @@ public class BipedRobotAgent : Agent
 
         IncrementDecisionTimer();
         var hipsRB = jdController.robotBodyPartsDict[hips].rb;
-        var hipsVelocity = transform.InverseTransformDirection(hipsRB.velocity);
+        //var hipsVelocity = transform.InverseTransformDirection(hipsRB.velocity);
 
         #region OnlyIfTarget
 
@@ -144,7 +144,7 @@ public class BipedRobotAgent : Agent
         AddReward(
             + rotToTarget   //Only if useTarget
             + moveToTarget  //Only if useTarget
-            + 0.02f * (hipsRB.centerOfMass.y - 1)
+            //+ 0.02f * (hipsRB.centerOfMass.y - 1)
             //- 0.01f * Vector3.Distance(jdController.bodyPartsDict[head].rb.velocity,jdController.bodyPartsDict[body].rb.velocity)
         );
     }
