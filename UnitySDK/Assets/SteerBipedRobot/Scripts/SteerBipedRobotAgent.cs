@@ -150,10 +150,11 @@ public class SteerBipedRobotAgent : Agent
 
         //  var jumpBonus = ShouldJump ? GetRewardJump() : 0f;
 
-        //CurrentVelocityZ = GetAverageVelocity(hips);
+        CurrentVelocityZ = GetAverageVelocity(hips);
         //float velocityReward = 1f - (Mathf.Abs(TargetVelocityZ - CurrentVelocityZ) * 1.2f);
-        //currentVelocityField = CurrentVelocityZ.ToString();
-        //velocityRewardField = velocityReward.ToString();
+        float velocityDiff = TargetVelocityZ - CurrentVelocityZ;
+        currentVelocityField = CurrentVelocityZ.ToString();
+        velocityRewardField = velocityDiff.ToString();
         //velocityReward = Mathf.Clamp(velocityReward, -1f, 1f);
 
 
@@ -164,9 +165,9 @@ public class SteerBipedRobotAgent : Agent
 
 
         AddReward(
-            //velocityReward
+            - velocityDiff   //encourage agent to match velocity
             + 0.02f * (body.position.y - hips.position.y)       //encourage body height
-            + 0.03f * Vector3.Dot(direction.normalized, jdController.robotBodyPartsDict[body].rb.velocity)
+            + 0.03f * Vector3.Dot(direction, jdController.robotBodyPartsDict[body].rb.velocity)
             + 0.01f * Vector3.Dot(Vector3.forward, body.forward)
             - 0.01f * Vector3.Distance(jdController.robotBodyPartsDict[body].rb.velocity,
                 jdController.robotBodyPartsDict[hips].rb.velocity)      //discourage head movement
