@@ -41,7 +41,7 @@ namespace MLAgents
         public float currentJointTorqueSqrMag;
         public AnimationCurve jointForceCurve = new AnimationCurve();
         public AnimationCurve jointTorqueCurve = new AnimationCurve();
-
+        public string jointName;
         /// <summary>
         /// Reset body part to initial configuration.
         /// </summary>
@@ -121,7 +121,8 @@ namespace MLAgents
                 rb = t.GetComponent<Rigidbody>(),
                 joint = t.GetComponent<ConfigurableJoint>(),
                 startingPos = t.position,
-                startingRot = t.rotation
+                startingRot = t.rotation,
+                jointName = t.name
             };
             bp.rb.maxAngularVelocity = 100;
 

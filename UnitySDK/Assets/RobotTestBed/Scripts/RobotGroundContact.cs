@@ -19,6 +19,13 @@ namespace MLAgents
         public float groundContactPenalty; // Penalty amount (ex: -1).
         public bool touchingGround;
         private const string Ground = "ground"; // Tag of ground object.
+        private string bodyPartName;
+
+        private void Awake()
+        {
+            bodyPartName = gameObject.name;
+            
+        }
 
         /// <summary>
         /// Check for collision with ground, and optionally penalize agent.
@@ -35,8 +42,16 @@ namespace MLAgents
                 //currently only feet have no penalty so:
                 else
                 {
-                    agent.feetTouchingGround = true;
-                }
+                    if(bodyPartName == "Foot_L")
+                    {
+                        agent.isLeftFootDown = true;
+                    }
+                    else if(bodyPartName == "Foot_R")
+                    {
+                        agent.isRightFootDown = true;
+                    }                    
+                    
+    }
 
                 if (agentDoneOnGroundContact)
                 {
@@ -53,9 +68,14 @@ namespace MLAgents
             if (other.transform.CompareTag(Ground))
             {
                 touchingGround = false;
-                if(penalizeGroundContact == false)
+
+                if (bodyPartName == "Foot_L")
                 {
-                    agent.feetTouchingGround = false;
+                    agent.isLeftFootDown = false;
+                }
+                else if (bodyPartName == "Foot_R")
+                {
+                    agent.isRightFootDown = false;
                 }
             }
         }

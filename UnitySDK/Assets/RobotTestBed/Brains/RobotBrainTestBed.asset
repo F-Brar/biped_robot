@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RobotBrainTestBed
   m_EditorClassIdentifier: 
   brainParameters:
-    vectorObservationSize: 116
+    vectorObservationSize: 110
     numStackedVectorObservations: 5
     vectorActionSize: 14000000
     cameraResolutions: []
@@ -39,5 +39,5 @@ MonoBehaviour:
     - 
     - 
     vectorActionSpaceType: 1
-  model: {fileID: 11400000, guid: 8f41b3ccc821ee64c998c770d79483d7, type: 3}
+  model: {fileID: 11400000, guid: a857c6e714838374686ce2f9bc7833af, type: 3}
   inferenceDevice: 0

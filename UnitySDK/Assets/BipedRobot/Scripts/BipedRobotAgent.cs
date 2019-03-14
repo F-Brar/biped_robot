@@ -15,7 +15,7 @@ public class BipedRobotAgent : Agent
     public bool useTarget;
     Vector3 dirToTarget;
     //Sensors
-    public bool feetTouchingGround;
+    public bool BothFeetDown;
     public bool isLeftFootDown;
     public bool isRightFootDown;
 
@@ -31,11 +31,16 @@ public class BipedRobotAgent : Agent
     public Transform shinR;
     public Transform footR;
 
+    // Parms to set in subclass.AgentReset() 
+    [Tooltip("Reward value to set on termination")]
+    /**< \brief Reward value to set on termination*/
+    protected float OnTerminateRewardValue = -1;
+
     //local vars
     RobotJointDriveController jdController;
     bool isNewDecisionStep;
     int currentDecisionStep;
-    Dictionary<string, Quaternion> BodyPartsToFocalRoation = new Dictionary<string, Quaternion>();  //use this to determine the initial axis
+    Dictionary<string, Quaternion> BodyPartsToFocalRotation = new Dictionary<string, Quaternion>();  //use this to determine the initial axis
 
     public override void InitializeAgent()
     {
@@ -61,8 +66,10 @@ public class BipedRobotAgent : Agent
             focalPoint.z += 10; //forward is z
             var focalPointRotation = rigidbody.rotation;    //copy initial rotation
             focalPointRotation.SetLookRotation(focalPoint - rigidbody.position);    //save forward rotation to determine angle diff
-            BodyPartsToFocalRoation[name] = focalPointRotation;
-            Debug.DrawRay(rigidbody.position, focalPoint - rigidbody.position, Color.red, 5);
+            BodyPartsToFocalRotation[name] = focalPointRotation;                    //in initial condition these are all zero rotations
+            //var EulerAngles = focalPointRotation.eulerAngles;
+            //Debug.DrawRay(rigidbody.position, focalPoint - rigidbody.position, Color.red, 5);
+            
         }
     }
 
@@ -100,13 +107,30 @@ public class BipedRobotAgent : Agent
 
         jdController.GetCurrentJointForces();
         //AddVectorObs(jdController.robotBodyPartsDict[body].rb.position);
+        AddVectorObs(jdController.robotBodyPartsDict[hips].rb.velocity);
         AddVectorObs(hips.forward);
         AddVectorObs(hips.up);
+
+        AddVectorObs(body.forward);
+        AddVectorObs(body.up);
+
+        
 
         foreach (var bodyPart in jdController.robotBodyPartsDict.Values)
         {
             CollectObservationBodyPart(bodyPart);
         }
+    }
+
+    bool TerminateRobot()
+    {
+        //if (TerminateOnNonFootHitTerrain())
+        //    return true;
+        var height = GetHeightPenality(.9f);
+        var angle = GetForwardBonus(hips);
+        bool endOnHeight = height > 0f;
+        bool endOnAngle = (angle < .15f);
+        return endOnHeight || endOnAngle;
     }
 
     public override void AgentAction(float[] vectorAction, string textAction)
@@ -115,9 +139,19 @@ public class BipedRobotAgent : Agent
         {
             dirToTarget = target.position - jdController.robotBodyPartsDict[hips].rb.position;
         }
-        
-        // Apply action to all relevant body parts. 
-        if (isNewDecisionStep)
+
+        if (!IsDone())
+        {
+            bool done = TerminateRobot();
+
+            if (done)
+            {
+                Done();
+                SetReward(OnTerminateRewardValue);
+            }
+        }
+            // Apply action to all relevant body parts. 
+            if (isNewDecisionStep)
         {
             var bpDict = jdController.robotBodyPartsDict;
             int i = -1;
@@ -147,29 +181,46 @@ public class BipedRobotAgent : Agent
 
         #region OnlyIfTarget
 
-        var rotToTarget = 0f;
-        float moveToTarget = 0f;
+        float _rotToTarget = 0f;
+        float _moveToTarget = 0f;
 
         if (useTarget)
         {
-            moveToTarget = Vector3.Dot(dirToTarget.normalized, hipsRB.velocity);
-            rotToTarget = Vector3.Dot(dirToTarget.normalized, hips.forward);
+            _moveToTarget = Vector3.Dot(dirToTarget.normalized, hipsRB.velocity);
+            _rotToTarget = Vector3.Dot(dirToTarget.normalized, hips.forward);
         }
         #endregion
 
-        float headHeight = hipsRB.position.y - head.position.y;
-
+        _velocity = GetVelocity();
+        _heightPenality = GetHeightPenality(1.3f);  //height of body
+        _uprightBonus =
+            ( (GetUprightBonus(hips) / 6)
+            + (GetUprightBonus(body) / 6));
+        _forwardBonus =
+            ( (GetForwardBonus(hips) / 6)
+            + (GetForwardBonus(body) / 6));
+        _headHeightBonus = hipsRB.position.y - head.position.y;
+        float leftThighPenality = Mathf.Abs(GetForwardBonus(thighL));
+        float rightThighPenality = Mathf.Abs(GetBackwardsBonus(thighR));
+        _limbPenalty = leftThighPenality + rightThighPenality;
+        _limbPenalty = Mathf.Min(0.5f, _limbPenalty);   //penalty for moving both legs in the same direction
+        _finalPhaseBonus = GetPhaseBonus();
         // Set reward for this step according to mixture of the following elements.
         // a. Velocity alignment with goal direction.
         // b. Rotation alignment with goal direction.
         // c. Encourage head height.
         // d. Discourage head movement.
-        AddReward(
-            + 0.01f * rotToTarget   //Only if useTarget
-            + 0.03f * moveToTarget  //Only if useTarget
-            + 0.02f * (hipsRB.centerOfMass.y - 1)
-            + 0.02f * headHeight
+        AddReward(_velocity
+            + _uprightBonus
+            + _forwardBonus
+            + _finalPhaseBonus
+            
+            - _limbPenalty
+            - _heightPenality
+            //+ _headHeightBonus
             //- 0.01f * Vector3.Distance(jdController.bodyPartsDict[head].rb.velocity,jdController.bodyPartsDict[body].rb.velocity)
+            + 0.3f * _rotToTarget   //Only if useTarget
+            + 0.5f * _moveToTarget  //Only if useTarget
         );
     }
 
@@ -210,12 +261,10 @@ public class BipedRobotAgent : Agent
 
         isNewDecisionStep = true;
         currentDecisionStep = 1;
+        PhaseBonusInitalize();
+        //recentVelocity = new List<float>();
     }
 
-    // implement phase bonus (reward for left then right)
-    List<bool> _lastSenorState = new List<bool>();
-    int NumSensors = 2; //left food, right food
-    
     public float _phaseBonus;
     public int _phase;
     public float _reward;
@@ -227,13 +276,144 @@ public class BipedRobotAgent : Agent
     public float _limbPenalty;
     public float _jointsAtLimitPenality;
     public float _effortPenality;
-
+    public float _headHeightBonus;
 
     public float LeftMin;
     public float LeftMax;
 
     public float RightMin;
     public float RightMax;
+
+
+    internal float GetVelocity(Transform bodyPart = null)
+    {
+        var dt = Time.fixedDeltaTime;
+        float rawVelocity = 0f;
+        if (bodyPart != null)
+            rawVelocity = jdController.robotBodyPartsDict[bodyPart].rb.velocity.z;
+        else
+            rawVelocity = jdController.robotBodyPartsDict[hips].rb.velocity.z;  //velocity in meters per seconds
+
+        var maxSpeed = 4f; // meters per second
+        var velocity = rawVelocity / maxSpeed;
+        /*
+        if (ShowMonitor)
+        {
+            Monitor.Log("MaxDistance", FocalPointMaxDistanceTraveled.ToString());
+            Monitor.Log("MPH: ", (rawVelocity * 2.236936f).ToString());
+        }*/
+
+        return velocity;
+    }
+
+    /// <summary>
+    /// returns float penalty for falling below maxheight
+    /// </summary>
+    /// <param name="maxHeight"></param>
+    /// <returns></returns>
+    internal float GetHeightPenality(float maxHeight)
+    {
+        var height = GetHeight();   //body height
+        var heightPenality = maxHeight - height;    //difference the set maxheight and the body height
+        heightPenality = Mathf.Clamp(heightPenality, 0f, maxHeight);    //clamp between zero and maxheight
+        return heightPenality;
+    }
+
+    /// <summary>
+    /// get body height over lowest foot
+    /// </summary>
+    /// <returns></returns>
+    internal float GetHeight()
+    {
+        var feetYpos = jdController.robotBodyPartsDict          //oredered list from lowest to highest foot
+            .Where(x => x.Key.name.ToLowerInvariant().Contains("foot"))
+            .Select(x => x.Key.position.y)
+            .OrderBy(x => x)
+            .ToList();
+        float lowestFoot = 0f;
+        if (feetYpos != null && feetYpos.Count != 0)
+            lowestFoot = feetYpos[0];
+        var height = body.transform.position.y - lowestFoot;
+        return height;
+    }
+
+    /// <summary>
+    /// returns upright reward between -1  and 1; positive if the angle between given bodypart and up axis is sharp
+    /// </summary>
+    /// <param name="bodyPart"></param>
+    /// <returns></returns>
+    internal float GetUprightBonus(Transform bodyPart)
+    {
+        var toFocalAngle = BodyPartsToFocalRotation[bodyPart.name] * bodyPart.up;       //bodypartstofocalrot == (0,0,0,1 [real part]) => 1*bodypart.up
+        var angleFromUp = Vector3.Angle(toFocalAngle, Vector3.up);      //check angle between bodypart.up and up
+        var qpos2 = (angleFromUp % 180) / 180;  //normalize the rotation angle
+        var uprightBonus = 0.5f * (2 - (Mathf.Abs(qpos2) * 2) - 1);
+        return uprightBonus;
+    }
+
+    /// <summary>
+    /// /// returns upright reward between -maxbonus  and maxbonus; positive if the angle between given bodypart and direction axis is sharp
+    /// </summary>
+    /// <param name="bodyPart"></param>
+    /// <param name="direction"></param>
+    /// <param name="maxBonus"></param>
+    /// <returns></returns>
+    internal float GetDirectionBonus(Transform bodyPart, Vector3 direction, float maxBonus = 0.5f)
+    {
+        var toFocalAngle = BodyPartsToFocalRotation[bodyPart.name] * bodyPart.forward;
+        //Debug.DrawRay(bodyPart.position, toFocalAngle, Color.yellow, 1);
+        var angle = Vector3.Angle(toFocalAngle, direction);
+        var qpos2 = (angle % 180) / 180;
+        var bonus = maxBonus * (2 - (Mathf.Abs(qpos2) * 2) - 1);
+        //Debug.Log("direction: " + direction + " bonus: " + bonus + " qpos2: " + qpos2 + " angle: " + angle);
+        return bonus;
+    }
+
+    /// <summary>
+    /// leverages directionBonus
+    /// </summary>
+    /// <param name="bodyPart"></param>
+    /// <returns></returns>
+    internal float GetLeftBonus(Transform bodyPart)
+    {
+        var bonus = GetDirectionBonus(bodyPart, Vector3.left);
+        return bonus;
+    }
+    /// <summary>
+    /// leverages directionBonus
+    /// </summary>
+    /// <param name="bodyPart"></param>
+    /// <returns></returns>
+    internal float GetRightBonus(Transform bodyPart)
+    {
+        var bonus = GetDirectionBonus(bodyPart, Vector3.right);
+        return bonus;
+    }
+    /// <summary>
+    /// leverages directionBonus
+    /// </summary>
+    /// <param name="bodyPart"></param>
+    /// <returns></returns>
+    internal float GetForwardBonus(Transform bodyPart)
+    {
+        var bonus = GetDirectionBonus(bodyPart, Vector3.forward);
+        return bonus;
+    }
+    /// <summary>
+    /// leverages directionBonus to get backfacing bonus
+    /// </summary>
+    /// <param name="bodyPart"></param>
+    /// <returns></returns>
+    internal float GetBackwardsBonus(Transform bodyPart)
+    {
+        var bonus = GetDirectionBonus(bodyPart, -Vector3.forward);
+        return bonus;
+    }
+
+    // implement phase bonus (reward for left then right)
+    List<bool> _lastSenorState = new List<bool>();
+    int NumSensors = 2; //left food, right food
+    
 
     void PhaseBonusInitalize()
     {
@@ -260,24 +440,33 @@ public class BipedRobotAgent : Agent
 
     void PhaseSetLeft()
     {
-        var inPhaseToFocalAngle = BodyPartsToFocalRoation["thighL"] * jdController.robotBodyPartsDict[thighL].rb.transform.right;
+        var inPhaseToFocalAngle = BodyPartsToFocalRotation["Thigh_L"] * -jdController.robotBodyPartsDict[thighL].rb.transform.forward;
+
+        //Debug.DrawRay(jdController.robotBodyPartsDict[thighL].rb.position, inPhaseToFocalAngle, Color.blue, 1);
+        //Debug.DrawRay(thighL.position, inPhaseToFocalAngle, Color.yellow, 1);
+
         var inPhaseAngleFromUp = Vector3.Angle(inPhaseToFocalAngle, Vector3.up);
+
+        //Debug.Log("inPhaseAngleFromUp: " + inPhaseAngleFromUp);
 
         var angle = 180 - inPhaseAngleFromUp;
         var qpos2 = (angle % 180) / 180;
         var bonus = 2 - (Mathf.Abs(qpos2) * 2) - 1;
+
+        //Debug.Log("bonus: " + bonus + " qpos2: " + qpos2 + " angle: " + angle);
+
         LeftMin = Mathf.Min(LeftMin, bonus);
         LeftMax = Mathf.Max(LeftMax, bonus);
     }
 
     void PhaseSetRight()
     {
-        var inPhaseToFocalAngle = BodyPartsToFocalRoation["thighR"] * jdController.robotBodyPartsDict[thighL].rb.transform.right;
-        var inPhaseAngleFromUp = Vector3.Angle(inPhaseToFocalAngle, Vector3.up);
+        var inPhaseToFocalAngle = BodyPartsToFocalRotation["Thigh_R"] * -jdController.robotBodyPartsDict[thighL].rb.transform.forward;  //quaternion initial rot * local backwards vector  -of thigh
+        var inPhaseAngleFromUp = Vector3.Angle(inPhaseToFocalAngle, Vector3.up);    //angle from up
 
         var angle = 180 - inPhaseAngleFromUp;
         var qpos2 = (angle % 180) / 180;
-        var bonus = 2 - (Mathf.Abs(qpos2) * 2) - 1;
+        var bonus = 2 - (Mathf.Abs(qpos2) * 2) - 1; //if aligned bonus is high, else low - negative
         RightMin = Mathf.Min(RightMin, bonus);
         RightMax = Mathf.Max(RightMax, bonus);
     }
