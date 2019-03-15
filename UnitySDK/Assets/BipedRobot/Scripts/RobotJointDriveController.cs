@@ -16,10 +16,9 @@ namespace MLAgents
         [HideInInspector] public Vector3 startingPos;
         [HideInInspector] public Quaternion startingRot;
 
-        [Header("Ground & Target Contact")]
+        [Header("Ground Contact")]
         [Space(10)]
         public RobotGroundContact groundContact;
-        public TargetContact targetContact;
 
         [HideInInspector] public RobotJointDriveController thisRobotJDController;
 
@@ -55,11 +54,6 @@ namespace MLAgents
             {
                 bp.groundContact.touchingGround = false;
             }
-
-            if (bp.targetContact)
-            {
-                bp.targetContact.touchingTarget = false;
-            }
         }
 
         /// <summary>
@@ -67,16 +61,16 @@ namespace MLAgents
         /// </summary>
         public void SetJointTargetRotation(float x, float y, float z)
         {
-            x = (x + 1f) * 0.5f;
+            x = (x + 1f) * 0.5f;    //map to range(0,1)
             y = (y + 1f) * 0.5f;
             z = (z + 1f) * 0.5f;
 
-            var xRot = Mathf.Lerp(joint.lowAngularXLimit.limit, joint.highAngularXLimit.limit, x);
+            var xRot = Mathf.Lerp(joint.lowAngularXLimit.limit, joint.highAngularXLimit.limit, x);  //interpolate/ map value between joint low/high limits
             var yRot = Mathf.Lerp(-joint.angularYLimit.limit, joint.angularYLimit.limit, y);
             var zRot = Mathf.Lerp(-joint.angularZLimit.limit, joint.angularZLimit.limit, z);
 
-            currentXNormalizedRot = Mathf.InverseLerp(joint.lowAngularXLimit.limit, joint.highAngularXLimit.limit, xRot);//float Percentage -
-            currentYNormalizedRot = Mathf.InverseLerp(-joint.angularYLimit.limit, joint.angularYLimit.limit, yRot);//of value between start and end.
+            currentXNormalizedRot = Mathf.InverseLerp(joint.lowAngularXLimit.limit, joint.highAngularXLimit.limit, xRot);   //  float Percentage - of value between start and end. -> range 0,1
+            currentYNormalizedRot = Mathf.InverseLerp(-joint.angularYLimit.limit, joint.angularYLimit.limit, yRot);
             currentZNormalizedRot = Mathf.InverseLerp(-joint.angularZLimit.limit, joint.angularZLimit.limit, zRot);
 
             joint.targetRotation = Quaternion.Euler(xRot, yRot, zRot);
@@ -136,13 +130,6 @@ namespace MLAgents
             else
             {
                 bp.groundContact.agent = gameObject.GetComponent<BipedRobotAgent>();
-            }
-
-            // Add & setup the target contact script
-            bp.targetContact = t.GetComponent<TargetContact>();
-            if (!bp.targetContact)
-            {
-                bp.targetContact = t.gameObject.AddComponent<TargetContact>();
             }
 
             bp.thisRobotJDController = this;
