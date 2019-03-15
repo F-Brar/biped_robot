@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: 49e61ac6d5980e54b8a97376ad8f442a
+ScriptedImporter:
+  fileIDToRecycleName:
+    11400000: Assets/RobotTestBed/Models/RobotBrainTestBed 3.nn
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 83221ad3db87f4b3b91b041047cb2bc5, type: 3}

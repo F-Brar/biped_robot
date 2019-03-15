@@ -129,7 +129,7 @@ public class BipedRobotAgent : Agent
         var height = GetHeightPenality(.9f);
         var angle = GetForwardBonus(hips);
         bool endOnHeight = height > 0f;
-        bool endOnAngle = (angle < .15f);
+        bool endOnAngle = (angle < .2f);
         return endOnHeight || endOnAngle;
     }
 
@@ -186,6 +186,8 @@ public class BipedRobotAgent : Agent
 
         if (useTarget)
         {
+            // Velocity alignment with goal direction.
+            // Rotation alignment with goal direction.
             _moveToTarget = Vector3.Dot(dirToTarget.normalized, hipsRB.velocity);
             _rotToTarget = Vector3.Dot(dirToTarget.normalized, hips.forward);
         }
@@ -193,22 +195,23 @@ public class BipedRobotAgent : Agent
 
         _velocity = GetVelocity();
         _heightPenality = GetHeightPenality(1.3f);  //height of body
+        // Encourage uprightness of hips and body.
         _uprightBonus =
-            ( (GetUprightBonus(hips) / 6)
+            ( (GetUprightBonus(hips) / 4)//6
             + (GetUprightBonus(body) / 6));
         _forwardBonus =
-            ( (GetForwardBonus(hips) / 6)
+            ( (GetForwardBonus(hips) / 4)//6
             + (GetForwardBonus(body) / 6));
-        _headHeightBonus = hipsRB.position.y - head.position.y;
+        //_headHeightBonus = hipsRB.position.y - head.position.y;
+        // penalize asynchron leg movement
         float leftThighPenality = Mathf.Abs(GetForwardBonus(thighL));
         float rightThighPenality = Mathf.Abs(GetBackwardsBonus(thighR));
         _limbPenalty = leftThighPenality + rightThighPenality;
         _limbPenalty = Mathf.Min(0.5f, _limbPenalty);   //penalty for moving both legs in the same direction
         _finalPhaseBonus = GetPhaseBonus();
         // Set reward for this step according to mixture of the following elements.
-        // a. Velocity alignment with goal direction.
-        // b. Rotation alignment with goal direction.
-        // c. Encourage head height.
+
+        
         // d. Discourage head movement.
         AddReward(_velocity
             + _uprightBonus
@@ -217,9 +220,7 @@ public class BipedRobotAgent : Agent
             
             - _limbPenalty
             - _heightPenality
-            //+ _headHeightBonus
-            //- 0.01f * Vector3.Distance(jdController.bodyPartsDict[head].rb.velocity,jdController.bodyPartsDict[body].rb.velocity)
-            + 0.3f * _rotToTarget   //Only if useTarget
+            + 0.3f * _rotToTarget   //if useTarget else 0
             + 0.5f * _moveToTarget  //Only if useTarget
         );
     }
