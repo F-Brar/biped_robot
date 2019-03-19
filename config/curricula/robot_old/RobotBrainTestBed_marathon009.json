@@ -1,0 +1,11 @@
+{
+    "measure" : "progress",
+    "thresholds" : [0.03, 0.06, 0.09, 0.12, 0.15, 0.18],
+    "min_lesson_length": 1,
+    "signal_smoothing" : false, 
+    "parameters" : 
+    {
+        "lateral_force" : [600, 500, 400, 300, 200, 100, 0],
+        "forward_force" : [1000, 800, 600, 400, 200, 100, 0]
+    }
+}

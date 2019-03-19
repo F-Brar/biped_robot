@@ -37,6 +37,8 @@ public class BipedRobotAgent : Agent
     protected float OnTerminateRewardValue = -1;
 
     //local vars
+    LocoAcadamy academy;
+    VirtualAssistant assistant;
     RobotJointDriveController jdController;
     bool isNewDecisionStep;
     int currentDecisionStep;
@@ -44,13 +46,17 @@ public class BipedRobotAgent : Agent
 
     public override void InitializeAgent()
     {
+        academy = FindObjectOfType<LocoAcadamy>();
+        assistant = GetComponent<VirtualAssistant>();
+        jdController = GetComponent<RobotJointDriveController>();
         if (CameraTarget != null)
         {
             var smoothFollow = CameraTarget.GetComponent<SmoothFollow>();
             if (smoothFollow != null)
                 smoothFollow.target = hips.transform;
         }
-        jdController = GetComponent<RobotJointDriveController>();
+
+        
         //Debug.Log("body: " + body.name);
         jdController.SetupBodyPart(body);
         jdController.SetupBodyPart(hips);
@@ -87,11 +93,11 @@ public class BipedRobotAgent : Agent
         var rb = bp.rb;
         AddVectorObs(bp.groundContact.touchingGround ? 1 : 0); // Is this bp touching the ground
         AddVectorObs(rb.velocity);
-        AddVectorObs(rb.angularVelocity);
+        //AddVectorObs(rb.angularVelocity);
         //Vector3 localPosRelToHips = hips.InverseTransformPoint(rb.position);
         //AddVectorObs(localPosRelToHips);
 
-        if (bp.rb.transform != footL && bp.rb.transform != footR && bp.rb.transform != hips)
+        if (/*bp.rb.transform != footL && bp.rb.transform != footR && */bp.rb.transform != hips)
         {
             AddVectorObs(bp.currentXNormalizedRot);
             AddVectorObs(bp.currentYNormalizedRot);
@@ -105,7 +111,7 @@ public class BipedRobotAgent : Agent
     /// </summary>
     public override void CollectObservations()
     {
-        
+        _maxDistanceTravelled = Mathf.Max(_maxDistanceTravelled, hips.position.z);
         jdController.GetCurrentJointForces();
         //AddVectorObs(jdController.robotBodyPartsDict[body].rb.position);
         //AddVectorObs(jdController.robotBodyPartsDict[hips].rb.velocity);
@@ -123,6 +129,12 @@ public class BipedRobotAgent : Agent
         }
     }
 
+    void ConfigureAssistant()
+    {
+        assistant.forwardStabilityForce = academy.resetParameters["forward_force"];
+        assistant.sideWaysStabilityForce = academy.resetParameters["lateral_force"];
+    }
+
     bool TerminateRobot()
     {
         //if (TerminateOnNonFootHitTerrain())
@@ -136,7 +148,9 @@ public class BipedRobotAgent : Agent
 
     public override void AgentAction(float[] vectorAction, string textAction)
     {
-
+        Actions = vectorAction
+                .Select(x => x)
+                .ToList();
 
 
         if (!IsDone())
@@ -183,7 +197,7 @@ public class BipedRobotAgent : Agent
         //var hipsVelocity = transform.InverseTransformDirection(hipsRB.velocity);
 
         _velocity = GetVelocity();
-        _heightPenality = GetHeightPenality(1.3f);  //height of body
+        _velocity = _velocity / 6;
         // Encourage uprightness of hips and body.
         _uprightBonus =
             ( (GetUprightBonus(hips) / 4)//6
@@ -191,17 +205,20 @@ public class BipedRobotAgent : Agent
         _forwardBonus =
             ( (GetForwardBonus(hips) / 4)//6
             + (GetForwardBonus(body) / 6));
-        //_headHeightBonus = hipsRB.position.y - head.position.y;
-        
+        //bonus for async phase:
+        _finalPhaseBonus = GetPhaseBonus();
+
         // penalize synchron leg movement
         float leftThighPenality = Mathf.Abs(GetForwardBonus(thighL));
         float rightThighPenality = Mathf.Abs(GetBackwardsBonus(thighR));
         _limbPenalty = leftThighPenality + rightThighPenality;
         _limbPenalty = Mathf.Min(0.5f, _limbPenalty);   //penalty for moving both legs in the same direction
+        //penalize excessive joint actions
+        float effort = GetEffort(new string[] { shinL.name, shinR.name });
+        _effortPenality = 1e-2f * (float)effort;
         //penalize joint actions at limit
         _jointsAtLimitPenality = GetJointsAtLimitPenality();
-        //bonus for async phase:
-        _finalPhaseBonus = GetPhaseBonus();
+        _heightPenality = GetHeightPenality(1.3f);  //height of body
 
         // Set reward for this step according to mixture of the following elements.
         AddReward(
@@ -212,6 +229,7 @@ public class BipedRobotAgent : Agent
             + _finalPhaseBonus
 
             - _limbPenalty
+            - _effortPenality
             - _jointsAtLimitPenality
             - _heightPenality
 
@@ -243,7 +261,7 @@ public class BipedRobotAgent : Agent
     /// </summary>
     public override void AgentReset()
     {
-                
+        ConfigureAssistant();
         foreach (var bodyPart in jdController.robotBodyPartsDict.Values)
         {
             bodyPart.Reset(bodyPart);
@@ -267,6 +285,7 @@ public class BipedRobotAgent : Agent
     public float _jointsAtLimitPenality;
     public float _effortPenality;
     public float _headHeightBonus;
+    public float _maxDistanceTravelled;
 
     public float LeftMin;
     public float LeftMax;
@@ -333,8 +352,8 @@ public class BipedRobotAgent : Agent
         else
             rawVelocity = jdController.robotBodyPartsDict[hips].rb.velocity.z;  //velocity in meters per seconds
 
-        var maxSpeed = 4f; // meters per second
-        var velocity = rawVelocity / maxSpeed;
+        //var maxSpeed = 4f; // meters per second
+        var velocity = rawVelocity; // maxSpeed;
         /*
         if (ShowMonitor)
         {
@@ -391,7 +410,7 @@ public class BipedRobotAgent : Agent
     }
 
     /// <summary>
-    /// /// returns upright reward between -maxbonus  and maxbonus; positive if the angle between given bodypart and direction axis is sharp
+    /// /// returns direction reward between -.5 and .5; positive if the angle between given bodypart and direction axis is sharp
     /// </summary>
     /// <param name="bodyPart"></param>
     /// <param name="direction"></param>
