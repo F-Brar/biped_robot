@@ -54,6 +54,7 @@ MonoBehaviour:
   _lesson: 0
   milestoneCounter: 0
   multiplier: 0
+  done: 0
 --- !u!1001 &5678194371775982771
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -241,8 +242,16 @@ PrefabInstance:
       value: 0.008503681
       objectReference: {fileID: 0}
     - target: {fileID: 740248474, guid: 266bb848f77f9ca4b84cbcac24961108, type: 3}
+      propertyPath: m_AngularYMotion
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 740248474, guid: 266bb848f77f9ca4b84cbcac24961108, type: 3}
       propertyPath: m_LowAngularXLimit.limit
       value: -60
+      objectReference: {fileID: 0}
+    - target: {fileID: 740248474, guid: 266bb848f77f9ca4b84cbcac24961108, type: 3}
+      propertyPath: m_AngularYLimit.limit
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 740248474, guid: 266bb848f77f9ca4b84cbcac24961108, type: 3}
       propertyPath: m_AngularZLimit.limit

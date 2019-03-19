@@ -35,7 +35,10 @@ public class BipedRobotAgent : Agent
             {
                 _timeAlive = 0;
                 _cumulativeVelocityReward = 0f;
-                curricula.ResetRollout();
+                if (curricula.done)
+                {
+                    curricula.ResetRollout();
+                }
             }
         }
     }
@@ -75,8 +78,8 @@ public class BipedRobotAgent : Agent
 
     public override void InitializeAgent()
     {
-        curriculumLearning = shouldCurriculumLearning;
         academy = FindObjectOfType<LocoAcadamy>();
+        curriculumLearning = academy.GetIsInference() ? shouldCurriculumLearning : false;   //curriculum deactivated if inference mode
         assistant = GetComponent<VirtualAssistant>();
         jdController = GetComponent<RobotJointDriveController>();
 
@@ -209,7 +212,7 @@ public class BipedRobotAgent : Agent
             .Select(x => x)
             .ToList();
 
-            bpDict[body].SetJointTargetRotation(vectorAction[++i], 0, 0);
+            bpDict[body].SetJointTargetRotation(vectorAction[++i], vectorAction[++i], 0);
             bpDict[thighL].SetJointTargetRotation(vectorAction[++i], vectorAction[++i], 0);
             bpDict[thighR].SetJointTargetRotation(vectorAction[++i], vectorAction[++i], 0);
             bpDict[shinL].SetJointTargetRotation(vectorAction[++i], 0, 0);

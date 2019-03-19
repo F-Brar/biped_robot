@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: RobotBrainTestBed
   m_EditorClassIdentifier: 
   brainParameters:
-    vectorObservationSize: 72
+    vectorObservationSize: 88
     numStackedVectorObservations: 5
-    vectorActionSize: 14000000
+    vectorActionSize: 15000000
     cameraResolutions: []
     vectorActionDescriptions:
+    - 
     - 
     - 
     - 

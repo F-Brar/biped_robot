@@ -49,6 +49,7 @@ public class LocalRobotCurricula : MonoBehaviour
     public int milestoneCounter = 0;
     [Range(0,1)]
     public float multiplier;
+    public bool done;
     /// <summary>
     /// initialize
     /// </summary>
@@ -69,6 +70,7 @@ public class LocalRobotCurricula : MonoBehaviour
         {
             //end curriculum learning
             agent.curriculumLearning = false;
+            done = true;
         }
     }
 

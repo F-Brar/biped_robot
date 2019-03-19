@@ -11,6 +11,7 @@ using System.Linq;
 [System.Serializable]
 public class RobotCurricula : MonoBehaviour
 {
+    public bool _shouldCurriculumLearning;
     //private List<BipedRobotAgent> agents;
     private List<LocalRobotCurricula> curricula;
     [Tooltip("time milestone global")]
@@ -26,17 +27,26 @@ public class RobotCurricula : MonoBehaviour
     [HideInInspector]
     public LocoAcadamy academy;
 
+
+    
     /// <summary>
     /// the cumulative reward from the initial trained policy with full assistance
     /// </summary>
     public float expertReward;
     public int lesson = 0;
-    
+    //locks lesson updates
+    private bool locked;
     /// <summary>
     /// initialize
     /// </summary>
     public void Init()
     {
+        if (_shouldCurriculumLearning == false)
+        {
+            _initPropForce = 0;
+            _initLatForce = 0;
+        }
+
         curricula = new List<LocalRobotCurricula>();
 
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("agent"))
@@ -44,18 +54,24 @@ public class RobotCurricula : MonoBehaviour
             var curr = obj.GetComponent<LocalRobotCurricula>();
             curr.initPropForce = _initPropForce;
             curr.initLatForce = _initLatForce;
+            curr.mileStone = _mileStone;
+            curr.reductionPercentage = _reductionPercentage;
             curr.globalCurricula = this;
-            curr.Init();
-            curricula.Add(curr);
+            //
+            if (_shouldCurriculumLearning)
+            {
+                curr.Init();
+                curricula.Add(curr);
+            }
+            else
+            {
+                curr.agent = curr.GetComponent<BipedRobotAgent>();
+                curr.agent.shouldCurriculumLearning = _shouldCurriculumLearning;
+            }
 
-            if(_reductionPercentage != 0)
-            {
-                curr.reductionPercentage = _reductionPercentage;
-            }
-            if(_mileStone != 0)
-            {
-                curr.mileStone = _mileStone;
-            }
+            /*
+            */
+
         }
     }
 
@@ -66,8 +82,9 @@ public class RobotCurricula : MonoBehaviour
     public void UpdateAll(float reward)
     {
         //check if the sent reward is bigger than percentage of the stored expert
-        if(reward >= expertReward * updateOnPercentage)
+        if(reward >= expertReward * updateOnPercentage && !locked)
         {
+            StartCoroutine(LockLessons());
             lesson++;
 
             foreach (LocalRobotCurricula curr in curricula)
@@ -78,6 +95,14 @@ public class RobotCurricula : MonoBehaviour
 
             expertReward = Mathf.Max(reward, expertReward);
         }
+    }
+
+    IEnumerator LockLessons()
+    {
+        locked = true;
+        yield return new WaitForSeconds(2);
+        locked = false;
+        yield break;
     }
 
 }

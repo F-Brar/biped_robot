@@ -1224,11 +1224,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 592bdf7dd57165a47a204e76a7bb5393, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agents: []
-  curricula: []
-  p: 3
-  k: 0.25
+  _shouldCurriculumLearning: 0
+  _mileStone: 4
+  _reductionPercentage: 0.2
   updateOnPercentage: 0
+  _initPropForce: 25
+  _initLatForce: 20
+  academy: {fileID: 0}
   expertReward: 0
   lesson: 0
 --- !u!1 &1628795730
