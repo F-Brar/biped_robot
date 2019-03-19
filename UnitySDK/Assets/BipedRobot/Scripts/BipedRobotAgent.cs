@@ -4,6 +4,15 @@ using UnityEngine;
 using MLAgents;
 using System.Linq;
 
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MLAgents;
+using System.Linq;
+
+
+
+
 public class BipedRobotAgent : Agent
 {
     public GameObject CameraTarget;
@@ -11,6 +20,9 @@ public class BipedRobotAgent : Agent
     [Tooltip("Last set of Actions")]
     /**< \brief Last set of Actions*/
     public List<float> Actions;
+
+    [Tooltip("wether to activate curriculum learning or not")]
+    public bool curriculumLearning = true;
 
     //Sensors
     public bool BothFeetDown;
@@ -29,7 +41,8 @@ public class BipedRobotAgent : Agent
     public Transform shinR;
     public Transform footR;
 
-    
+
+    public LocalRobotCurricula curricula;
 
     // Parms to set in subclass.AgentReset() 
     [Tooltip("Reward value to set on termination")]
@@ -38,7 +51,7 @@ public class BipedRobotAgent : Agent
 
     //local vars
     LocoAcadamy academy;
-    VirtualAssistant assistant;
+    public VirtualAssistant assistant;
     RobotJointDriveController jdController;
     bool isNewDecisionStep;
     int currentDecisionStep;
@@ -49,6 +62,15 @@ public class BipedRobotAgent : Agent
         academy = FindObjectOfType<LocoAcadamy>();
         assistant = GetComponent<VirtualAssistant>();
         jdController = GetComponent<RobotJointDriveController>();
+
+        _timeAlive = 0;
+        _cumulativeReward = 0;
+
+        //Initialize the curriculum learning
+        curricula = GetComponent<LocalRobotCurricula>();
+        curricula.assistant = assistant;
+        curricula.Init();
+        
         if (CameraTarget != null)
         {
             var smoothFollow = CameraTarget.GetComponent<SmoothFollow>();
@@ -112,6 +134,7 @@ public class BipedRobotAgent : Agent
     public override void CollectObservations()
     {
         _maxDistanceTravelled = Mathf.Max(_maxDistanceTravelled, hips.position.z);
+        
         jdController.GetCurrentJointForces();
         //AddVectorObs(jdController.robotBodyPartsDict[body].rb.position);
         //AddVectorObs(jdController.robotBodyPartsDict[hips].rb.velocity);
@@ -129,12 +152,6 @@ public class BipedRobotAgent : Agent
         }
     }
 
-    void ConfigureAssistant()
-    {
-        assistant.forwardStabilityForce = academy.resetParameters["forward_force"];
-        assistant.sideWaysStabilityForce = academy.resetParameters["lateral_force"];
-    }
-
     bool TerminateRobot()
     {
         //if (TerminateOnNonFootHitTerrain())
@@ -148,6 +165,18 @@ public class BipedRobotAgent : Agent
 
     public override void AgentAction(float[] vectorAction, string textAction)
     {
+        if (curriculumLearning)
+        {
+            _timeAlive += Time.deltaTime;
+
+            if (_timeAlive >= curricula.timeMileStone)
+            {
+                curricula.reward = _cumulativeReward;
+                curricula.ReachedMileStone();
+            }
+        }
+
+
         Actions = vectorAction
                 .Select(x => x)
                 .ToList();
@@ -222,7 +251,7 @@ public class BipedRobotAgent : Agent
 
         // Set reward for this step according to mixture of the following elements.
         AddReward(
-            _reward =
+            _cumulativeReward += _reward =
               _velocity
             + _uprightBonus
             + _forwardBonus
@@ -261,7 +290,7 @@ public class BipedRobotAgent : Agent
     /// </summary>
     public override void AgentReset()
     {
-        ConfigureAssistant();
+        
         foreach (var bodyPart in jdController.robotBodyPartsDict.Values)
         {
             bodyPart.Reset(bodyPart);
@@ -270,12 +299,21 @@ public class BipedRobotAgent : Agent
         isNewDecisionStep = true;
         currentDecisionStep = 1;
         PhaseBonusInitalize();
+        if (curriculumLearning)
+        {
+            _timeAlive = 0;
+            _cumulativeReward = 0f;
+            curricula.ResetRollout();
+        }
+
         //recentVelocity = new List<float>();
     }
 
+    public float _timeAlive;
     public float _phaseBonus;
     public int _phase;
     public float _reward;
+    public float _cumulativeReward;
     public float _velocity;
     public float _uprightBonus;
     public float _forwardBonus;
