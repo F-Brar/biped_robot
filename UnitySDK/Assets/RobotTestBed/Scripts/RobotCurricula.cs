@@ -11,15 +11,18 @@ using System.Linq;
 [System.Serializable]
 public class RobotCurricula : MonoBehaviour
 {
-    private List<BipedRobotAgent> agents;
+    //private List<BipedRobotAgent> agents;
     private List<LocalRobotCurricula> curricula;
-    [Tooltip("meters milestone global")]
-    public float p = 3;
+    [Tooltip("time milestone global")]
+    public float _mileStone = 3;
     [Tooltip("percantage reduction on milestone reach")]
-    public float k = .1f;
+    public float _reductionPercentage = .1f;
     [Tooltip("update the curriculum when this value of initial policy is reached")]
-    public float updateOnPercentage;
-
+    public float updateOnPercentage = .7f;
+    [Tooltip("initial propelling force")]
+    public float _initPropForce = 25;
+    [Tooltip("initial lateral balance force")]
+    public float _initLatForce = 20;
     [HideInInspector]
     public LocoAcadamy academy;
 
@@ -27,37 +30,33 @@ public class RobotCurricula : MonoBehaviour
     /// the cumulative reward from the initial trained policy with full assistance
     /// </summary>
     public float expertReward;
-    public int lesson = 1;
-
-    public bool init;
+    public int lesson = 0;
+    
     /// <summary>
     /// initialize
     /// </summary>
     public void Init()
     {
-        agents = new List<BipedRobotAgent>();
         curricula = new List<LocalRobotCurricula>();
 
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("agent"))
         {
-            var agent = obj.GetComponent<BipedRobotAgent>();
             var curr = obj.GetComponent<LocalRobotCurricula>();
+            curr.initPropForce = _initPropForce;
+            curr.initLatForce = _initLatForce;
             curr.globalCurricula = this;
+            curr.Init();
             curricula.Add(curr);
-            agents.Add(agent);
 
-            if(k != 0)
+            if(_reductionPercentage != 0)
             {
-                curr.reductionPercentage = k;
+                curr.reductionPercentage = _reductionPercentage;
             }
-            if(p != 0)
+            if(_mileStone != 0)
             {
-                curr.mileStone = p;
+                curr.mileStone = _mileStone;
             }
-
-            
         }
-        init = true;
     }
 
     /// <summary>
@@ -66,37 +65,19 @@ public class RobotCurricula : MonoBehaviour
     /// <param name="reward"></param>
     public void UpdateAll(float reward)
     {
-        if (!init)
+        //check if the sent reward is bigger than percentage of the stored expert
+        if(reward >= expertReward * updateOnPercentage)
         {
-            return;
-        }
-        //check if the sent reward is bigger than percentage of the stored expert 
-        if(reward >= expertReward * .7f)
-        {
-
             lesson++;
+
             foreach (LocalRobotCurricula curr in curricula)
             {
-                curr.ResetRollout();
+                curr.agent.AgentReset();
                 curr.UpdateLesson(lesson);
             }
-            academy.AcademyReset();
 
-            //if last lesson done:
-            if (lesson * k == 1)
-            {
-                //end curriculum learning
-                foreach (BipedRobotAgent agent in agents)
-                {
-                    agent.curriculumLearning = false;
-                }
-            }
-
-
+            expertReward = Mathf.Max(reward, expertReward);
         }
-        
-       
-
     }
 
 }

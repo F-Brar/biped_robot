@@ -10,6 +10,9 @@ public class LocalRobotCurricula : MonoBehaviour
 {
     public RobotCurricula globalCurricula;
     public VirtualAssistant assistant;
+    public BipedRobotAgent agent;
+
+    #region AssistantForces
     //initial forces updatet only on lesson iteration
     public float initPropForce = 25;
     public float initLatForce = 25;
@@ -34,20 +37,13 @@ public class LocalRobotCurricula : MonoBehaviour
         }
     }
     private float _lateralBalanceForce;
+    #endregion
 
-    public float reward {
-        get { return _reward; }
-        set {
-            _reward = value;
-            globalCurricula.expertReward = Mathf.Max(_reward, globalCurricula.expertReward);
-        }
-    }
-    private float _reward;
+    public float reward;
     //reduction speed of forces
-    public float reductionPercentage = .1f;
-
+    public float reductionPercentage;
     //time alive milestone
-    public float mileStone = 5;
+    public float mileStone;
     
     public int _lesson = 0;
     public int milestoneCounter = 0;
@@ -58,6 +54,7 @@ public class LocalRobotCurricula : MonoBehaviour
     /// </summary>
     public void Init()
     {
+        agent = GetComponent<BipedRobotAgent>();
         lateralBalanceForce = initLatForce;
         propellingForce = initPropForce;
     }
@@ -67,26 +64,30 @@ public class LocalRobotCurricula : MonoBehaviour
     public void UpdateLesson(int lesson)
     {
         _lesson = lesson;
-        //multiplier capped between 0 and 1
-        multiplier = 1 - ((reductionPercentage * _lesson) <= 1 ? (reductionPercentage * _lesson) : 1);
-        propellingForce = initPropForce * multiplier  ;
-        lateralBalanceForce = initLatForce * multiplier;
+        //if last lesson done:
+        if (_lesson * reductionPercentage >= 1)
+        {
+            //end curriculum learning
+            agent.curriculumLearning = false;
+        }
     }
 
     /// <summary>
-    /// temporarily reduce forces in one rollout to avoid overfitting to one curricula
+    /// gradually (timeAlive dependent) reduces forces in one rollout ; avoids overfitting to one curricula
     /// </summary>
     public void ReachedMileStone()
     {
         //if curriculum not already done:
-        if (propellingForce >= 0)
+        if (_lesson * reductionPercentage <= 1)
         {
             milestoneCounter += 1;
             if (milestoneCounter >= 2)
             {
                 globalCurricula.UpdateAll(reward);
+                ResetRollout();
             }
-            multiplier = 1 - ((reductionPercentage * (_lesson + milestoneCounter)) <= 1 ? (reductionPercentage * (_lesson + milestoneCounter)) : 1);
+
+            multiplier = GetMultiplier(milestoneCounter);
             propellingForce = initPropForce * multiplier;
             lateralBalanceForce = initLatForce * multiplier;
         }
@@ -98,9 +99,22 @@ public class LocalRobotCurricula : MonoBehaviour
     /// </summary>
     public void ResetRollout()
     {
-        multiplier = 1 - ((reductionPercentage * _lesson) <= 1 ? (reductionPercentage * _lesson) : 1);
+       
         milestoneCounter = 0;
-        lateralBalanceForce = initPropForce * multiplier;
+
+        multiplier = GetMultiplier();
         propellingForce = initLatForce * multiplier;
+        lateralBalanceForce = initPropForce * multiplier;
+        
+    }
+
+    /// <summary>
+    /// returns the lesson respective percentage mult to update assistant forces. range 0,1
+    /// </summary>
+    /// <returns></returns>
+    float GetMultiplier(float mileStoneCounter = 0)
+    {
+        float _multiplier = 1 - ((reductionPercentage * (_lesson + milestoneCounter)) <= 1 ? (reductionPercentage * (_lesson + milestoneCounter)) : 1);    //returns 1 if curriculum done
+        return _multiplier;
     }
 }

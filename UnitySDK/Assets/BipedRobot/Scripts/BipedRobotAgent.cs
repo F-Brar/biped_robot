@@ -22,8 +22,24 @@ public class BipedRobotAgent : Agent
     public List<float> Actions;
 
     [Tooltip("wether to activate curriculum learning or not")]
-    public bool curriculumLearning = true;
-
+    public bool shouldCurriculumLearning = true;
+    
+    public bool curriculumLearning 
+    {
+        get 
+            { return _curriculumLearning; }
+        set 
+        {
+            _curriculumLearning = value;
+            if (!_curriculumLearning)
+            {
+                _timeAlive = 0;
+                _cumulativeVelocityReward = 0f;
+                curricula.ResetRollout();
+            }
+        }
+    }
+    private bool _curriculumLearning;
     //Sensors
     public bool BothFeetDown;
     public bool isLeftFootDown;
@@ -42,7 +58,7 @@ public class BipedRobotAgent : Agent
     public Transform footR;
 
 
-    public LocalRobotCurricula curricula;
+    private LocalRobotCurricula curricula;
 
     // Parms to set in subclass.AgentReset() 
     [Tooltip("Reward value to set on termination")]
@@ -51,7 +67,7 @@ public class BipedRobotAgent : Agent
 
     //local vars
     LocoAcadamy academy;
-    public VirtualAssistant assistant;
+    VirtualAssistant assistant;
     RobotJointDriveController jdController;
     bool isNewDecisionStep;
     int currentDecisionStep;
@@ -59,18 +75,16 @@ public class BipedRobotAgent : Agent
 
     public override void InitializeAgent()
     {
+        curriculumLearning = shouldCurriculumLearning;
         academy = FindObjectOfType<LocoAcadamy>();
         assistant = GetComponent<VirtualAssistant>();
         jdController = GetComponent<RobotJointDriveController>();
 
-        _timeAlive = 0;
-        _cumulativeReward = 0;
-
         //Initialize the curriculum learning
         curricula = GetComponent<LocalRobotCurricula>();
         curricula.assistant = assistant;
-        curricula.Init();
         
+        //setup camera target
         if (CameraTarget != null)
         {
             var smoothFollow = CameraTarget.GetComponent<SmoothFollow>();
@@ -78,8 +92,6 @@ public class BipedRobotAgent : Agent
                 smoothFollow.target = hips.transform;
         }
 
-        
-        //Debug.Log("body: " + body.name);
         jdController.SetupBodyPart(body);
         jdController.SetupBodyPart(hips);
         jdController.SetupBodyPart(thighL);
@@ -115,11 +127,11 @@ public class BipedRobotAgent : Agent
         var rb = bp.rb;
         AddVectorObs(bp.groundContact.touchingGround ? 1 : 0); // Is this bp touching the ground
         AddVectorObs(rb.velocity);
-        //AddVectorObs(rb.angularVelocity);
+        AddVectorObs(rb.angularVelocity);
         //Vector3 localPosRelToHips = hips.InverseTransformPoint(rb.position);
         //AddVectorObs(localPosRelToHips);
 
-        if (/*bp.rb.transform != footL && bp.rb.transform != footR && */bp.rb.transform != hips)
+        if (bp.rb.transform != footL && bp.rb.transform != footR && bp.rb.transform != hips)
         {
             AddVectorObs(bp.currentXNormalizedRot);
             AddVectorObs(bp.currentYNormalizedRot);
@@ -171,16 +183,11 @@ public class BipedRobotAgent : Agent
 
             if (_timeAlive >= curricula.mileStone)
             {
-                curricula.reward = _cumulativeReward;
+                curricula.reward = _cumulativeVelocityReward;
                 curricula.ReachedMileStone();
+                _timeAlive = 0;
             }
         }
-
-
-        Actions = vectorAction
-                .Select(x => x)
-                .ToList();
-
 
         if (!IsDone())
         {
@@ -226,7 +233,12 @@ public class BipedRobotAgent : Agent
         //var hipsVelocity = transform.InverseTransformDirection(hipsRB.velocity);
 
         _velocity = GetVelocity();
-        _velocity = _velocity / 6;
+        //update the curriculum
+        if (curriculumLearning)
+        {
+            _cumulativeVelocityReward += _velocity;
+        }
+        
         // Encourage uprightness of hips and body.
         _uprightBonus =
             ( (GetUprightBonus(hips) / 4)//6
@@ -263,7 +275,6 @@ public class BipedRobotAgent : Agent
             - _heightPenality
 
         );
-        _cumulativeReward += _reward;
     }
 
 
@@ -300,10 +311,11 @@ public class BipedRobotAgent : Agent
         isNewDecisionStep = true;
         currentDecisionStep = 1;
         PhaseBonusInitalize();
+
         if (curriculumLearning)
         {
             _timeAlive = 0;
-            _cumulativeReward = 0f;
+            _cumulativeVelocityReward = 0f;
             curricula.ResetRollout();
         }
 
@@ -314,7 +326,7 @@ public class BipedRobotAgent : Agent
     public float _phaseBonus;
     public int _phase;
     public float _reward;
-    public float _cumulativeReward;
+    public float _cumulativeVelocityReward;
     public float _velocity;
     public float _uprightBonus;
     public float _forwardBonus;

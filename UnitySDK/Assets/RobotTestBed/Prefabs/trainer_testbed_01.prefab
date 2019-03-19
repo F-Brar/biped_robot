@@ -45,10 +45,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalCurricula: {fileID: 0}
   assistant: {fileID: 0}
+  agent: {fileID: 0}
   initPropForce: 25
   initLatForce: 25
+  reward: 0
   reductionPercentage: 0.25
-  timeMileStone: 2
+  mileStone: 0
   _lesson: 0
   milestoneCounter: 0
   multiplier: 0
