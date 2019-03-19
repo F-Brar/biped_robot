@@ -17,9 +17,8 @@ public class VirtualAssistant : MonoBehaviour
 
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        //Get the local hips direction
         var localVel = transform.InverseTransformDirection(hips.velocity);
         if (localVel.z <= -.0f)
         {
@@ -27,15 +26,12 @@ public class VirtualAssistant : MonoBehaviour
         }
         if(localVel.x <= -.0f)
         {
-            applyPowerBody.AddForce(hips.transform.right * sideWaysStabilityForce, ForceMode.Acceleration);
+            hips.AddForce(hips.transform.right * sideWaysStabilityForce, ForceMode.Acceleration);
         }
         else if(localVel.x >= .0f)
         {
 
-            applyPowerBody.AddForce( - hips.transform.right * sideWaysStabilityForce, ForceMode.Acceleration);
+            hips.AddForce( - hips.transform.right * sideWaysStabilityForce, ForceMode.Acceleration);
         }
     }
-
-
-
 }
