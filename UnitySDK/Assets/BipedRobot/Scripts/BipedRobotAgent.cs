@@ -169,7 +169,7 @@ public class BipedRobotAgent : Agent
         {
             _timeAlive += Time.deltaTime;
 
-            if (_timeAlive >= curricula.timeMileStone)
+            if (_timeAlive >= curricula.mileStone)
             {
                 curricula.reward = _cumulativeReward;
                 curricula.ReachedMileStone();
@@ -251,7 +251,7 @@ public class BipedRobotAgent : Agent
 
         // Set reward for this step according to mixture of the following elements.
         AddReward(
-            _cumulativeReward += _reward =
+            _reward =
               _velocity
             + _uprightBonus
             + _forwardBonus
@@ -263,6 +263,7 @@ public class BipedRobotAgent : Agent
             - _heightPenality
 
         );
+        _cumulativeReward += _reward;
     }
 
 

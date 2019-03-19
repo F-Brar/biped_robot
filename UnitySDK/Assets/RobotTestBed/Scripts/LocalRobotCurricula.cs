@@ -44,12 +44,14 @@ public class LocalRobotCurricula : MonoBehaviour
     }
     private float _reward;
     //reduction speed of forces
-    public float reductionPercentage = .25f;
+    public float reductionPercentage = .1f;
 
     //time alive milestone
-    public float timeMileStone = 2;
+    public float mileStone = 5;
+    
     public int _lesson = 0;
-    public int milestoneCounter;
+    public int milestoneCounter = 0;
+    [Range(0,1)]
     public float multiplier;
     /// <summary>
     /// initialize
@@ -65,8 +67,9 @@ public class LocalRobotCurricula : MonoBehaviour
     public void UpdateLesson(int lesson)
     {
         _lesson = lesson;
-        multiplier = 1 - (reductionPercentage * _lesson);
-        propellingForce = initPropForce * multiplier;
+        //multiplier capped between 0 and 1
+        multiplier = 1 - ((reductionPercentage * _lesson) <= 1 ? (reductionPercentage * _lesson) : 1);
+        propellingForce = initPropForce * multiplier  ;
         lateralBalanceForce = initLatForce * multiplier;
     }
 
@@ -75,17 +78,19 @@ public class LocalRobotCurricula : MonoBehaviour
     /// </summary>
     public void ReachedMileStone()
     {
-        milestoneCounter += 1;
-        if (milestoneCounter >= 2)
+        //if curriculum not already done:
+        if (propellingForce >= 0)
         {
-            if(propellingForce >= 0)
+            milestoneCounter += 1;
+            if (milestoneCounter >= 2)
             {
                 globalCurricula.UpdateAll(reward);
             }
+            multiplier = 1 - ((reductionPercentage * (_lesson + milestoneCounter)) <= 1 ? (reductionPercentage * (_lesson + milestoneCounter)) : 1);
+            propellingForce = initPropForce * multiplier;
+            lateralBalanceForce = initLatForce * multiplier;
         }
-        multiplier = 1 - (reductionPercentage * (_lesson + milestoneCounter));
-        propellingForce -= initPropForce * multiplier;
-        lateralBalanceForce -= initLatForce * multiplier;
+
     }
 
     /// <summary>
@@ -93,7 +98,7 @@ public class LocalRobotCurricula : MonoBehaviour
     /// </summary>
     public void ResetRollout()
     {
-        multiplier = 1 - (reductionPercentage * _lesson);
+        multiplier = 1 - ((reductionPercentage * _lesson) <= 1 ? (reductionPercentage * _lesson) : 1);
         milestoneCounter = 0;
         lateralBalanceForce = initPropForce * multiplier;
         propellingForce = initLatForce * multiplier;
