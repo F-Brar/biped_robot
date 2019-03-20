@@ -25,14 +25,10 @@ public class SkillSelector
 public class RobotMultiSkillAgent : Agent
 {
 
-    //public Dictionary<string, Brain> activeSkill = new Dictionary<string, Brain>();
+    
     [Tooltip("setup wich skills to learn")]
     public List<SkillSelector> skillList;
     public GameObject CameraTarget;
-
-    [Tooltip("Last set of Actions")]
-    /**< \brief Last set of Actions*/
-    public List<float> Actions;
 
     [Tooltip("wether to activate curriculum learning or not")]
     public bool shouldCurriculumLearning = true;
@@ -41,7 +37,7 @@ public class RobotMultiSkillAgent : Agent
         get { return _curriculumLearning; }
         set {
             _curriculumLearning = value;
-            if (!_curriculumLearning)
+            if (_curriculumLearning == false)
             {
                 _timeAlive = 0;
                 _cumulativeVelocityReward = 0f;
@@ -49,14 +45,13 @@ public class RobotMultiSkillAgent : Agent
         }
     }
     private bool _curriculumLearning;
-    //Sensors
+
+    [Header("Sensors")]
     public bool BothFeetDown;
     public bool isLeftFootDown;
     public bool isRightFootDown;
-    public bool standingTest;
 
-
-    //bodyparts
+    [Header("The robots bodyparts")]
     public Transform head;  //rigid bp - for measuring height
     public Transform hips;
     public Transform body;
@@ -67,32 +62,34 @@ public class RobotMultiSkillAgent : Agent
     public Transform shinR;
     public Transform footR;
 
-    
-    private LocalRobotCurricula curricula;
-
     [Tooltip("Reward value to set on termination")]
     /**< \brief Reward value to set on termination*/
     protected float OnTerminateRewardValue = -1;
 
     //local vars
-    LocoAcadamy academy;
-    VirtualAssistant assistant;
-    RobotJointDriveController jdController;
-    bool isNewDecisionStep;
-    int currentDecisionStep;
-    Dictionary<string, Quaternion> BodyPartsToFocalRotation = new Dictionary<string, Quaternion>();  //use this to determine the initial axis
+    private List<float> Actions;            //last action values
+    private LocalRobotCurricula curricula;  //the curriculum learner
+    private bool standSkill = true;
+    private bool walkSkill;
+    private LocoAcadamy academy;
+    private VirtualAssistant assistant;
+    private RobotJointDriveController jdController;
+    private bool isNewDecisionStep;
+    private int currentDecisionStep;
+    private Dictionary<string, Quaternion> BodyPartsToFocalRotation = new Dictionary<string, Quaternion>();  //use this to determine the initial axis
 
     public override void InitializeAgent()
     {
         academy = FindObjectOfType<LocoAcadamy>();
-        curriculumLearning = shouldCurriculumLearning;   //curriculum deactivated if inference mode
         assistant = GetComponent<VirtualAssistant>();
         jdController = GetComponent<RobotJointDriveController>();
-
         //Initialize the curriculum learning
-        curricula = GetComponent<LocalRobotCurricula>();
-        curricula.assistant = assistant;
-
+        curriculumLearning = shouldCurriculumLearning;
+        if (curriculumLearning)
+        {
+            curricula = GetComponent<LocalRobotCurricula>();
+            curricula.assistant = assistant;
+        }
         //setup camera target
         if (CameraTarget != null)
         {
@@ -100,7 +97,6 @@ public class RobotMultiSkillAgent : Agent
             if (smoothFollow != null)
                 smoothFollow.target = hips.transform;
         }
-
         jdController.SetupBodyPart(body);
         jdController.SetupBodyPart(hips);
         jdController.SetupBodyPart(thighL);
@@ -125,6 +121,25 @@ public class RobotMultiSkillAgent : Agent
 
         }
     }
+    
+
+    void SetupSkill(SkillSelector _ss)
+    {
+        _ss.active = true;
+
+        switch (_ss.skill){
+            case Skills.Stand:
+                walkSkill = false;
+                standSkill = true;
+                GiveBrain(_ss.skillBrain);
+                break;
+            case Skills.Walk:
+                standSkill = false;
+                walkSkill = true;
+                GiveBrain(_ss.skillBrain);
+                break;
+        }
+    }
 
     /// <summary>
     /// Add relevant information on each body part to observations.
@@ -137,7 +152,6 @@ public class RobotMultiSkillAgent : Agent
         AddVectorObs(rb.angularVelocity);
         //Vector3 localPosRelToHips = hips.InverseTransformPoint(rb.position);
         //AddVectorObs(localPosRelToHips);
-
         if (bp.rb.transform != footL && bp.rb.transform != footR && bp.rb.transform != hips)
         {
             AddVectorObs(bp.currentXNormalizedRot);
@@ -155,15 +169,11 @@ public class RobotMultiSkillAgent : Agent
         _maxDistanceTravelled = Mathf.Max(_maxDistanceTravelled, hips.position.z);
 
         jdController.GetCurrentJointForces();
-        //AddVectorObs(jdController.robotBodyPartsDict[body].rb.position);
-        //AddVectorObs(jdController.robotBodyPartsDict[hips].rb.velocity);
         AddVectorObs(hips.forward);
         AddVectorObs(hips.up);
 
         AddVectorObs(body.forward);
         AddVectorObs(body.up);
-
-
 
         foreach (var bodyPart in jdController.robotBodyPartsDict.Values)
         {
@@ -171,11 +181,26 @@ public class RobotMultiSkillAgent : Agent
         }
     }
 
+    /// <summary>
+    /// used to determine if the rollout should be aborted/reset
+    /// </summary>
+    /// <returns></returns>
     bool TerminateRobot()
     {
-        //if (TerminateOnNonFootHitTerrain())
-        //    return true;
-        var height = GetHeightPenality(.9f);
+        float height;
+        if (standSkill)
+        {
+            height = GetHeightPenalty(1.1f);
+        }
+        else if (walkSkill)
+        {
+            height = GetHeightPenalty(.9f);
+        }
+        else
+        {
+            height = GetHeightPenalty(1f);
+        }
+        
         var angle = GetForwardBonus(hips);
         bool endOnHeight = height > 0f;
         bool endOnAngle = (angle < .2f);
@@ -191,7 +216,14 @@ public class RobotMultiSkillAgent : Agent
             if (_timeAlive >= curricula.mileStone)
             {
                 //testing purpose: for standing
-                curricula.reward = standingTest ? _reward : _cumulativeVelocityReward;
+                if (standSkill)
+                {
+                    curricula.reward = _reward;
+                }
+                else if (walkSkill)
+                {
+                    curricula.reward = _cumulativeVelocityReward;
+                }
                 curricula.ReachedMileStone();
                 _timeAlive = 0;
             }
@@ -210,13 +242,12 @@ public class RobotMultiSkillAgent : Agent
         // Apply action to all relevant body parts. 
         if (isNewDecisionStep)
         {
-            var bpDict = jdController.robotBodyPartsDict;
-            int i = -1;
-
             Actions = vectorAction
             .Select(x => x)
             .ToList();
 
+            var bpDict = jdController.robotBodyPartsDict;
+            int i = -1;
             bpDict[body].SetJointTargetRotation(vectorAction[++i], vectorAction[++i], 0);
             bpDict[thighL].SetJointTargetRotation(vectorAction[++i], vectorAction[++i], 0);
             bpDict[thighR].SetJointTargetRotation(vectorAction[++i], vectorAction[++i], 0);
@@ -224,7 +255,6 @@ public class RobotMultiSkillAgent : Agent
             bpDict[shinR].SetJointTargetRotation(vectorAction[++i], 0, 0);
             bpDict[footR].SetJointTargetRotation(vectorAction[++i], vectorAction[++i], vectorAction[++i]);
             bpDict[footL].SetJointTargetRotation(vectorAction[++i], vectorAction[++i], vectorAction[++i]);
-
 
             bpDict[body].SetJointStrength(vectorAction[++i]);
             bpDict[thighL].SetJointStrength(vectorAction[++i]);
@@ -239,8 +269,16 @@ public class RobotMultiSkillAgent : Agent
         IncrementDecisionTimer();
         var hipsRB = jdController.robotBodyPartsDict[hips].rb;
 
+        if (standSkill)
+        {
+            _reward = GetStandingReward();
+        }
+        else if (walkSkill)
+        {
+            _reward = GetWalkerReward();
+        }
         AddReward(
-            _reward = GetStandingReward()
+            _reward
         );
     }
 
@@ -248,21 +286,29 @@ public class RobotMultiSkillAgent : Agent
     internal float GetStandingReward()
     {
         float __reward = 0;
-        _velocityPenalty = -GetVelocity();
-        // Encourage uprightness of hips and body.
+        _velocityPenalty = 4 * Mathf.Abs(GetVelocity());
         _uprightBonus =
             ((GetUprightBonus(hips) / 2)//6
-            + (GetUprightBonus(body) / 3));
+            + (GetUprightBonus(body) / 6)
+            + (GetUprightBonus(thighL) / 8)
+            + (GetUprightBonus(thighR) / 8)
+            + (GetUprightBonus(footL) / 6)
+            + (GetUprightBonus(footR) / 6));
         _forwardBonus =
             ((GetForwardBonus(hips) / 2)//6
-            + (GetForwardBonus(body) / 3));
+            + (GetForwardBonus(body) / 6)
+            + (GetForwardBonus(thighL)/8)
+            + (GetForwardBonus(thighR)/8)
+            + (GetForwardBonus(footL) / 6)
+            + (GetForwardBonus(footR) / 6));
         float effort = GetEffort();
+        _finalPhasePenalty = GetPhaseBonus();
         _effortPenality = 1e-2f * (float)effort;
-        _heightPenality = GetHeightPenality(1.3f);  //height of body
+        _heightPenality = GetHeightPenalty(1.3f);  //height of body
         __reward = (
-
             +_uprightBonus
             + _forwardBonus
+            - _finalPhasePenalty
             - _velocityPenalty
             - _effortPenality
             - _heightPenality
@@ -285,10 +331,10 @@ public class RobotMultiSkillAgent : Agent
 
         // Encourage uprightness of hips and body.
         _uprightBonus =
-            ((GetUprightBonus(hips) / 4)//6
+            ((GetUprightBonus(hips) / 6)//6
             + (GetUprightBonus(body) / 6));
         _forwardBonus =
-            ((GetForwardBonus(hips) / 4)//6
+            ((GetForwardBonus(hips) / 6)//6
             + (GetForwardBonus(body) / 6));
         //bonus for async phase:
         _finalPhaseBonus = GetPhaseBonus();
@@ -298,12 +344,11 @@ public class RobotMultiSkillAgent : Agent
         float rightThighPenality = Mathf.Abs(GetBackwardsBonus(thighR));
         _limbPenalty = leftThighPenality + rightThighPenality;
         _limbPenalty = Mathf.Min(0.5f, _limbPenalty);   //penalty for moving both legs in the same direction
-        //penalize excessive joint actions
+
         float effort = GetEffort(new string[] { shinL.name, shinR.name });
         _effortPenality = 1e-2f * (float)effort;
-        //penalize joint actions at limit
         _jointsAtLimitPenality = GetJointsAtLimitPenality();
-        _heightPenality = GetHeightPenality(1.3f);  //height of body
+        _heightPenality = GetHeightPenalty(1.3f);  //height of body
 
         __reward = (
               _velocity
@@ -363,30 +408,67 @@ public class RobotMultiSkillAgent : Agent
 
         //recentVelocity = new List<float>();
     }
-    
-    public float _timeAlive;
-    public float _phaseBonus;
-    public int _phase;
+
+    [Header("Relevant learning values")]
+    /// <summary>
+    /// the overall reward
+    /// </summary>
     public float _reward;
+    /// <summary>
+    /// the cumulative velocity reward since agent reset
+    /// </summary>
     public float _cumulativeVelocityReward;
-    public float _velocity;
-    public float _velocityPenalty;
-    public float _uprightBonus;
-    public float _forwardBonus;
+    /// <summary>
+    /// the time alive since last reset
+    /// </summary>
+    public float _timeAlive;
+
+    /// <summary>
+    /// the bonus for phase regularity 
+    /// </summary>
     public float _finalPhaseBonus;
+    /// <summary>
+    /// leverages phase bonus as penalty for both feet on ground
+    /// </summary>
+    public float _finalPhasePenalty;
+    /// <summary>
+    /// the forward velocity of given bodypart
+    /// </summary>
+    public float _velocity;
+    /// <summary>
+    /// the velocity in all direction of given bodypart
+    /// </summary>
+    public float _velocityPenalty;
+    /// <summary>
+    /// the bonus for holding given bodyparts upright
+    /// </summary>
+    public float _uprightBonus;
+    /// <summary>
+    /// the bonus for holding given bodypart aligned with forward axis
+    /// </summary>
+    public float _forwardBonus;
+    /// <summary>
+    /// penalty for falling below height over feet
+    /// </summary>
     public float _heightPenality;
+    /// <summary>
+    /// penalty for moving legs irregular - max 0.5
+    /// </summary>
     public float _limbPenalty;
+    /// <summary>
+    /// penalize joint actions at limit
+    /// </summary>
     public float _jointsAtLimitPenality;
+    /// <summary>
+    /// penalize excessive joint actions
+    /// </summary>
     public float _effortPenality;
-    public float _headHeightBonus;
+    /// <summary>
+    /// the maximum reached distance since training began
+    /// </summary>
     public float _maxDistanceTravelled;
 
-    public float LeftMin;
-    public float LeftMax;
-
-    public float RightMin;
-    public float RightMax;
-
+    #region Utilities
     /// <summary>
     /// returns penalty for joints hitting rotation limits
     /// </summary>
@@ -463,7 +545,7 @@ public class RobotMultiSkillAgent : Agent
     /// </summary>
     /// <param name="maxHeight"></param>
     /// <returns></returns>
-    internal float GetHeightPenality(float maxHeight)
+    internal float GetHeightPenalty(float maxHeight)
     {
         var height = GetHeight();   //body height
         var heightPenality = maxHeight - height;    //difference the set maxheight and the body height
@@ -562,16 +644,32 @@ public class RobotMultiSkillAgent : Agent
         return bonus;
     }
 
-    // implement phase bonus (reward for left then right)
-    List<bool> _lastSenorState = new List<bool>();
+    #region PhaseBonus calculation
+
+    List<bool> _lastSensorState = new List<bool>();
     int NumSensors = 2; //left food, right food
+
+    /// <summary>
+    /// the bonus for one phase cicle
+    /// </summary>
+    public float _phaseBonus;
+    /// <summary>
+    /// the actual phase - left=1 right=2
+    /// </summary>
+    public int _phase;
+    public float LeftMin;
+    public float LeftMax;
+
+    public float RightMin;
+    public float RightMax;
+
 
     /// <summary>
     /// initialize on agent reset/ Done
     /// </summary>
     void PhaseBonusInitalize()
     {
-        _lastSenorState = Enumerable.Repeat<bool>(false, NumSensors).ToList();
+        _lastSensorState = Enumerable.Repeat<bool>(false, NumSensors).ToList();
         _phase = 0;
         _phaseBonus = 0f;
         PhaseResetLeft();
@@ -658,14 +756,13 @@ public class RobotMultiSkillAgent : Agent
     float GetPhaseBonus()
     {
         bool noPhaseChange = true;
-        //bool isLeftFootDown = SensorIsInTouch[0] > 0f || SensorIsInTouch[1] > 0f;
-        //bool isRightFootDown = SensorIsInTouch[2] > 0f || SensorIsInTouch[3] > 0f;
-        bool wasLeftFootDown = _lastSenorState[0];
-        bool wasRightFootDown = _lastSenorState[1];
+        bool wasLeftFootDown = _lastSensorState[0];
+        bool wasRightFootDown = _lastSensorState[1];
         noPhaseChange = noPhaseChange && isLeftFootDown == wasLeftFootDown;
         noPhaseChange = noPhaseChange && isRightFootDown == wasRightFootDown;
-        _lastSenorState[0] = isLeftFootDown;
-        _lastSenorState[1] = isRightFootDown;
+        BothFeetDown = isLeftFootDown && isRightFootDown;
+        _lastSensorState[0] = isLeftFootDown;
+        _lastSensorState[1] = isRightFootDown;
         if (isLeftFootDown && isRightFootDown)
         {
             _phase = 0;
@@ -718,7 +815,8 @@ public class RobotMultiSkillAgent : Agent
 
         return _phaseBonus;
     }
-
+    #endregion
+    #endregion
 }
 
 

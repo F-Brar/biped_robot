@@ -21,7 +21,7 @@ public class LocalRobotCurricula : MonoBehaviour
         set {
             //update assistant
             _propellingForce = value;
-            assistant.forwardStabilityForce = _propellingForce;
+            assistant.propellingForce = _propellingForce;
         }
     }
 
@@ -32,7 +32,7 @@ public class LocalRobotCurricula : MonoBehaviour
         set {
             //update assistant
             _lateralBalanceForce = value;
-            assistant.sideWaysStabilityForce = _lateralBalanceForce;
+            assistant.lateralBalanceForce = _lateralBalanceForce;
         }
     }
     private float _lateralBalanceForce;
