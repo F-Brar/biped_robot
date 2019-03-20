@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: faf6fe8d71bb93c458374cff84140503
+ScriptedImporter:
+  fileIDToRecycleName:
+    11400002: Assets/RobotTestBed/Models/curriculum/RobotBrainTestBedCurr008.nn
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 83221ad3db87f4b3b91b041047cb2bc5, type: 3}
