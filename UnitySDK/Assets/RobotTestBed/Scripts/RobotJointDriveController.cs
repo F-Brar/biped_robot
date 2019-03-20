@@ -125,11 +125,11 @@ namespace MLAgents
             if (!bp.groundContact)
             {
                 bp.groundContact = t.gameObject.AddComponent<RobotGroundContact>();
-                bp.groundContact.agent = gameObject.GetComponent<BipedRobotAgent>();
+                bp.groundContact.agent = gameObject.GetComponent<RobotMultiSkillAgent>();
             }
             else
             {
-                bp.groundContact.agent = gameObject.GetComponent<BipedRobotAgent>();
+                bp.groundContact.agent = gameObject.GetComponent<RobotMultiSkillAgent>();
             }
 
             bp.thisRobotJDController = this;

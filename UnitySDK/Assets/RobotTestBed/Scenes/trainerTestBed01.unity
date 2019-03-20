@@ -1181,7 +1181,8 @@ MonoBehaviour:
   broadcastHub:
     broadcastingBrains:
     - {fileID: 11400000, guid: e9e557dfefff35e49977bdda932033b7, type: 2}
-    _brainsToControl: []
+    _brainsToControl:
+    - {fileID: 11400000, guid: e9e557dfefff35e49977bdda932033b7, type: 2}
   maxSteps: 0
   trainingConfiguration:
     width: 80
@@ -1197,8 +1198,6 @@ MonoBehaviour:
     targetFrameRate: 60
   resetParameters:
     resetParameters: []
-  isCommunicatorOn: 0
-  _isInference: 0
 --- !u!4 &1626997144
 Transform:
   m_ObjectHideFlags: 0
@@ -1227,10 +1226,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _shouldCurriculumLearning: 0
   _mileStone: 3
-  _reductionPercentage: 0.25
-  updateOnPercentage: 1
+  _reductionPercentage: 0.1
+  updateOnPercentage: 0.7
   _initPropForce: 30
-  _initLatForce: 20
+  _initLatForce: 25
   academy: {fileID: 0}
   expertReward: 0
   lesson: 0
@@ -2380,5 +2379,10 @@ PrefabInstance:
       propertyPath: CameraTarget
       value: 
       objectReference: {fileID: 1628795730}
+    - target: {fileID: 5678194371610540897, guid: b34c9b9da906c5f43a95e756f9836f3e,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b34c9b9da906c5f43a95e756f9836f3e, type: 3}

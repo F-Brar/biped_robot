@@ -10,7 +10,7 @@ public class LocalRobotCurricula : MonoBehaviour
 {
     public RobotCurricula globalCurricula;
     public VirtualAssistant assistant;
-    public BipedRobotAgent agent;
+    public RobotMultiSkillAgent agent;
 
     #region AssistantForces
     public float initPropForce = 25;
@@ -53,7 +53,7 @@ public class LocalRobotCurricula : MonoBehaviour
     /// </summary>
     public void Init()
     {
-        agent = GetComponent<BipedRobotAgent>();
+        agent = GetComponent<RobotMultiSkillAgent>();
         lateralBalanceForce = initLatForce;
         propellingForce = initPropForce;
     }

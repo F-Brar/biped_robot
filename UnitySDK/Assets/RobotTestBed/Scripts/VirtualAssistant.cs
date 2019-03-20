@@ -8,6 +8,8 @@ using UnityEngine;
 /// </summary>
 public class VirtualAssistant : MonoBehaviour
 {
+    [Tooltip("if this is active the agent will be stabilized on all sides")]
+    public bool standing;
     public Rigidbody applyPowerBody;
     public Rigidbody hips;
     [Tooltip("adjusted through curriculum learning")]
@@ -24,6 +26,13 @@ public class VirtualAssistant : MonoBehaviour
         {
             hips.AddForce(hips.transform.forward * forwardStabilityForce, ForceMode.Acceleration);
         }
+        //frontal stability at 70% for standing agent
+        else if(localVel.z >= .0f && standing)
+        {
+            hips.AddForce(-hips.transform.forward * forwardStabilityForce * .7f, ForceMode.Acceleration);
+        }
+
+
         if(localVel.x <= -.0f)
         {
             hips.AddForce(hips.transform.right * sideWaysStabilityForce, ForceMode.Acceleration);
@@ -33,5 +42,6 @@ public class VirtualAssistant : MonoBehaviour
 
             hips.AddForce( - hips.transform.right * sideWaysStabilityForce, ForceMode.Acceleration);
         }
+        
     }
 }

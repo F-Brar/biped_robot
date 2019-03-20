@@ -67,7 +67,7 @@ public class RobotCurricula : MonoBehaviour
             }
             else
             {
-                curr.agent = curr.GetComponent<BipedRobotAgent>();
+                curr.agent = curr.GetComponent<RobotMultiSkillAgent>();
                 curr.agent.shouldCurriculumLearning = _shouldCurriculumLearning;
             }
 

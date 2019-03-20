@@ -12,7 +12,7 @@ namespace MLAgents
     [DisallowMultipleComponent]
     public class RobotGroundContact : MonoBehaviour
     {
-        [HideInInspector] public BipedRobotAgent agent;
+        [HideInInspector] public RobotMultiSkillAgent agent;
 
         [Header("Ground Check")] public bool agentDoneOnGroundContact; // Whether to reset agent on ground contact.
         public bool penalizeGroundContact; // Whether to penalize on contact.

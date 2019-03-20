@@ -83,6 +83,19 @@ public class SteerBipedRobotAgent : Agent
         }
     }
 
+    internal float GetStandingReward()
+    {
+        float _reward = 0;
+
+        return _reward;
+    }
+    internal float GetWalkerReward()
+    {
+        float _reward = 0;
+
+        return _reward;
+    }
+
     /// <summary>
     /// Loop over body parts to add them to observation.
     /// </summary>
@@ -90,7 +103,7 @@ public class SteerBipedRobotAgent : Agent
     {
         //Observe input
         TargetVelocityZ = controllerAgent.AxisX;
-        ShouldJump = controllerAgent.Jump;
+        ShouldJump = false;// controllerAgent.Jump;
 
         AddVectorObs(TargetVelocityZ);
         AddVectorObs(CurrentVelocityZ);
