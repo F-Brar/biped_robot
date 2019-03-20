@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: b5d316df9178967439daaf8f138d2f82
+ScriptedImporter:
+  fileIDToRecycleName:
+    11400002: Assets/RobotTestBed/Models/nocurrriculum/noCurriculum006.nn
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 83221ad3db87f4b3b91b041047cb2bc5, type: 3}
