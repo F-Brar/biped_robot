@@ -168,7 +168,7 @@ public class SteerBipedRobotAgent : Agent
          //var effortPenality = 1e-2f * (float)effort;
         //var effortPenality = (float)effort;
         //Vector3 direction = new Vector3(0, 0, TargetVelocityZ);
-        float aliveBonus = 0.001f;
+        //float aliveBonus = 0.001f;
 
         AddReward(
             //- 0.03f * velocityDiff   //encourage agent to match velocity

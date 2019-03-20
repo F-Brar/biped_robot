@@ -1181,8 +1181,7 @@ MonoBehaviour:
   broadcastHub:
     broadcastingBrains:
     - {fileID: 11400000, guid: e9e557dfefff35e49977bdda932033b7, type: 2}
-    _brainsToControl:
-    - {fileID: 11400000, guid: e9e557dfefff35e49977bdda932033b7, type: 2}
+    _brainsToControl: []
   maxSteps: 0
   trainingConfiguration:
     width: 80
@@ -1198,6 +1197,8 @@ MonoBehaviour:
     targetFrameRate: 60
   resetParameters:
     resetParameters: []
+  isCommunicatorOn: 0
+  _isInference: 0
 --- !u!4 &1626997144
 Transform:
   m_ObjectHideFlags: 0
@@ -1224,12 +1225,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 592bdf7dd57165a47a204e76a7bb5393, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _shouldCurriculumLearning: 1
-  _mileStone: 0.5
-  _reductionPercentage: 0.5
-  updateOnPercentage: 0.7
+  _shouldCurriculumLearning: 0
+  _mileStone: 3
+  _reductionPercentage: 0.25
+  updateOnPercentage: 1
   _initPropForce: 30
-  _initLatForce: 30
+  _initLatForce: 20
   academy: {fileID: 0}
   expertReward: 0
   lesson: 0

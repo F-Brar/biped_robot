@@ -41,6 +41,8 @@ public class RobotCurricula : MonoBehaviour
     /// </summary>
     public void Init()
     {
+        //_shouldCurriculumLearning = academy.GetIsInference() ? false : _shouldCurriculumLearning;
+
         if (_shouldCurriculumLearning == false)
         {
             _initPropForce = 0;

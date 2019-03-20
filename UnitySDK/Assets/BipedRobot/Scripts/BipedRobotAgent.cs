@@ -4,12 +4,6 @@ using UnityEngine;
 using MLAgents;
 using System.Linq;
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using MLAgents;
-using System.Linq;
-
 
 
 
@@ -35,10 +29,6 @@ public class BipedRobotAgent : Agent
             {
                 _timeAlive = 0;
                 _cumulativeVelocityReward = 0f;
-                if (curricula.done)
-                {
-                    curricula.ResetRollout();
-                }
             }
         }
     }
@@ -62,8 +52,7 @@ public class BipedRobotAgent : Agent
 
 
     private LocalRobotCurricula curricula;
-
-    // Parms to set in subclass.AgentReset() 
+    
     [Tooltip("Reward value to set on termination")]
     /**< \brief Reward value to set on termination*/
     protected float OnTerminateRewardValue = -1;
@@ -79,7 +68,7 @@ public class BipedRobotAgent : Agent
     public override void InitializeAgent()
     {
         academy = FindObjectOfType<LocoAcadamy>();
-        curriculumLearning = academy.GetIsInference() ? shouldCurriculumLearning : false;   //curriculum deactivated if inference mode
+        curriculumLearning = shouldCurriculumLearning;   //curriculum deactivated if inference mode
         assistant = GetComponent<VirtualAssistant>();
         jdController = GetComponent<RobotJointDriveController>();
 
@@ -116,8 +105,6 @@ public class BipedRobotAgent : Agent
             var focalPointRotation = rigidbody.rotation;    //copy initial rotation
             focalPointRotation.SetLookRotation(focalPoint - rigidbody.position);    //save forward rotation to determine angle diff
             BodyPartsToFocalRotation[name] = focalPointRotation;                    //in initial condition these are all zero rotations --> rotation that is needed to point forward (z-axis)
-            //var EulerAngles = focalPointRotation.eulerAngles;
-            //Debug.DrawRay(rigidbody.position, focalPoint - rigidbody.position, Color.red, 5);
             
         }
     }
