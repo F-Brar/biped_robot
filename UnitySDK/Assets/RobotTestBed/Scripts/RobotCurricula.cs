@@ -15,7 +15,7 @@ public class RobotCurricula : MonoBehaviour
     //private List<BipedRobotAgent> agents;
     private List<LocalRobotCurricula> curricula;
     [Tooltip("time milestone global")]
-    public float _mileStone = 3;
+    public float _mileStone = .5f;
     [Tooltip("percantage reduction on milestone reach")]
     public float _reductionPercentage = .1f;
     [Tooltip("update the curriculum when this value of initial policy is reached")]
@@ -90,7 +90,9 @@ public class RobotCurricula : MonoBehaviour
             foreach (LocalRobotCurricula curr in curricula)
             {
                 curr.agent.AgentReset();
+                
                 curr.UpdateLesson(lesson);
+                
             }
 
             expertReward = Mathf.Max(reward, expertReward);

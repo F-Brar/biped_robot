@@ -13,7 +13,6 @@ public class LocalRobotCurricula : MonoBehaviour
     public BipedRobotAgent agent;
 
     #region AssistantForces
-    //initial forces updatet only on lesson iteration
     public float initPropForce = 25;
     public float initLatForce = 25;
     //internal forces updatet in each rollout
@@ -49,7 +48,6 @@ public class LocalRobotCurricula : MonoBehaviour
     public int milestoneCounter = 0;
     [Range(0,1)]
     public float multiplier;
-    public bool done;
     /// <summary>
     /// initialize
     /// </summary>
@@ -70,12 +68,15 @@ public class LocalRobotCurricula : MonoBehaviour
         {
             //end curriculum learning
             agent.curriculumLearning = false;
-            done = true;
+            //for convenience
+            agent.shouldCurriculumLearning = false;
         }
+        //reset values
+        ResetRollout();
     }
 
     /// <summary>
-    /// gradually (timeAlive dependent) reduces forces in one rollout ; avoids overfitting to one curricula
+    /// gradually (timeAlive dependent) reduces forces in one rollout ; avoids overfitting to one curricula by reducing force on milestone reached
     /// </summary>
     public void ReachedMileStone()
     {
@@ -105,8 +106,8 @@ public class LocalRobotCurricula : MonoBehaviour
         milestoneCounter = 0;
 
         multiplier = GetMultiplier();
-        propellingForce = initLatForce * multiplier;
-        lateralBalanceForce = initPropForce * multiplier;
+        lateralBalanceForce = initLatForce * multiplier;
+        propellingForce = initPropForce * multiplier;
         
     }
 
