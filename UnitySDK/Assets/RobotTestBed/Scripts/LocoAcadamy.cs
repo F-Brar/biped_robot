@@ -7,9 +7,13 @@ public class LocoAcadamy : Academy
 
     public override void InitializeAcademy()
     {
-        RobotCurricula curr = GetComponent<RobotCurricula>();
+        GlobalCurriculumController curr = GetComponent<GlobalCurriculumController>();
         curr.academy = this;
-        curr.Init();
+        if (curr.shouldCurriculumLearning)
+        {
+            curr.Init();
+        }
+        
         Monitor.verticalOffset = 1f;
 
         // We increase the Physics solver iterations in order to

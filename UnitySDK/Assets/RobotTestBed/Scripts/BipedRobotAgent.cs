@@ -51,7 +51,7 @@ public class BipedRobotAgent : Agent
     public Transform footR;
 
 
-    private LocalRobotCurricula curricula;
+    private LocalCurriculumController curricula;
     
     [Tooltip("Reward value to set on termination")]
     /**< \brief Reward value to set on termination*/
@@ -73,7 +73,7 @@ public class BipedRobotAgent : Agent
         jdController = GetComponent<RobotJointDriveController>();
 
         //Initialize the curriculum learning
-        curricula = GetComponent<LocalRobotCurricula>();
+        curricula = GetComponent<LocalCurriculumController>();
         curricula.assistant = assistant;
         
         //setup camera target

@@ -11,6 +11,8 @@ public abstract class RobotAgent : Agent
     [Tooltip("wether the agent should be reset")]
     public bool terminateNever;
 
+    public GameObject CameraTarget;
+
     [Header("Sensors")]
     public bool bothFeetDown;
     public bool isLeftFootDown;
@@ -43,6 +45,14 @@ public abstract class RobotAgent : Agent
     public override void InitializeAgent()
     {
         jdController = GetComponent<RobotJointDriveController>();
+
+        //setup camera target
+        if (CameraTarget != null)
+        {
+            var smoothFollow = CameraTarget.GetComponent<SmoothFollow>();
+            if (smoothFollow != null)
+                smoothFollow.target = hips.transform;
+        }
 
         jdController.SetupBodyPart(body);
         jdController.SetupBodyPart(hips);
@@ -137,6 +147,11 @@ public abstract class RobotAgent : Agent
         return endOnAngle;
     }
 
+    /// <summary>
+    /// Apply the action vector sent by the communicator to the joints --> send back the skill reward
+    /// </summary>
+    /// <param name="vectorAction"></param>
+    /// <param name="textAction"></param>
     public override void AgentAction(float[] vectorAction, string textAction)
     {
         

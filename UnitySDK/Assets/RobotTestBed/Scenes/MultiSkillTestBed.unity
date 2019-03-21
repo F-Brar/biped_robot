@@ -1217,15 +1217,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 592bdf7dd57165a47a204e76a7bb5393, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  curriculumSkills:
+  - CurriculumName: STAND
+    mileStone: 5
+    reductionPercentage: 0.1
+    updateOnPercentage: 1
+    initPropellingForce: 25
+    initLateralForce: 20
+    initBreakForce: 20
+    propellingForce: 0
+    lateralForce: 0
+    breakForce: 0
+    expertReward: 0
+    reward: 0
+    lesson: 0
+    active: 0
+  - CurriculumName: WALK
+    mileStone: 4
+    reductionPercentage: 0.25
+    updateOnPercentage: 0.7
+    initPropellingForce: 30
+    initLateralForce: 25
+    initBreakForce: 10
+    propellingForce: 0
+    lateralForce: 0
+    breakForce: 0
+    expertReward: 0
+    reward: 0
+    lesson: 0
+    active: 0
   shouldCurriculumLearning: 1
-  _mileStone: 5
-  _reductionPercentage: 0.1
-  updateOnPercentage: 0.7
-  _initPropForce: 30
-  _initLatForce: 25
   academy: {fileID: 0}
-  expertReward: 0
-  lesson: 0
 --- !u!1 &1628795730
 GameObject:
   m_ObjectHideFlags: 0

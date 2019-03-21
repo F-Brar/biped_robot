@@ -8,17 +8,18 @@ using UnityEngine;
 /// </summary>
 public class VirtualAssistant : MonoBehaviour
 {
-    [Tooltip("if this is active the agent will be stabilized on all sides")]
-    public bool standing;
     public Rigidbody hips;
     [Tooltip("adjusted through curriculum learning")]
     public float propellingForce;       //propels forward velocity
     public float lateralBalanceForce;   //lateral balance
     public float breakForce;            //breaks forward velocity
 
+    private void Awake()
+    {
+        hips = transform.Find("hips").gameObject.GetComponent<Rigidbody>();
+    }
 
-
-    // Update is called once per frame
+    // fixedUpdate is called every physics step
     void FixedUpdate()
     {
         var localVel = transform.InverseTransformDirection(hips.velocity);
@@ -27,9 +28,9 @@ public class VirtualAssistant : MonoBehaviour
             hips.AddForce(hips.transform.forward * propellingForce, ForceMode.Acceleration);
         }
         //frontal stability at 70% for standing agent
-        else if(localVel.z >= .1f && standing)
+        else if(localVel.z >= .1f)
         {
-            hips.AddForce(-hips.transform.forward * propellingForce * .7f, ForceMode.Acceleration);
+            hips.AddForce(-hips.transform.forward * breakForce * .7f, ForceMode.Acceleration);
         }
 
 

@@ -30,7 +30,6 @@ public class RobotMultiSkillAgent : RobotAgent
     public List<Skill> skillList;
     [Header("active skill => 0 : stand; 1 : walk;")]
     public int activeSkill;
-    public GameObject CameraTarget;
 
     public bool curriculumLearning {
         get { return _curriculumLearning; }
@@ -46,32 +45,30 @@ public class RobotMultiSkillAgent : RobotAgent
     [SerializeField]
     private bool _curriculumLearning;
 
-    private LocalRobotCurricula curricula;  //the curriculum learner
+    private LocalCurriculumController curriculumController;  //the curriculum learner
     private VirtualAssistant assistant;
 
 
     public override void InitializeAgent()
     {
-
         //Initialize the curriculum learning
-        curricula = GetComponent<LocalRobotCurricula>();
-
-        //setup camera target
-        if (CameraTarget != null)
-        {
-            var smoothFollow = CameraTarget.GetComponent<SmoothFollow>();
-            if (smoothFollow != null)
-                smoothFollow.target = hips.transform;
-        }
-
+        curriculumController = GetComponent<LocalCurriculumController>();
         base.InitializeAgent();
 
         SetupSkill(activeSkill);
     }
     
-
+    /// <summary>
+    /// switch active skill; either from controllerAgent or this agent
+    /// </summary>
+    /// <param name="_activeSkill"></param>
     public void SetupSkill(int _activeSkill)
     {
+        if(this.activeSkill != _activeSkill)
+        {
+            this.activeSkill = _activeSkill;
+        }
+        //check for convenience
         foreach(var skill in skillList)
         {
             skill.active = false;
@@ -89,6 +86,12 @@ public class RobotMultiSkillAgent : RobotAgent
                 _terminationHeight = 1f;
                 break;
         }
+        if (curriculumLearning)
+        {
+            ResetCurriculumRollout();
+            curriculumController.SetActiveCurriculum(activeSkill);
+        }
+        
     }
 
 
@@ -98,18 +101,18 @@ public class RobotMultiSkillAgent : RobotAgent
         {
             _timeAlive += Time.deltaTime;
 
-            if (_timeAlive >= curricula.mileStone)
+            if (_timeAlive >= curriculumController.mileStone)
             {
-                //testing purpose: for standing
+                
                 if (activeSkill == 0)
                 {
-                    curricula.reward = _reward;
+                    curriculumController.reward = _reward;
                 }
                 else if (activeSkill == 1)
                 {
-                    curricula.reward = _cumulativeVelocityReward;
+                    curriculumController.reward = _cumulativeVelocityReward;
                 }
-                curricula.ReachedMileStone();
+                curriculumController.ReachedMileStone();
                 _timeAlive = 0;
             }
         }
@@ -151,8 +154,8 @@ public class RobotMultiSkillAgent : RobotAgent
         _forwardBonus =
             ((GetForwardBonus(hips) / 4)//6
             + (GetForwardBonus(body) / 6)
-            + (GetForwardBonus(thighL)/8)
-            + (GetForwardBonus(thighR)/8)
+            + (GetForwardBonus(thighL)/ 8)
+            + (GetForwardBonus(thighR)/ 8)
             + (GetForwardBonus(shinL) / 8)
             + (GetForwardBonus(shinR) / 8)
             + (GetForwardBonus(footL) / 6)
@@ -235,14 +238,22 @@ public class RobotMultiSkillAgent : RobotAgent
 
         if (curriculumLearning)
         {
-            _timeAlive = 0;
-            _cumulativeVelocityReward = 0f;
-            curricula.ResetRollout();
+            ResetCurriculumRollout();
         }
 
         //recentVelocity = new List<float>();
     }
 
+    public void ResetCurriculumRollout()
+    {
+        _timeAlive = 0;
+        _cumulativeVelocityReward = 0f;
+        curriculumController.ResetRollout();
+    }
+    public int GetActiveSkill()
+    {
+        return activeSkill;
+    }
 
 }
 

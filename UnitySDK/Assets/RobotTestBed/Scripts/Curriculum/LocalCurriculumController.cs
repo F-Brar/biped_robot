@@ -6,16 +6,23 @@ using UnityEngine;
 /// iterate the curriulum if the policy reaches 70% of its predecessor and stays 2p seconds alive
 /// </summary>
 [System.Serializable]
-public class LocalRobotCurricula : MonoBehaviour
+public class LocalCurriculumController : MonoBehaviour
 {
-    public RobotCurricula globalCurricula;
+    public List<Curriculum> curriculumSkills;
+    public int activeSkill;
+    [HideInInspector]
+    public GlobalCurriculumController globalCurricula;
+    [HideInInspector]
     public VirtualAssistant assistant;
+    [HideInInspector]
     public RobotMultiSkillAgent agent;
 
     #region AssistantForces
-    public float initPropForce = 25;
-    public float initLatForce = 25;
     //internal forces updatet in each rollout
+    public float initPropForce;
+    public float initLatForce;
+    public float initBreakForce;
+
     public float propellingForce {
         get { return _propellingForce; }
         set {
@@ -40,6 +47,17 @@ public class LocalRobotCurricula : MonoBehaviour
         }
     }
     private float _lateralBalanceForce;
+
+
+    public float breakForce {
+        get { return _breakForce; }
+        set {
+            //update assistant
+            _breakForce = value;
+            assistant.breakForce = _breakForce;
+        }
+    }
+    private float _breakForce;
     #endregion
 
     public float reward;
@@ -55,6 +73,7 @@ public class LocalRobotCurricula : MonoBehaviour
 
     private void Awake()
     {
+        curriculumSkills = new List<Curriculum>();
         if (assistant == null)
         {
             assistant = GetComponent<VirtualAssistant>();
@@ -68,17 +87,48 @@ public class LocalRobotCurricula : MonoBehaviour
     /// <summary>
     /// initialize
     /// </summary>
-    public void Init()
+    public void Init(List<Curriculum> _curriculumSkills)
     {
+        foreach(var curriculum in _curriculumSkills)
+        {
+            this.curriculumSkills.Add(curriculum);
+        }
+        activeSkill = agent.GetActiveSkill();
+        //initialize with globale values
+        initLatForce = curriculumSkills[activeSkill].initLateralForce;
+        initPropForce = curriculumSkills[activeSkill].initPropellingForce;
+        initBreakForce = curriculumSkills[activeSkill].initBreakForce;
+        mileStone = curriculumSkills[activeSkill].mileStone;
+        reductionPercentage = curriculumSkills[activeSkill].reductionPercentage;
+        //initialize local values
         lateralBalanceForce = initLatForce;
         propellingForce = initPropForce;
+        breakForce = initBreakForce;
     }
+
+    /// <summary>
+    /// Adapt all values to new skill + reset rollout
+    /// </summary>
+    /// <param name="activeSkill"></param>
+    public void SetActiveCurriculum(int activeSkill)
+    {
+        ResetRollout();
+        this.activeSkill = activeSkill;
+        curriculumSkills[activeSkill].active = true;
+        this.mileStone = curriculumSkills[activeSkill].mileStone;
+        this.reductionPercentage = curriculumSkills[activeSkill].reductionPercentage;
+        this.lateralBalanceForce = curriculumSkills[activeSkill].lateralForce;
+        this.propellingForce = curriculumSkills[activeSkill].propellingForce;
+        this.breakForce = curriculumSkills[activeSkill].breakForce;
+    }
+
     /// <summary>
     /// reduce assistant force with each lesson
     /// </summary>
-    public void UpdateLesson(int lesson)
+    public void UpdateLesson(int lesson, float _newExpertReward )
     {
-        _lesson = lesson;
+        _lesson = curriculumSkills[activeSkill].lesson = lesson;
+        curriculumSkills[activeSkill].expertReward = _newExpertReward;
         //if last lesson done:
         if (_lesson * reductionPercentage >= 1)
         {
@@ -100,7 +150,7 @@ public class LocalRobotCurricula : MonoBehaviour
             milestoneCounter += 1;
             if (milestoneCounter >= 2)
             {
-                globalCurricula.UpdateAll(reward);
+                globalCurricula.UpdateAll(reward, activeSkill);
                 ResetRollout();
             }
 
@@ -118,7 +168,6 @@ public class LocalRobotCurricula : MonoBehaviour
     {
        
         milestoneCounter = 0;
-
         multiplier = GetMultiplier();
         lateralBalanceForce = initLatForce * multiplier;
         propellingForce = initPropForce * multiplier;
@@ -131,6 +180,8 @@ public class LocalRobotCurricula : MonoBehaviour
     /// <returns></returns>
     float GetMultiplier(float mileStoneCounter = 0)
     {
+        _lesson = curriculumSkills[activeSkill].lesson;
+        
         float _multiplier = 1 - ((reductionPercentage * (_lesson + milestoneCounter)) <= 1 ? (reductionPercentage * (_lesson + milestoneCounter)) : 1);    //returns 1 if curriculum done
         return _multiplier;
     }

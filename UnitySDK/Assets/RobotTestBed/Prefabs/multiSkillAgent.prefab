@@ -87,10 +87,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 45583560}
-  - component: {fileID: 45583564}
   - component: {fileID: 2543176773027384878}
   - component: {fileID: 45583562}
-  - component: {fileID: 3553489625926987850}
   - component: {fileID: 45583565}
   m_Layer: 0
   m_Name: multiSkillAgent
@@ -121,23 +119,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &45583564
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 45583559}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86d61873b75430348ab42a94fe44c1b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  standing: 1
-  hips: {fileID: 366016886}
-  propellingForce: 0
-  lateralBalanceForce: 0
-  breakForce: 0
 --- !u!114 &2543176773027384878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,6 +139,7 @@ MonoBehaviour:
     onDemandDecision: 0
     numberOfActionsBetweenDecisions: 1
   terminateNever: 0
+  CameraTarget: {fileID: 0}
   bothFeetDown: 0
   isLeftFootDown: 0
   isRightFootDown: 0
@@ -199,8 +181,7 @@ MonoBehaviour:
   - skill: 1
     skillBrain: {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
     active: 0
-  activeSkill: 1
-  CameraTarget: {fileID: 0}
+  activeSkill: 0
   _curriculumLearning: 0
 --- !u!114 &45583562
 MonoBehaviour:
@@ -218,29 +199,6 @@ MonoBehaviour:
   jointDampen: 50
   maxJointForceLimit: 3000
   robotBodyPartsList: []
---- !u!114 &3553489625926987850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 45583559}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4da5aaf99dd05b44ab54f43c91e852c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  globalCurricula: {fileID: 0}
-  assistant: {fileID: 0}
-  agent: {fileID: 0}
-  initPropForce: 25
-  initLatForce: 25
-  reward: 0
-  reductionPercentage: 0.25
-  mileStone: 0
-  _lesson: 0
-  milestoneCounter: 0
-  multiplier: 0
 --- !u!114 &45583565
 MonoBehaviour:
   m_ObjectHideFlags: 0
