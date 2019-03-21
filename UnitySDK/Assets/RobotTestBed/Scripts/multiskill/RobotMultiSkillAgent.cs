@@ -84,7 +84,7 @@ public class RobotMultiSkillAgent : Agent
         assistant = GetComponent<VirtualAssistant>();
         jdController = GetComponent<RobotJointDriveController>();
         //Initialize the curriculum learning
-        curriculumLearning = shouldCurriculumLearning;
+        //curriculumLearning = shouldCurriculumLearning;
         if (curriculumLearning)
         {
             curricula = GetComponent<LocalRobotCurricula>();
@@ -288,23 +288,27 @@ public class RobotMultiSkillAgent : Agent
         float __reward = 0;
         _velocityPenalty = 4 * Mathf.Abs(GetVelocity());
         _uprightBonus =
-            ((GetUprightBonus(hips) / 2)//6
+            ((GetUprightBonus(hips) / 4)//6
             + (GetUprightBonus(body) / 6)
             + (GetUprightBonus(thighL) / 8)
             + (GetUprightBonus(thighR) / 8)
+            + (GetUprightBonus(shinL) / 8)
+            + (GetUprightBonus(shinR) / 8)
             + (GetUprightBonus(footL) / 6)
             + (GetUprightBonus(footR) / 6));
         _forwardBonus =
-            ((GetForwardBonus(hips) / 2)//6
+            ((GetForwardBonus(hips) / 4)//6
             + (GetForwardBonus(body) / 6)
             + (GetForwardBonus(thighL)/8)
             + (GetForwardBonus(thighR)/8)
+            + (GetForwardBonus(shinL) / 8)
+            + (GetForwardBonus(shinR) / 8)
             + (GetForwardBonus(footL) / 6)
             + (GetForwardBonus(footR) / 6));
         float effort = GetEffort();
         _finalPhasePenalty = GetPhaseBonus();
         _effortPenality = 1e-2f * (float)effort;
-        _heightPenality = GetHeightPenalty(1.3f);  //height of body
+        _heightPenality = 2 * GetHeightPenalty(1.3f);  //height of body
         __reward = (
             +_uprightBonus
             + _forwardBonus

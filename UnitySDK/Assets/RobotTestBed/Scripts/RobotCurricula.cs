@@ -65,15 +65,7 @@ public class RobotCurricula : MonoBehaviour
                 curr.Init();
                 curricula.Add(curr);
             }
-            else
-            {
-                curr.agent = curr.GetComponent<RobotMultiSkillAgent>();
-                curr.agent.shouldCurriculumLearning = _shouldCurriculumLearning;
-            }
-
-            /*
-            */
-
+            
         }
     }
 

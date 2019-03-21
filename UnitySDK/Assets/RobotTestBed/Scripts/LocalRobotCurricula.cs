@@ -8,7 +8,21 @@ using UnityEngine;
 [System.Serializable]
 public class LocalRobotCurricula : MonoBehaviour
 {
-    public RobotCurricula globalCurricula;
+    public RobotCurricula globalCurricula {
+        get { return _globalCurricula; }
+        set 
+        {
+            _globalCurricula = value;
+            if(agent == null)
+            {
+                agent = GetComponent<RobotMultiSkillAgent>();
+            }
+            agent.curriculumLearning = _globalCurricula._shouldCurriculumLearning;
+            agent.shouldCurriculumLearning = _globalCurricula._shouldCurriculumLearning;
+        }
+    }
+    [SerializeField]
+    private RobotCurricula _globalCurricula;
     public VirtualAssistant assistant;
     public RobotMultiSkillAgent agent;
 
