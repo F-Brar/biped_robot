@@ -11,7 +11,7 @@ using System.Linq;
 [System.Serializable]
 public class RobotCurricula : MonoBehaviour
 {
-    public bool _shouldCurriculumLearning;
+    public bool shouldCurriculumLearning;
     //private List<BipedRobotAgent> agents;
     private List<LocalRobotCurricula> curricula;
     [Tooltip("time milestone global")]
@@ -43,7 +43,7 @@ public class RobotCurricula : MonoBehaviour
     {
         //_shouldCurriculumLearning = academy.GetIsInference() ? false : _shouldCurriculumLearning;
 
-        if (_shouldCurriculumLearning == false)
+        if (shouldCurriculumLearning == false)
         {
             _initPropForce = 0;
             _initLatForce = 0;
@@ -54,17 +54,18 @@ public class RobotCurricula : MonoBehaviour
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("agent"))
         {
             var curr = obj.GetComponent<LocalRobotCurricula>();
+            curr.agent.curriculumLearning = shouldCurriculumLearning;
+            if (!shouldCurriculumLearning)
+            {
+                continue;
+            }
             curr.initPropForce = _initPropForce;
             curr.initLatForce = _initLatForce;
             curr.mileStone = _mileStone;
             curr.reductionPercentage = _reductionPercentage;
             curr.globalCurricula = this;
-            //
-            if (_shouldCurriculumLearning)
-            {
-                curr.Init();
-                curricula.Add(curr);
-            }
+            curr.Init();
+            curricula.Add(curr);
             
         }
     }

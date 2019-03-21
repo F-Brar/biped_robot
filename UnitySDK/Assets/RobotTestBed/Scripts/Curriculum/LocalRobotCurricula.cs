@@ -8,21 +8,7 @@ using UnityEngine;
 [System.Serializable]
 public class LocalRobotCurricula : MonoBehaviour
 {
-    public RobotCurricula globalCurricula {
-        get { return _globalCurricula; }
-        set 
-        {
-            _globalCurricula = value;
-            if(agent == null)
-            {
-                agent = GetComponent<RobotMultiSkillAgent>();
-            }
-            agent.curriculumLearning = _globalCurricula._shouldCurriculumLearning;
-            agent.shouldCurriculumLearning = _globalCurricula._shouldCurriculumLearning;
-        }
-    }
-    [SerializeField]
-    private RobotCurricula _globalCurricula;
+    public RobotCurricula globalCurricula;
     public VirtualAssistant assistant;
     public RobotMultiSkillAgent agent;
 
@@ -35,6 +21,10 @@ public class LocalRobotCurricula : MonoBehaviour
         set {
             //update assistant
             _propellingForce = value;
+            if (assistant == null)
+            {
+                assistant = GetComponent<VirtualAssistant>();
+            }
             assistant.propellingForce = _propellingForce;
         }
     }
@@ -62,12 +52,24 @@ public class LocalRobotCurricula : MonoBehaviour
     public int milestoneCounter = 0;
     [Range(0,1)]
     public float multiplier;
+
+    private void Awake()
+    {
+        if (assistant == null)
+        {
+            assistant = GetComponent<VirtualAssistant>();
+        }
+        if (agent == null)
+        {
+            agent = GetComponent<RobotMultiSkillAgent>();
+        }
+    }
+
     /// <summary>
     /// initialize
     /// </summary>
     public void Init()
     {
-        agent = GetComponent<RobotMultiSkillAgent>();
         lateralBalanceForce = initLatForce;
         propellingForce = initPropForce;
     }
@@ -82,8 +84,6 @@ public class LocalRobotCurricula : MonoBehaviour
         {
             //end curriculum learning
             agent.curriculumLearning = false;
-            //for convenience
-            agent.shouldCurriculumLearning = false;
         }
         //reset values
         ResetRollout();

@@ -134,10 +134,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   standing: 1
-  applyPowerBody: {fileID: 1818394058}
   hips: {fileID: 366016886}
-  forwardStabilityForce: 0
-  sideWaysStabilityForce: 0
+  propellingForce: 0
+  lateralBalanceForce: 0
+  breakForce: 0
 --- !u!114 &2543176773027384878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,20 +157,10 @@ MonoBehaviour:
     resetOnDone: 1
     onDemandDecision: 0
     numberOfActionsBetweenDecisions: 1
-  skillList:
-  - skill: 0
-    skillBrain: {fileID: 11400000, guid: 26a3a1998308de24a8985f2dd301cb67, type: 2}
-    active: 0
-  - skill: 1
-    skillBrain: {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
-    active: 0
-  CameraTarget: {fileID: 0}
-  Actions: []
-  shouldCurriculumLearning: 1
-  BothFeetDown: 0
+  terminateNever: 0
+  bothFeetDown: 0
   isLeftFootDown: 0
   isRightFootDown: 0
-  standingTest: 1
   head: {fileID: 537574482}
   hips: {fileID: 366016891}
   body: {fileID: 1818394055}
@@ -180,26 +170,39 @@ MonoBehaviour:
   thighR: {fileID: 272531646}
   shinR: {fileID: 1657951250}
   footR: {fileID: 1431006815}
-  _timeAlive: 0
-  _phaseBonus: 0
-  _phase: 0
   _reward: 0
   _cumulativeVelocityReward: 0
+  _timeAlive: 0
+  _finalPhaseBonus: 0
+  _finalPhasePenalty: 0
   _velocity: 0
   _velocityPenalty: 0
   _uprightBonus: 0
   _forwardBonus: 0
-  _finalPhaseBonus: 0
   _heightPenality: 0
   _limbPenalty: 0
   _jointsAtLimitPenality: 0
   _effortPenality: 0
-  _headHeightBonus: 0
   _maxDistanceTravelled: 0
+  _terminationHeight: 0
+  _terminationAngle: 0
+  _phaseBonus: 0
+  _phase: 0
   LeftMin: 0
   LeftMax: 0
   RightMin: 0
   RightMax: 0
+  skillList:
+  - skill: 0
+    skillBrain: {fileID: 11400000, guid: 26a3a1998308de24a8985f2dd301cb67, type: 2}
+    active: 0
+  - skill: 1
+    skillBrain: {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
+    active: 0
+  standSkill: 1
+  walkSkill: 0
+  CameraTarget: {fileID: 0}
+  shouldCurriculumLearning: 1
 --- !u!114 &45583562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,7 +231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4da5aaf99dd05b44ab54f43c91e852c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  globalCurricula: {fileID: 0}
+  _globalCurricula: {fileID: 0}
   assistant: {fileID: 0}
   agent: {fileID: 0}
   initPropForce: 25
@@ -416,7 +419,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.0000001937151, y: -0.5466387, z: 0}
+  m_ConnectedAnchor: {x: 0.000000029802322, y: -0.5466387, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 0, z: 1}
   m_XMotion: 0
@@ -657,7 +660,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.5193637, y: -0.3749662, z: -0.2853449}
+  m_ConnectedAnchor: {x: 0.5193641, y: -0.3749662, z: -0.2853449}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 0, z: 1}
   m_XMotion: 0
@@ -1530,7 +1533,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.5193637, y: -0.3749662, z: -0.2853449}
+  m_ConnectedAnchor: {x: -0.5193641, y: -0.3749662, z: -0.2853449}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 0, z: 1}
   m_XMotion: 0
@@ -2236,7 +2239,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 1, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.0000001937151, y: -0.61780775, z: 0}
+  m_ConnectedAnchor: {x: 0.00000008940697, y: -0.61780775, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -2523,7 +2526,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 1, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.00000016391277, y: -0.61780775, z: 0}
+  m_ConnectedAnchor: {x: -0.00000008940697, y: -0.61780775, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -2777,7 +2780,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.0000001937151, y: -0.5466387, z: 0}
+  m_ConnectedAnchor: {x: 0, y: -0.5466387, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 0, z: 1}
   m_XMotion: 0
