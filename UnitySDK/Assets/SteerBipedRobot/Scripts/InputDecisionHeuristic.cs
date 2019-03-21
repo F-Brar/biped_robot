@@ -5,13 +5,18 @@ using MLAgents;
 
 public class InputDecisionHeuristic : Decision
 {
-
-    public float X;
     public int Action;
-
     float[] ActionList;
     
-    
+    /// <summary>
+    /// decision heuristic wich skill to execute
+    /// </summary>
+    /// <param name="vectorObs"></param>
+    /// <param name="visualObs"></param>
+    /// <param name="reward"></param>
+    /// <param name="done"></param>
+    /// <param name="memory"></param>
+    /// <returns></returns>
     public override float[] Decide(
         List<float> vectorObs,
         List<Texture2D> visualObs,
@@ -31,17 +36,17 @@ public class InputDecisionHeuristic : Decision
         {
             var rnd = UnityEngine.Random.value;
             bool repeateAction = false;
-            if (rnd > .6f)           // || JumpAction != 0 && rnd > .75f ?
+            if (Action != 0 && rnd > .6f)
                 repeateAction = true;
             if (!repeateAction)
             {
                 rnd = UnityEngine.Random.value;
-                if (rnd <= .3f)
-                    Action = 1;
+                if (rnd <= .4f)
+                    Action = 1; //walk
                 else
                     Action = 0; // stand
             }
-            memory[0] = 80 + (int)(UnityEngine.Random.value * 300); //statt 40 / 200
+            memory[0] = 40 + (int)(UnityEngine.Random.value * 200); //statt 40 / 200
             memory[1] = (float)Action;
         }
         float[] ActionList = new float[1] { Action };
@@ -56,7 +61,6 @@ public class InputDecisionHeuristic : Decision
         bool done,
         List<float> memory)
     {
-        // memory.Add(0);
         return memory;
     }
 }

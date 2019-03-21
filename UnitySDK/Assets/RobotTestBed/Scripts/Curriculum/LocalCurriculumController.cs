@@ -81,45 +81,35 @@ public class LocalCurriculumController : MonoBehaviour
         if (agent == null)
         {
             agent = GetComponent<RobotMultiSkillAgent>();
+            agent.curriculumController = this;
         }
     }
 
     /// <summary>
-    /// initialize
+    /// initialize local curricula
     /// </summary>
     public void Init(List<Curriculum> _curriculumSkills)
     {
+        //initialize local curriculum list
         foreach(var curriculum in _curriculumSkills)
         {
             this.curriculumSkills.Add(curriculum);
         }
         activeSkill = agent.GetActiveSkill();
         //initialize with globale values
-        initLatForce = curriculumSkills[activeSkill].initLateralForce;
-        initPropForce = curriculumSkills[activeSkill].initPropellingForce;
-        initBreakForce = curriculumSkills[activeSkill].initBreakForce;
-        mileStone = curriculumSkills[activeSkill].mileStone;
-        reductionPercentage = curriculumSkills[activeSkill].reductionPercentage;
-        //initialize local values
-        lateralBalanceForce = initLatForce;
-        propellingForce = initPropForce;
-        breakForce = initBreakForce;
+        UpdateCurriculumValues(activeSkill);
     }
 
     /// <summary>
     /// Adapt all values to new skill + reset rollout
     /// </summary>
-    /// <param name="activeSkill"></param>
-    public void SetActiveCurriculum(int activeSkill)
+    /// <param name="_activeSkill"></param>
+    public void SetActiveCurriculum(int _activeSkill)
     {
+        activeSkill = _activeSkill;
+        _lesson = curriculumSkills[_activeSkill].lesson;
+        UpdateCurriculumValues(_activeSkill);
         ResetRollout();
-        this.activeSkill = activeSkill;
-        curriculumSkills[activeSkill].active = true;
-        this.mileStone = curriculumSkills[activeSkill].mileStone;
-        this.reductionPercentage = curriculumSkills[activeSkill].reductionPercentage;
-        this.lateralBalanceForce = curriculumSkills[activeSkill].lateralForce;
-        this.propellingForce = curriculumSkills[activeSkill].propellingForce;
-        this.breakForce = curriculumSkills[activeSkill].breakForce;
     }
 
     /// <summary>
@@ -157,6 +147,7 @@ public class LocalCurriculumController : MonoBehaviour
             multiplier = GetMultiplier(milestoneCounter);
             propellingForce = initPropForce * multiplier;
             lateralBalanceForce = initLatForce * multiplier;
+            breakForce = initBreakForce * multiplier;
         }
 
     }
@@ -171,7 +162,8 @@ public class LocalCurriculumController : MonoBehaviour
         multiplier = GetMultiplier();
         lateralBalanceForce = initLatForce * multiplier;
         propellingForce = initPropForce * multiplier;
-        
+        breakForce = initBreakForce * multiplier;
+
     }
 
     /// <summary>
@@ -184,5 +176,17 @@ public class LocalCurriculumController : MonoBehaviour
         
         float _multiplier = 1 - ((reductionPercentage * (_lesson + milestoneCounter)) <= 1 ? (reductionPercentage * (_lesson + milestoneCounter)) : 1);    //returns 1 if curriculum done
         return _multiplier;
+    }
+
+    void UpdateCurriculumValues(int _activeSkill)
+    {
+        mileStone = curriculumSkills[_activeSkill].mileStone;
+        reductionPercentage = curriculumSkills[_activeSkill].reductionPercentage;
+        initLatForce = curriculumSkills[_activeSkill].initLateralForce;
+        initPropForce = curriculumSkills[_activeSkill].initPropellingForce;
+        initBreakForce = curriculumSkills[_activeSkill].initBreakForce;
+        lateralBalanceForce = curriculumSkills[_activeSkill].lateralForce;
+        propellingForce = curriculumSkills[_activeSkill].propellingForce;
+        breakForce = curriculumSkills[_activeSkill].breakForce;
     }
 }

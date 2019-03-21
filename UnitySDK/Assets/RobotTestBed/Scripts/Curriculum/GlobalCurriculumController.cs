@@ -22,7 +22,7 @@ public class Curriculum
     [Tooltip("initial lateral balance force for this skill")]
     public float initLateralForce = 20;
     [Tooltip("initial lateral balance force for this skill")]
-    public float initBreakForce = 0;
+    public float initBreakForce = 20;
     [Header("Actual curriculum values")]
     [Tooltip("initial propelling force for this skill")]
     public float propellingForce = 0;
@@ -36,7 +36,6 @@ public class Curriculum
     public float expertReward;
     public float reward;
     public int lesson = 0;
-    public bool active;
 
 }
 
@@ -65,8 +64,9 @@ public class GlobalCurriculumController : MonoBehaviour
         {
             obj.AddComponent<VirtualAssistant>();
             var currController = obj.AddComponent<LocalCurriculumController>();
-            //currController.curriculumSkills = curriculumSkills;
             currController.Init(curriculumSkills);
+            currController.globalCurricula = this;
+            currController.agent.curriculumLearning = shouldCurriculumLearning;
             curriculumControllerList.Add(currController);
 
         }

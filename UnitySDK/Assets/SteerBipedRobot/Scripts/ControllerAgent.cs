@@ -4,39 +4,73 @@ using System;
 using UnityEngine;
 using MLAgents;
 
+/// <summary>
+/// The controller either controlled by internal logic (heuristic) or player input
+/// </summary>
 public class ControllerAgent : Agent
 {
-    public Brain standingBrain;
-    public Brain walkingBrain;
+    [Header("either heuristic logic input or Player input")]
+    public Brain playerBrain;
+    public Brain heuristicBrain;
 
-    public float AxisX;
+    [Tooltip("if checked the player controls the agent")]
+    public bool playerControl;
+    public int Action;
+    //public float targetVelocity;
+    private RobotMultiSkillAgent agent;
+    private int lastAction;
 
+    public override void InitializeAgent()
+    {
+        agent = GetComponent<RobotMultiSkillAgent>();
+        base.InitializeAgent();
+        if (playerControl)
+        {
+            GiveBrain(playerBrain);
+        }
+        else
+        {
+            GiveBrain(heuristicBrain);
+        }
+    }
+    
     public override void AgentReset()
     {
-        AxisX = 0f;
+        Action = 0;
+        //targetVelocity = 0f;
     }
-
+    
     public override void CollectObservations()
     {
-        AddVectorObs(AxisX);
+        AddVectorObs(Action);
     }
 
     public override void AgentAction(float[] vectorAction, string textAction)
     {
-        int walkAction = (int)vectorAction[0];
-        switch (walkAction)
+        Action = (int)vectorAction[0];
+
+        /*
+        switch (Action)
         {
             case 0:
-                
-                AxisX = 0f;
+                targetVelocity = 0f;
                 break;
             case 1:
-                AxisX = 1f;
+                targetVelocity = 1f;
                 break;
 
             default:
                 throw new NotImplementedException();
+        }*/
+        if(Action != lastAction)
+        {
+            agent.SetupSkill(Action);
+            /*
+            if (agent.curriculumLearning)
+            {
+                currController.SetActiveCurriculum(Action);
+            }*/
         }
-
+        lastAction = Action;
     }
 }

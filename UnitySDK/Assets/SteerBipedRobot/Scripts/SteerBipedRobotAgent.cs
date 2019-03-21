@@ -102,7 +102,7 @@ public class SteerBipedRobotAgent : Agent
     public override void CollectObservations()
     {
         //Observe input
-        TargetVelocityZ = controllerAgent.AxisX;
+        //TargetVelocityZ = controllerAgent.targetVelocity;
         ShouldJump = false;// controllerAgent.Jump;
 
         AddVectorObs(TargetVelocityZ);

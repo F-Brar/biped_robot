@@ -45,8 +45,8 @@ public class RobotMultiSkillAgent : RobotAgent
     [SerializeField]
     private bool _curriculumLearning;
 
-    private LocalCurriculumController curriculumController;  //the curriculum learner
-    private VirtualAssistant assistant;
+    [HideInInspector]
+    public LocalCurriculumController curriculumController;  //the curriculum learner
 
 
     public override void InitializeAgent()
@@ -55,7 +55,7 @@ public class RobotMultiSkillAgent : RobotAgent
         curriculumController = GetComponent<LocalCurriculumController>();
         base.InitializeAgent();
 
-        SetupSkill(activeSkill);
+        //SetupSkill(activeSkill);
     }
     
     /// <summary>
@@ -88,7 +88,9 @@ public class RobotMultiSkillAgent : RobotAgent
         }
         if (curriculumLearning)
         {
+            
             ResetCurriculumRollout();
+            //curriculumController.activeSkill = activeSkill;
             curriculumController.SetActiveCurriculum(activeSkill);
         }
         
@@ -153,9 +155,9 @@ public class RobotMultiSkillAgent : RobotAgent
             + (GetUprightBonus(footR) / 6));
         _forwardBonus =
             ((GetForwardBonus(hips) / 4)//6
-            + (GetForwardBonus(body) / 6)
-            + (GetForwardBonus(thighL)/ 8)
-            + (GetForwardBonus(thighR)/ 8)
+            + (GetForwardBonus(body) / 8)
+            + (GetForwardBonus(thighL)/ 6)
+            + (GetForwardBonus(thighR)/ 6)
             + (GetForwardBonus(shinL) / 8)
             + (GetForwardBonus(shinR) / 8)
             + (GetForwardBonus(footL) / 6)
@@ -250,6 +252,7 @@ public class RobotMultiSkillAgent : RobotAgent
         _cumulativeVelocityReward = 0f;
         curriculumController.ResetRollout();
     }
+
     public int GetActiveSkill()
     {
         return activeSkill;

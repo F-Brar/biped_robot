@@ -4,14 +4,14 @@ using UnityEngine;
 using MLAgents;
 public class LocoAcadamy : Academy
 {
-    public float time;
+    
     public override void InitializeAcademy()
     {
-        GlobalCurriculumController  curr = GetComponent<GlobalCurriculumController>();
-        curr.academy = this;
-        if (curr.shouldCurriculumLearning)
+        GlobalCurriculumController  curriculumController = GetComponent<GlobalCurriculumController>();
+        curriculumController.academy = this;
+        if (curriculumController.shouldCurriculumLearning)
         {
-            curr.Init();
+            curriculumController.Init();
         }
         
         Monitor.verticalOffset = 1f;
