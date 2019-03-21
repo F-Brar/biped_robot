@@ -28,7 +28,7 @@ public class RobotMultiSkillAgent : RobotAgent
     [Header("Skill Setup Area")]
     [Tooltip("setup wich skills to learn")]
     public List<Skill> skillList;
-    public Dictionary <int, Skill> skillDict;
+    [Header("active skill => 0 : stand; 1 : walk;")]
     public int activeSkill;
     public GameObject CameraTarget;
 
@@ -52,12 +52,6 @@ public class RobotMultiSkillAgent : RobotAgent
 
     public override void InitializeAgent()
     {
-        activeSkill = 0;
-        skillDict = new Dictionary<int, Skill>();
-        for(int i = 0; i < skillList.Count; i++)
-        {
-            skillDict[i] = skillList[i];
-        }
 
         //Initialize the curriculum learning
         curricula = GetComponent<LocalRobotCurricula>();
@@ -71,16 +65,18 @@ public class RobotMultiSkillAgent : RobotAgent
         }
 
         base.InitializeAgent();
+
+        SetupSkill(activeSkill);
     }
     
 
     public void SetupSkill(int _activeSkill)
     {
-        foreach(var skill in skillDict)
+        foreach(var skill in skillList)
         {
-            skill.Value.active = false;
+            skill.active = false;
         }
-        Skill _skill = skillDict[_activeSkill];
+        Skill _skill = skillList[_activeSkill];
         _skill.active = true;
 
         switch (_skill.skill){
@@ -105,11 +101,11 @@ public class RobotMultiSkillAgent : RobotAgent
             if (_timeAlive >= curricula.mileStone)
             {
                 //testing purpose: for standing
-                if (standSkill)
+                if (activeSkill == 0)
                 {
                     curricula.reward = _reward;
                 }
-                else if (walkSkill)
+                else if (activeSkill == 1)
                 {
                     curricula.reward = _cumulativeVelocityReward;
                 }
@@ -123,11 +119,11 @@ public class RobotMultiSkillAgent : RobotAgent
 
     public override float CalcSkillReward()
     {
-        if (standSkill)
+        if (activeSkill == 0)
         {
             _reward = GetStandingReward();
         }
-        else if (walkSkill)
+        else if (activeSkill == 1)
         {
             _reward = GetWalkerReward();
         }

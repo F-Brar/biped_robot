@@ -199,10 +199,9 @@ MonoBehaviour:
   - skill: 1
     skillBrain: {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
     active: 0
-  standSkill: 1
-  walkSkill: 0
+  activeSkill: 1
   CameraTarget: {fileID: 0}
-  shouldCurriculumLearning: 1
+  _curriculumLearning: 0
 --- !u!114 &45583562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,7 +230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4da5aaf99dd05b44ab54f43c91e852c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _globalCurricula: {fileID: 0}
+  globalCurricula: {fileID: 0}
   assistant: {fileID: 0}
   agent: {fileID: 0}
   initPropForce: 25
