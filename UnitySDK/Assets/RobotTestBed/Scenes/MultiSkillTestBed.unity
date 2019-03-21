@@ -1222,12 +1222,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   curriculumSkills:
   - CurriculumName: STAND
-    mileStone: 5
+    mileStone: 7
     reductionPercentage: 0.1
     updateOnPercentage: 1
     initPropellingForce: 25
     initLateralForce: 20
-    initBreakForce: 23
+    initBreakForce: 25
     propellingForce: 0
     lateralForce: 0
     breakForce: 0
