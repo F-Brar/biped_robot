@@ -99,7 +99,7 @@ public class RobotMultiSkillAgent : RobotAgent
     {
         if (curriculumLearning)
         {
-            _timeAlive += Time.deltaTime;
+            _timeAlive += Time.fixedDeltaTime;
 
             if (_timeAlive >= curriculumController.mileStone)
             {
@@ -144,9 +144,9 @@ public class RobotMultiSkillAgent : RobotAgent
         _velocityPenalty = 4 * Mathf.Abs(GetVelocity());
         _uprightBonus =
             ((GetUprightBonus(hips) / 4)//6
-            + (GetUprightBonus(body) / 6)
-            + (GetUprightBonus(thighL) / 8)
-            + (GetUprightBonus(thighR) / 8)
+            + (GetUprightBonus(body) / 8)
+            + (GetUprightBonus(thighL) / 6)
+            + (GetUprightBonus(thighR) / 6)
             + (GetUprightBonus(shinL) / 8)
             + (GetUprightBonus(shinR) / 8)
             + (GetUprightBonus(footL) / 6)

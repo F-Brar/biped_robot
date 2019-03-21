@@ -4,10 +4,10 @@ using UnityEngine;
 using MLAgents;
 public class LocoAcadamy : Academy
 {
-
+    public float time;
     public override void InitializeAcademy()
     {
-        GlobalCurriculumController curr = GetComponent<GlobalCurriculumController>();
+        GlobalCurriculumController  curr = GetComponent<GlobalCurriculumController>();
         curr.academy = this;
         if (curr.shouldCurriculumLearning)
         {
@@ -23,5 +23,7 @@ public class LocoAcadamy : Academy
         Time.fixedDeltaTime = 0.01333f; //(75fps). default is .2 (60fps)
         Time.maximumDeltaTime = .15f; // Default is .33
     }
+
+
 
 }
