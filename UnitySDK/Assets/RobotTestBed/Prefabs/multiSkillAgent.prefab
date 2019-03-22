@@ -89,6 +89,7 @@ GameObject:
   - component: {fileID: 45583560}
   - component: {fileID: 2543176773027384878}
   - component: {fileID: 45583562}
+  - component: {fileID: 293561274}
   m_Layer: 0
   m_Name: multiSkillAgent
   m_TagString: agent
@@ -157,7 +158,10 @@ MonoBehaviour:
   _finalPhaseBonus: 0
   _finalPhasePenalty: 0
   _velocity: 0
+  _targetVelocityForward: 0
+  _currentVelocityForward: 0
   _velocityPenalty: 0
+  _velocityReward: 0
   _uprightBonus: 0
   _forwardBonus: 0
   _heightPenality: 0
@@ -199,6 +203,33 @@ MonoBehaviour:
   jointDampen: 50
   maxJointForceLimit: 3000
   robotBodyPartsList: []
+--- !u!114 &293561274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 45583559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7cc0755004de0b41ae1c8b06b82e11b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  brain: {fileID: 11400000, guid: bbe50d65f4ea4ea41b39815653053cf7, type: 2}
+  agentParameters:
+    agentCameras: []
+    maxStep: 5000
+    resetOnDone: 1
+    onDemandDecision: 0
+    numberOfActionsBetweenDecisions: 5
+  playerBrain: {fileID: 11400000, guid: 7bb1c95e70a454645aaab6e717aefcf6, type: 2}
+  heuristicBrain: {fileID: 11400000, guid: bbe50d65f4ea4ea41b39815653053cf7, type: 2}
+  _stepCountTillSkill: 0
+  useMultiSkill: 1
+  stepsToTrainWalk: 100000
+  stepsToTrainStand: 50000
+  playerControl: 1
+  Action: 0
 --- !u!1 &57454850
 GameObject:
   m_ObjectHideFlags: 0

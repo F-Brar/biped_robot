@@ -24,6 +24,8 @@ public class InputDecisionHeuristic : Decision
         bool done,
         List<float> memory)
     {
+        var lastActionFailed = vectorObs[0];
+
         if (memory.Count == 0)
         {
             memory.Add(0f);
@@ -32,6 +34,12 @@ public class InputDecisionHeuristic : Decision
         Action = (int)memory[1];
         
         memory[0]--;
+
+        //if last skill standing and failed --> choose new skill --> stand skill only executed till failure
+        if(lastActionFailed == 0)
+        {
+            memory[0] = 0;
+        }
         if (memory[0] <= 0)
         {
             var rnd = UnityEngine.Random.value;
@@ -41,7 +49,7 @@ public class InputDecisionHeuristic : Decision
             if (!repeateAction)
             {
                 rnd = UnityEngine.Random.value;
-                if (rnd <= .4f)
+                if (rnd <= .7f)
                     Action = 1; //walk
                 else
                     Action = 0; // stand

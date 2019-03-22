@@ -276,6 +276,11 @@ PrefabInstance:
       propertyPath: m_ConnectedAnchor.x
       value: -0.0000001937151
       objectReference: {fileID: 0}
+    - target: {fileID: 2543176773027384878, guid: c017ba3de44c87b44a4ba3571d51fbd8,
+        type: 3}
+      propertyPath: activeSkill
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
 --- !u!1 &210257401
@@ -1090,7 +1095,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1402675352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1112,8 +1117,7 @@ MonoBehaviour:
     numberOfActionsBetweenDecisions: 5
   playerBrain: {fileID: 11400000, guid: 7bb1c95e70a454645aaab6e717aefcf6, type: 2}
   heuristicBrain: {fileID: 11400000, guid: bbe50d65f4ea4ea41b39815653053cf7, type: 2}
-  academy: {fileID: 1626997143}
-  stepCount: 0
+  _stepCountTillSkill: 0
   useMultiSkill: 0
   stepsToTrainWalk: 100000
   stepsToTrainStand: 50000
@@ -1228,7 +1232,7 @@ GameObject:
   - component: {fileID: 1626997146}
   m_Layer: 0
   m_Name: LocoAcademy
-  m_TagString: Untagged
+  m_TagString: academy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1250,8 +1254,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 26a3a1998308de24a8985f2dd301cb67, type: 2}
     - {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
     - {fileID: 11400000, guid: bbe50d65f4ea4ea41b39815653053cf7, type: 2}
-    _brainsToControl:
-    - {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
+    _brainsToControl: []
   maxSteps: 0
   trainingConfiguration:
     width: 80
@@ -1316,7 +1319,7 @@ MonoBehaviour:
     updateOnPercentage: 0.7
     initPropellingForce: 25
     initLateralForce: 20
-    initBreakForce: 5
+    initBreakForce: 0
     propellingForce: 0
     lateralForce: 0
     breakForce: 0

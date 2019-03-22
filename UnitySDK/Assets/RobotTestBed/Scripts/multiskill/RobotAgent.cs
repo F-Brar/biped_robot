@@ -108,8 +108,7 @@ public abstract class RobotAgent : Agent
     /// </summary>
     public override void CollectObservations()
     {
-        AddVectorObs(_targetVelocityForward);
-        AddVectorObs(_currentVelocityForward);
+        
         _maxDistanceTravelled = Mathf.Max(_maxDistanceTravelled, hips.position.z);
 
         jdController.GetCurrentJointForces();

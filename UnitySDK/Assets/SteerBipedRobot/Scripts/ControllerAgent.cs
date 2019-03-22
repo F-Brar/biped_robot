@@ -13,8 +13,8 @@ public class ControllerAgent : Agent
     public Brain playerBrain;
     public Brain heuristicBrain;
 
-    public LocoAcadamy academy;
-    public int stepCount;
+    private LocoAcadamy academy;
+    public int _stepCountTillSkill;
     public bool useMultiSkill;
 
     public int stepsToTrainWalk;
@@ -25,16 +25,21 @@ public class ControllerAgent : Agent
     [Tooltip("if checked the player controls the agent")]
     public bool playerControl;
     public int Action;
-    private List<RobotMultiSkillAgent> agents;
+    
+    private RobotMultiSkillAgent agent;
     private int lastAction;
+    private int lastActionFailed;
 
     public override void InitializeAgent()
     {
+        academy = GameObject.FindGameObjectWithTag("academy").GetComponent<LocoAcadamy>();
+        /*
         agents = new List<RobotMultiSkillAgent>();
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("agent"))
         {
             agents.Add( obj.GetComponent<RobotMultiSkillAgent>() );
-        }
+        }*/
+        agent = GetComponent<RobotMultiSkillAgent>();
         base.InitializeAgent();
         if (playerControl)
         {
@@ -48,13 +53,21 @@ public class ControllerAgent : Agent
     
     public override void AgentReset()
     {
-        Action = 0;
+        lastActionFailed = 1;
+
+        if (Action == 0)
+        {
+            lastActionFailed = 0;
+            Action = 1;
+        }
+        
         //targetVelocity = 0f;
     }
     
     public override void CollectObservations()
     {
-        AddVectorObs(Action);
+        AddVectorObs(lastActionFailed);
+        //AddVectorObs(Action);
     }
 
     public override void AgentAction(float[] vectorAction, string textAction)
@@ -69,19 +82,19 @@ public class ControllerAgent : Agent
         }
         else
         {
-            stepCount = academy.stepCount;
+            _stepCountTillSkill = academy.stepCount;
             //train walkSkill for as long as required
-            if (stepCount <= stepsToTrainWalk)
+            if (_stepCountTillSkill <= stepsToTrainWalk)
             {
                 Action = 1;
             }
             //train standSkill for as long as required
-            else if(stepCount <= (stepsToTrainWalk + stepsToTrainStand))
+            else if(_stepCountTillSkill <= (stepsToTrainWalk + stepsToTrainStand))
             {
                 Action = 0;
             }
             //train both together for the rest of training + reset curriculum learning
-            else if(stepCount >= (stepsToTrainWalk + stepsToTrainStand))
+            else if(_stepCountTillSkill >= (stepsToTrainWalk + stepsToTrainStand))
             {
                 if (useMultiSkill == false)
                 {
@@ -100,8 +113,8 @@ public class ControllerAgent : Agent
 
     void ApplyActionToAgents(int Action)
     {
-        foreach(RobotMultiSkillAgent agent in agents)
-        {
+        //foreach(RobotMultiSkillAgent agent in agents)
+        //{
             agent.SetupSkill(Action, resetCurriculumLearning);
             
             if(resetCurriculumLearning == true)
@@ -109,6 +122,8 @@ public class ControllerAgent : Agent
                 resetCurriculumLearning = false;
             }
 
-        }
+        //}
     }
+
+
 }

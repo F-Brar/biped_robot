@@ -30,6 +30,7 @@ public class RobotMultiSkillAgent : RobotAgent
     public List<Skill> skillList;
     [Header("active skill => 0 : stand; 1 : walk;")]
     public int activeSkill;
+    
 
     public bool curriculumLearning {
         get { return _curriculumLearning; }
@@ -44,13 +45,14 @@ public class RobotMultiSkillAgent : RobotAgent
     }
     [SerializeField]
     private bool _curriculumLearning;
-
+    private ControllerAgent inputController;
     [HideInInspector]
     public LocalCurriculumController curriculumController;  //the curriculum learner
 
 
     public override void InitializeAgent()
     {
+        inputController = GetComponent<ControllerAgent>();
         //Initialize the curriculum learning
         curriculumController = GetComponent<LocalCurriculumController>();
         base.InitializeAgent();
@@ -60,13 +62,13 @@ public class RobotMultiSkillAgent : RobotAgent
 
     public override void CollectObservations()
     {
-        /*
+        
         //if walking brain
         if (activeSkill == 1)
         {
             AddVectorObs(_targetVelocityForward);
             AddVectorObs(_currentVelocityForward);
-        }*/
+        }
         base.CollectObservations();
     }
 
@@ -247,6 +249,7 @@ public class RobotMultiSkillAgent : RobotAgent
     /// </summary>
     public override void AgentReset()
     {
+        inputController.AgentReset();
 
         base.AgentReset();
 
