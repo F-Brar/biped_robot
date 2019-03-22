@@ -221,7 +221,7 @@ MonoBehaviour:
     numberOfActionsBetweenDecisions: 5
   playerBrain: {fileID: 11400000, guid: 7bb1c95e70a454645aaab6e717aefcf6, type: 2}
   heuristicBrain: {fileID: 11400000, guid: bbe50d65f4ea4ea41b39815653053cf7, type: 2}
-  playerControl: 0
+  playerControl: 1
   Action: 0
 --- !u!1 &57454850
 GameObject:

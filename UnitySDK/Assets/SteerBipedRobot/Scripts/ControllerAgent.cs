@@ -13,16 +13,22 @@ public class ControllerAgent : Agent
     public Brain playerBrain;
     public Brain heuristicBrain;
 
+    public GameObject academy;
+
     [Tooltip("if checked the player controls the agent")]
     public bool playerControl;
     public int Action;
     //public float targetVelocity;
-    private RobotMultiSkillAgent agent;
+    private List<RobotMultiSkillAgent> agents;
+    //private RobotMultiSkillAgent agent;
     private int lastAction;
 
     public override void InitializeAgent()
     {
-        agent = GetComponent<RobotMultiSkillAgent>();
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("agent"))
+        {
+            agents.Add( obj.GetComponent<RobotMultiSkillAgent>() );
+        }
         base.InitializeAgent();
         if (playerControl)
         {
@@ -64,7 +70,7 @@ public class ControllerAgent : Agent
         }*/
         if(Action != lastAction)
         {
-            agent.SetupSkill(Action);
+            ApplyActionToAgents(Action);
             /*
             if (agent.curriculumLearning)
             {
@@ -72,5 +78,13 @@ public class ControllerAgent : Agent
             }*/
         }
         lastAction = Action;
+    }
+
+    void ApplyActionToAgents(int Action)
+    {
+        foreach(RobotMultiSkillAgent agent in agents)
+        {
+            agent.SetupSkill(Action);
+        }
     }
 }
