@@ -11,7 +11,7 @@ public class LocalCurriculumController : MonoBehaviour
     public List<Curriculum> curriculumSkills;
     public int activeSkill;
     [HideInInspector]
-    public GlobalCurriculumController globalCurricula;
+    public GlobalCurriculumController globalCurriculumController;
     [HideInInspector]
     public VirtualAssistant assistant;
     [HideInInspector]
@@ -65,7 +65,9 @@ public class LocalCurriculumController : MonoBehaviour
     public float reductionPercentage;
     //time alive milestone
     public float mileStone;
-    
+
+    public float stepCount;
+
     public int _lesson = 0;
     public int milestoneCounter = 0;
     [Range(0,1)]
@@ -88,16 +90,19 @@ public class LocalCurriculumController : MonoBehaviour
     /// <summary>
     /// initialize local curricula
     /// </summary>
-    public void Init(List<Curriculum> _curriculumSkills)
+    public void Init(List<Curriculum> _curriculumSkills, bool shouldCurriculumLearning)
     {
         //initialize local curriculum list
         foreach(var curriculum in _curriculumSkills)
         {
             this.curriculumSkills.Add(curriculum);
         }
-        activeSkill = agent.GetActiveSkill();
-        //initialize with globale values
-        UpdateCurriculumValues(activeSkill);
+        if (shouldCurriculumLearning)
+        {
+            activeSkill = agent.GetActiveSkill();
+            //initialize with globale values
+            UpdateCurriculumValues(activeSkill);
+        }
     }
 
     /// <summary>
@@ -113,12 +118,13 @@ public class LocalCurriculumController : MonoBehaviour
     }
 
     /// <summary>
-    /// reduce assistant force with each lesson
+    /// reduce assistant force with each lesson; reset stepCount
     /// </summary>
-    public void UpdateLesson(int lesson, float _newExpertReward )
+    public void SetLesson(int lesson, float _newExpertReward )
     {
-        _lesson = curriculumSkills[activeSkill].lesson = lesson;
-        curriculumSkills[activeSkill].expertReward = _newExpertReward;
+        var activeCurriculum = curriculumSkills[activeSkill];
+        _lesson = activeCurriculum.lesson = lesson;
+        activeCurriculum.expertReward = _newExpertReward;
         //if last lesson done:
         if (_lesson * reductionPercentage >= 1)
         {
@@ -140,7 +146,7 @@ public class LocalCurriculumController : MonoBehaviour
             milestoneCounter += 1;
             if (milestoneCounter >= 2)
             {
-                globalCurricula.UpdateAll(reward, activeSkill);
+                globalCurriculumController.UpdateAll(reward, activeSkill);
                 ResetRollout();
             }
 
@@ -149,7 +155,11 @@ public class LocalCurriculumController : MonoBehaviour
             lateralBalanceForce = initLatForce * multiplier;
             breakForce = initBreakForce * multiplier;
         }
+    }
 
+    public bool IsMileStoneReached(float timeAlive)
+    {
+        return timeAlive >= mileStone;
     }
 
     /// <summary>

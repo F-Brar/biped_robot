@@ -57,16 +57,36 @@ public class RobotMultiSkillAgent : RobotAgent
 
         //SetupSkill(activeSkill);
     }
-    
+
+    public override void CollectObservations()
+    {
+        /*
+        //if walking brain
+        if (activeSkill == 1)
+        {
+            AddVectorObs(_targetVelocityForward);
+            AddVectorObs(_currentVelocityForward);
+        }*/
+        base.CollectObservations();
+    }
+
     /// <summary>
-    /// switch active skill; either from controllerAgent or this agent
+    /// switch active skill; either from controllerAgent or this agent; use reset curriculum to restart curriculum within training
     /// </summary>
     /// <param name="_activeSkill"></param>
-    public void SetupSkill(int _activeSkill)
+    public void SetupSkill(int _activeSkill, bool resetCurriculum)
     {
         if(this.activeSkill != _activeSkill)
         {
             this.activeSkill = _activeSkill;
+        }
+        else
+        {
+            return;
+        }
+        if (resetCurriculum)
+        {
+            curriculumController.globalCurriculumController.ResetCurriculumLearning(activeSkill);
         }
         //check for convenience
         foreach(var skill in skillList)
@@ -78,19 +98,19 @@ public class RobotMultiSkillAgent : RobotAgent
 
         switch (_skill.skill){
             case Skills.Stand:
+                _targetVelocityForward = 0f;
                 GiveBrain(_skill.skillBrain);
-                _terminationHeight = 1.1f;
+                _terminationHeight = 1f;
                 break;
             case Skills.Walk:
+                _targetVelocityForward = .3f;
                 GiveBrain(_skill.skillBrain);
                 _terminationHeight = 1f;
                 break;
         }
         if (curriculumLearning)
         {
-            
             ResetCurriculumRollout();
-            //curriculumController.activeSkill = activeSkill;
             curriculumController.SetActiveCurriculum(activeSkill);
         }
         
@@ -99,30 +119,27 @@ public class RobotMultiSkillAgent : RobotAgent
 
     public override void AgentAction(float[] vectorAction, string textAction)
     {
+        // update curriculum
         if (curriculumLearning)
         {
             _timeAlive += Time.fixedDeltaTime;
 
-            if (_timeAlive >= curriculumController.mileStone)
+            if (curriculumController.IsMileStoneReached(_timeAlive))
             {
-                
-                if (activeSkill == 0)
-                {
-                    curriculumController.reward = _reward;
-                }
-                else if (activeSkill == 1)
-                {
-                    curriculumController.reward = _cumulativeVelocityReward;
-                }
+                curriculumController.reward = GetCumulativeReward();
                 curriculumController.ReachedMileStone();
                 _timeAlive = 0;
             }
         }
-
+        // action base
         base.AgentAction(vectorAction, textAction);
     }
 
-    public override float CalcSkillReward()
+    /// <summary>
+    /// calculates the reward in respect to active skill
+    /// </summary>
+    /// <returns></returns>
+    public override float GetSkillReward()
     {
         if (activeSkill == 0)
         {
@@ -162,16 +179,17 @@ public class RobotMultiSkillAgent : RobotAgent
             + (GetForwardBonus(shinR) / 8)
             + (GetForwardBonus(footL) / 6)
             + (GetForwardBonus(footR) / 6));
-        float effort = GetEffort();
-        _finalPhasePenalty = GetPhaseBonus();
-        _effortPenality = 1e-2f * (float)effort;
+        //float effort = GetEffort();
+        //_finalPhasePenalty = GetPhaseBonus();
+        //_effortPenality = 1e-2f * (float)effort;
         _heightPenality = 2 * GetHeightPenalty(1.3f);  //height of body
+
         __reward = (
             +_uprightBonus
             + _forwardBonus
-            - _finalPhasePenalty
+            //- _finalPhasePenalty
             - _velocityPenalty
-            - _effortPenality
+            //- _effortPenality
             - _heightPenality
             );
 
@@ -183,18 +201,14 @@ public class RobotMultiSkillAgent : RobotAgent
     {
         float __reward = 0;
 
-        _velocity = GetVelocity();
-        _velocity = _velocity / 2;
-        //update the curriculum
-        if (curriculumLearning)
-        {
-            _cumulativeVelocityReward += _velocity;
-        }
-
+        //_velocity = GetVelocity();
+        //_velocity = _velocity / 2;
+        _currentVelocityForward = GetAverageVelocity();
+        _velocityReward = 1f - Mathf.Abs(_targetVelocityForward - _currentVelocityForward) * 1.3f;
         // Encourage uprightness of hips and body.
         _uprightBonus =
-            ((GetUprightBonus(hips) / 6)//6
-            + (GetUprightBonus(body) / 6));
+            ((GetUprightBonus(hips) / 4)//6
+            + (GetUprightBonus(body) / 4));
         _forwardBonus =
             ((GetForwardBonus(hips) / 6)//6
             + (GetForwardBonus(body) / 6));
@@ -213,7 +227,7 @@ public class RobotMultiSkillAgent : RobotAgent
         _heightPenality = GetHeightPenalty(1.3f);  //height of body
 
         __reward = (
-              _velocity
+              _velocityReward
             + _uprightBonus
             + _forwardBonus
             + _finalPhaseBonus

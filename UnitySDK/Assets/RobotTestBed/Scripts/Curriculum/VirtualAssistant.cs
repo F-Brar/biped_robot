@@ -23,7 +23,7 @@ public class VirtualAssistant : MonoBehaviour
     void FixedUpdate()
     {
         var localVel = transform.InverseTransformDirection(hips.velocity);
-        if (localVel.z <= -.0f)
+        if (localVel.z <= -.1f)
         {
             hips.AddForce(hips.transform.forward * propellingForce, ForceMode.Acceleration);
         }

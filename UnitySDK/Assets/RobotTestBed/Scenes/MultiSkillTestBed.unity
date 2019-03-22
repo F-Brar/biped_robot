@@ -123,6 +123,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: multiSkillAgent (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -50
@@ -664,6 +668,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: multiSkillAgent (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 60
@@ -826,6 +834,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: multiSkillAgent (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -60
@@ -906,6 +918,10 @@ PrefabInstance:
     - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_Name
       value: multiSkillAgent (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1058,6 +1074,65 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+--- !u!1 &1402675351
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1402675353}
+  - component: {fileID: 1402675352}
+  m_Layer: 0
+  m_Name: ControllerInputAgent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1402675352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402675351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7cc0755004de0b41ae1c8b06b82e11b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  brain: {fileID: 11400000, guid: bbe50d65f4ea4ea41b39815653053cf7, type: 2}
+  agentParameters:
+    agentCameras: []
+    maxStep: 5000
+    resetOnDone: 1
+    onDemandDecision: 0
+    numberOfActionsBetweenDecisions: 5
+  playerBrain: {fileID: 11400000, guid: 7bb1c95e70a454645aaab6e717aefcf6, type: 2}
+  heuristicBrain: {fileID: 11400000, guid: bbe50d65f4ea4ea41b39815653053cf7, type: 2}
+  academy: {fileID: 1626997143}
+  stepCount: 0
+  useMultiSkill: 0
+  stepsToTrainWalk: 100000
+  stepsToTrainStand: 50000
+  playerControl: 0
+  Action: 0
+--- !u!4 &1402675353
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402675351}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1445613481
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1175,7 +1250,8 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 26a3a1998308de24a8985f2dd301cb67, type: 2}
     - {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
     - {fileID: 11400000, guid: bbe50d65f4ea4ea41b39815653053cf7, type: 2}
-    _brainsToControl: []
+    _brainsToControl:
+    - {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
   maxSteps: 0
   trainingConfiguration:
     width: 80
@@ -1192,6 +1268,7 @@ MonoBehaviour:
   resetParameters:
     resetParameters: []
   stepCount: 0
+  shouldCurriculumLearning: 1
 --- !u!4 &1626997144
 Transform:
   m_ObjectHideFlags: 0
@@ -1218,7 +1295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 592bdf7dd57165a47a204e76a7bb5393, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  curriculumSkills:
+  curriculumList:
   - CurriculumName: STAND
     mileStone: 7
     reductionPercentage: 0.1
@@ -1232,19 +1309,21 @@ MonoBehaviour:
     expertReward: 0
     reward: 0
     lesson: 0
+    stepCount: 0
   - CurriculumName: WALK
-    mileStone: 4
-    reductionPercentage: 0.25
+    mileStone: 5
+    reductionPercentage: 0.2
     updateOnPercentage: 0.7
-    initPropellingForce: 30
-    initLateralForce: 25
-    initBreakForce: 0
+    initPropellingForce: 25
+    initLateralForce: 20
+    initBreakForce: 5
     propellingForce: 0
     lateralForce: 0
     breakForce: 0
     expertReward: 0
     reward: 0
     lesson: 0
+    stepCount: 0
   shouldCurriculumLearning: 0
   academy: {fileID: 0}
 --- !u!114 &1626997146

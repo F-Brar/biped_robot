@@ -41,6 +41,7 @@ public abstract class RobotAgent : Agent
     protected bool isNewDecisionStep;
     protected int currentDecisionStep;
     protected Dictionary<string, Quaternion> BodyPartsToFocalRotation = new Dictionary<string, Quaternion>();  //use this to determine the initial axis
+    protected List<float> recentVelocity;
 
     public override void InitializeAgent()
     {
@@ -77,6 +78,8 @@ public abstract class RobotAgent : Agent
             BodyPartsToFocalRotation[name] = focalPointRotation;                    //in initial condition these are all zero rotations --> rotation that is needed to point forward (z-axis)
 
         }
+
+        recentVelocity = new List<float>();
     }
 
 
@@ -105,6 +108,8 @@ public abstract class RobotAgent : Agent
     /// </summary>
     public override void CollectObservations()
     {
+        AddVectorObs(_targetVelocityForward);
+        AddVectorObs(_currentVelocityForward);
         _maxDistanceTravelled = Mathf.Max(_maxDistanceTravelled, hips.position.z);
 
         jdController.GetCurrentJointForces();
@@ -196,7 +201,7 @@ public abstract class RobotAgent : Agent
         var hipsRB = jdController.robotBodyPartsDict[hips].rb;
 
         AddReward(
-            _reward = CalcSkillReward()
+            _reward = GetSkillReward()
         );
     }
 
@@ -218,7 +223,7 @@ public abstract class RobotAgent : Agent
         }
     }
 
-    public virtual float CalcSkillReward()
+    public virtual float GetSkillReward()
     {
         return _reward;
     }
@@ -267,9 +272,21 @@ public abstract class RobotAgent : Agent
     /// </summary>
     public float _velocity;
     /// <summary>
+    /// the velocity the agent should match
+    /// </summary>
+    public float _targetVelocityForward;
+    /// <summary>
+    /// the avarage velocity forward
+    /// </summary>
+    public float _currentVelocityForward;
+    /// <summary>
     /// the forward velocity of given bodypart
     /// </summary>
     public float _velocityPenalty;
+    /// <summary>
+    /// the final reward for matching the targetVel
+    /// </summary>
+    public float _velocityReward;
     /// <summary>
     /// the bonus for holding given bodyparts upright
     /// </summary>
@@ -306,6 +323,7 @@ public abstract class RobotAgent : Agent
     /// the angle used to terminate the agent for given skill
     /// </summary>
     public float _terminationAngle;
+    
 
 
     /// <summary>
@@ -370,6 +388,23 @@ public abstract class RobotAgent : Agent
 
         return velocity;
     }
+
+    /// <summary>
+    /// Get Average velocity of last 10 steps
+    /// </summary>
+    /// <param name="bodyPart"></param>
+    /// <returns></returns>
+    internal float GetAverageVelocity(Transform bodyPart = null)
+    {
+        var v = GetVelocity(bodyPart);
+        recentVelocity.Add(v);
+        if (recentVelocity.Count >= 10)
+            recentVelocity.RemoveAt(0);
+        return recentVelocity.Average();
+    }
+
+
+
 
     /// <summary>
     /// returns float penalty for body falling below maxheight over feet
