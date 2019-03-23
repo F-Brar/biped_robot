@@ -1271,7 +1271,7 @@ MonoBehaviour:
   resetParameters:
     resetParameters: []
   stepCount: 0
-  shouldCurriculumLearning: 1
+  shouldCurriculumLearning: 0
 --- !u!4 &1626997144
 Transform:
   m_ObjectHideFlags: 0
@@ -1312,6 +1312,7 @@ MonoBehaviour:
     expertReward: 0
     reward: 0
     lesson: 0
+    minimumStepsToReach: 10000
     stepCount: 0
   - CurriculumName: WALK
     mileStone: 5
@@ -1326,6 +1327,7 @@ MonoBehaviour:
     expertReward: 0
     reward: 0
     lesson: 0
+    minimumStepsToReach: 10000
     stepCount: 0
   shouldCurriculumLearning: 0
   academy: {fileID: 0}

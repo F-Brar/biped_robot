@@ -37,7 +37,7 @@ public class Curriculum
     public float reward;
     public int lesson = 0;
     [Tooltip ("needs to match 1/updateOnPercentage : example 1/0,25 = 4")]
-    private int minimumStepsToReach;
+    public int minimumStepsToReach;
     private bool isMinimumStepCountReached;
     public int stepCount;
     private int stepCountAtLessonStart;

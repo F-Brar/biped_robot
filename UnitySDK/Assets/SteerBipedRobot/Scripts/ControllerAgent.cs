@@ -115,12 +115,12 @@ public class ControllerAgent : Agent
     {
         //foreach(RobotMultiSkillAgent agent in agents)
         //{
-            agent.SetupSkill(Action, resetCurriculumLearning);
+        agent.SetupSkill(Action, resetCurriculumLearning);
             
-            if(resetCurriculumLearning == true)
-            {
-                resetCurriculumLearning = false;
-            }
+        if(resetCurriculumLearning == true)
+        {
+            resetCurriculumLearning = false;
+        }
 
         //}
     }

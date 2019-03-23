@@ -103,11 +103,13 @@ public class RobotMultiSkillAgent : RobotAgent
                 _targetVelocityForward = 0f;
                 GiveBrain(_skill.skillBrain);
                 _terminationHeight = 1f;
+                _terminationAngle = .2f;
                 break;
             case Skills.Walk:
-                _targetVelocityForward = .3f;
+                _targetVelocityForward = 1.5f;
                 GiveBrain(_skill.skillBrain);
                 _terminationHeight = 1f;
+                _terminationAngle = .2f;
                 break;
         }
         if (curriculumLearning)
@@ -184,7 +186,7 @@ public class RobotMultiSkillAgent : RobotAgent
         //float effort = GetEffort();
         //_finalPhasePenalty = GetPhaseBonus();
         //_effortPenality = 1e-2f * (float)effort;
-        _heightPenality = 2 * GetHeightPenalty(1.3f);  //height of body
+        _heightPenality = 2 * GetHeightPenalty(1.4f);  //height of body
 
         __reward = (
             +_uprightBonus
@@ -207,6 +209,7 @@ public class RobotMultiSkillAgent : RobotAgent
         //_velocity = _velocity / 2;
         _currentVelocityForward = GetAverageVelocity();
         _velocityReward = 1f - Mathf.Abs(_targetVelocityForward - _currentVelocityForward) * 1.3f;
+        
         // Encourage uprightness of hips and body.
         _uprightBonus =
             ((GetUprightBonus(hips) / 4)//6
@@ -224,9 +227,9 @@ public class RobotMultiSkillAgent : RobotAgent
         _limbPenalty = Mathf.Min(0.5f, _limbPenalty);   //penalty for moving both legs in the same direction
 
         float effort = GetEffort(new string[] { shinL.name, shinR.name });
-        _effortPenality = 1e-2f * (float)effort;
+        _effortPenality = 2e-2f * (float)effort;
         _jointsAtLimitPenality = GetJointsAtLimitPenality();
-        _heightPenality = GetHeightPenalty(1.3f);  //height of body
+        _heightPenality = 1.2f * GetHeightPenalty(1.3f);  //height of body
 
         __reward = (
               _velocityReward
@@ -260,7 +263,7 @@ public class RobotMultiSkillAgent : RobotAgent
             ResetCurriculumRollout();
         }
 
-        //recentVelocity = new List<float>();
+        recentVelocity = new List<float>();
     }
 
     public void ResetCurriculumRollout()
