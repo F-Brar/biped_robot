@@ -4,4 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/RobotTestBed/Scenes/MultiSkillTestBed.unity
+    guid: e4320c31f020f8447b43ade93f0fdc56
+  m_configObjects: {}

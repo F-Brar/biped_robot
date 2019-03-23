@@ -14,7 +14,8 @@ public class ControllerAgent : Agent
     public Brain heuristicBrain;
 
     private LocoAcadamy academy;
-    public int _stepCountTillSkill;
+    
+    
     public bool useMultiSkill;
 
     public int stepsToTrainWalk;
@@ -25,7 +26,8 @@ public class ControllerAgent : Agent
     [Tooltip("if checked the player controls the agent")]
     public bool playerControl;
     public int Action;
-    
+
+    private int _stepCountTillSkill;
     private RobotMultiSkillAgent agent;
     private int lastAction;
     private int lastActionFailed;

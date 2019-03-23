@@ -1229,7 +1229,6 @@ GameObject:
   - component: {fileID: 1626997144}
   - component: {fileID: 1626997143}
   - component: {fileID: 1626997145}
-  - component: {fileID: 1626997146}
   m_Layer: 0
   m_Name: LocoAcademy
   m_TagString: academy
@@ -1331,20 +1330,6 @@ MonoBehaviour:
     stepCount: 0
   shouldCurriculumLearning: 0
   academy: {fileID: 0}
---- !u!114 &1626997146
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1626997142}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 100f8dc491f1ae043a4da3c3b6448ca4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  time: 0
-  timeReached: 0
 --- !u!1 &1628795730
 GameObject:
   m_ObjectHideFlags: 0
