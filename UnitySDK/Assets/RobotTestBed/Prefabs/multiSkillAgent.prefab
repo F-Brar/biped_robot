@@ -199,9 +199,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b31f96fd6fed26f439a0745b2e3ccee0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxJointSpring: 1500
+  maxJointSpring: 2500
   jointDampen: 50
-  maxJointForceLimit: 3000
+  maxJointForceLimit: 3500
   robotBodyPartsList: []
 --- !u!114 &293561274
 MonoBehaviour:
@@ -224,10 +224,10 @@ MonoBehaviour:
     numberOfActionsBetweenDecisions: 5
   playerBrain: {fileID: 11400000, guid: 7bb1c95e70a454645aaab6e717aefcf6, type: 2}
   heuristicBrain: {fileID: 11400000, guid: bbe50d65f4ea4ea41b39815653053cf7, type: 2}
-  useMultiSkill: 0
+  useMultiSkill: 1
   stepsToTrainWalk: 2000000
   stepsToTrainStand: 0
-  playerControl: 0
+  playerControl: 1
   Action: 0
 --- !u!1 &57454850
 GameObject:
@@ -365,7 +365,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 63661414}
   serializedVersion: 2
-  m_Mass: 7
+  m_Mass: 8
   m_Drag: 0.02
   m_AngularDrag: 0
   m_UseGravity: 1
@@ -606,7 +606,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 272531641}
   serializedVersion: 2
-  m_Mass: 7
+  m_Mass: 10
   m_Drag: 0.02
   m_AngularDrag: 0
   m_UseGravity: 1
@@ -918,7 +918,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 366016885}
   serializedVersion: 2
-  m_Mass: 8
+  m_Mass: 20
   m_Drag: 0.02
   m_AngularDrag: 0
   m_UseGravity: 1
@@ -1479,7 +1479,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 696376482}
   serializedVersion: 2
-  m_Mass: 7
+  m_Mass: 10
   m_Drag: 0.02
   m_AngularDrag: 0
   m_UseGravity: 1
@@ -2188,7 +2188,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1431006814}
   serializedVersion: 2
-  m_Mass: 6
+  m_Mass: 8
   m_Drag: 0.02
   m_AngularDrag: 0
   m_UseGravity: 1
@@ -2518,7 +2518,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1537048755}
   serializedVersion: 2
-  m_Mass: 6
+  m_Mass: 8
   m_Drag: 0.02
   m_AngularDrag: 0
   m_UseGravity: 1
@@ -2799,7 +2799,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1657951245}
   serializedVersion: 2
-  m_Mass: 7
+  m_Mass: 8
   m_Drag: 0.02
   m_AngularDrag: 0
   m_UseGravity: 1
@@ -3114,7 +3114,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1818394054}
   serializedVersion: 2
-  m_Mass: 8
+  m_Mass: 12
   m_Drag: 0.02
   m_AngularDrag: 0
   m_UseGravity: 1
