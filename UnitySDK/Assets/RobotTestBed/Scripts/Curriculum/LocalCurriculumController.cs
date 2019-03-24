@@ -163,6 +163,15 @@ public class LocalCurriculumController : MonoBehaviour
     }
 
     /// <summary>
+    /// returns lesson progress percentage
+    /// </summary>
+    /// <returns></returns>
+    public float GetLessonProgress()
+    {
+        return _lesson * reductionPercentage;
+    }
+
+    /// <summary>
     /// reset to initial values when agent is reset
     /// </summary>
     public void ResetRollout()

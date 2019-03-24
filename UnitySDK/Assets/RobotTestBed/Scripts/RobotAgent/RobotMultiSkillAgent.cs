@@ -30,7 +30,7 @@ public class RobotMultiSkillAgent : RobotAgent
     public List<Skill> skillList;
     [Header("active skill => 0 : stand; 1 : walk;")]
     public int activeSkill;
-    
+    public bool useMonitor;
 
     public bool curriculumLearning {
         get { return _curriculumLearning; }
@@ -56,6 +56,7 @@ public class RobotMultiSkillAgent : RobotAgent
         //Initialize the curriculum learning
         curriculumController = GetComponent<LocalCurriculumController>();
         base.InitializeAgent();
+        Monitor.SetActive(useMonitor);
 
         //SetupSkill(activeSkill);
     }
@@ -106,7 +107,7 @@ public class RobotMultiSkillAgent : RobotAgent
                 _terminationAngle = .2f;
                 break;
             case Skills.Walk:
-                _targetVelocityForward = 1.5f;
+                _targetVelocityForward = 1f;
                 GiveBrain(_skill.skillBrain);
                 _terminationHeight = 1f;
                 _terminationAngle = .2f;
@@ -209,7 +210,7 @@ public class RobotMultiSkillAgent : RobotAgent
         //_velocity = _velocity / 2;
         _currentVelocityForward = GetAverageVelocity();
         _velocityReward = 1f - Mathf.Abs(_targetVelocityForward - _currentVelocityForward) * 1.3f;
-        
+        _velocityReward *= 2;
         // Encourage uprightness of hips and body.
         _uprightBonus =
             ((GetUprightBonus(hips) / 4)//6
@@ -227,10 +228,10 @@ public class RobotMultiSkillAgent : RobotAgent
         _limbPenalty = Mathf.Min(0.5f, _limbPenalty);   //penalty for moving both legs in the same direction
 
         float effort = GetEffort(new string[] { shinL.name, shinR.name });
-        _effortPenality = 2e-2f * (float)effort;
+        _effortPenality = 1e-2f * (float)effort;
         _jointsAtLimitPenality = GetJointsAtLimitPenality();
         _heightPenality = 1.2f * GetHeightPenalty(1.3f);  //height of body
-
+        
         __reward = (
               _velocityReward
             + _uprightBonus
@@ -242,6 +243,9 @@ public class RobotMultiSkillAgent : RobotAgent
             - _jointsAtLimitPenality
             - _heightPenality
             );
+
+        Monitor.Log("VelocityReward", _velocityReward);
+        Monitor.Log("Curriculum lesson progress", curriculumController.GetLessonProgress());
 
         return __reward;
     }
