@@ -27,7 +27,7 @@ public class ControllerAgent : Agent
     public bool playerControl;
     public int Action;
 
-    private int _stepCountTillSkill;
+    public int _stepCountTillSkill;
     private RobotMultiSkillAgent agent;
     private int lastAction;
     private int lastActionFailed;
@@ -60,7 +60,7 @@ public class ControllerAgent : Agent
         if (Action == 0)
         {
             lastActionFailed = 0;
-            Action = 1;
+            //Action = 1;
         }
         
         //targetVelocity = 0f;
@@ -84,6 +84,7 @@ public class ControllerAgent : Agent
         }
         else
         {
+            //Force Skill to train single before multi
             _stepCountTillSkill = academy.stepCount;
             //train walkSkill for as long as required
             if (_stepCountTillSkill <= stepsToTrainWalk)
@@ -101,8 +102,9 @@ public class ControllerAgent : Agent
                 if (useMultiSkill == false)
                 {
                     resetCurriculumLearning = true;
+                    useMultiSkill = true;
                 }
-                useMultiSkill = true;
+                
             }
         }
         if(Action != lastAction)

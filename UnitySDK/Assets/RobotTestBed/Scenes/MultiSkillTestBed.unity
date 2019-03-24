@@ -208,6 +208,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: multiSkillAgent (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 10
@@ -279,6 +283,38 @@ PrefabInstance:
     - target: {fileID: 2543176773027384878, guid: c017ba3de44c87b44a4ba3571d51fbd8,
         type: 3}
       propertyPath: activeSkill
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 63661414, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 272531641, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 366016885, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 696376482, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1431006814, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1537048755, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1657951245, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1818394054, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -447,6 +483,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: multiSkillAgent (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -40
@@ -527,6 +567,10 @@ PrefabInstance:
     - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_Name
       value: multiSkillAgent (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -762,6 +806,10 @@ PrefabInstance:
     - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_Name
       value: multiSkillAgent (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1014,6 +1062,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: multiSkillAgent (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 20
@@ -1082,6 +1134,38 @@ PrefabInstance:
       propertyPath: m_ConnectedAnchor.x
       value: -0.0000001937151
       objectReference: {fileID: 0}
+    - target: {fileID: 63661414, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 272531641, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 366016885, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 696376482, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1431006814, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1537048755, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1657951245, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1818394054, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
 --- !u!1 &1402675351
@@ -1127,6 +1211,7 @@ MonoBehaviour:
   stepsToTrainStand: 50000
   playerControl: 0
   Action: 0
+  _stepCountTillSkill: 0
 --- !u!4 &1402675353
 Transform:
   m_ObjectHideFlags: 0
@@ -1151,6 +1236,10 @@ PrefabInstance:
     - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_Name
       value: multiSkillAgent (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1259,6 +1348,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: bbe50d65f4ea4ea41b39815653053cf7, type: 2}
     _brainsToControl:
     - {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
+    - {fileID: 11400000, guid: 26a3a1998308de24a8985f2dd301cb67, type: 2}
   maxSteps: 0
   trainingConfiguration:
     width: 80
@@ -1316,7 +1406,7 @@ MonoBehaviour:
     expertReward: 0
     reward: 0
     lesson: 0
-    minimumStepsToReach: 10000
+    minimumStepsToReach: 50000
     stepCount: 0
   - CurriculumName: WALK
     mileStone: 5
@@ -1331,7 +1421,7 @@ MonoBehaviour:
     expertReward: 0
     reward: 0
     lesson: 0
-    minimumStepsToReach: 10000
+    minimumStepsToReach: 50000
     stepCount: 0
   shouldCurriculumLearning: 0
   academy: {fileID: 0}
@@ -1447,6 +1537,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: multiSkillAgent (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -30
@@ -1527,6 +1621,10 @@ PrefabInstance:
     - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_Name
       value: multiSkillAgent (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x

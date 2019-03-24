@@ -64,12 +64,9 @@ public class RobotMultiSkillAgent : RobotAgent
     public override void CollectObservations()
     {
         
-        //if walking brain
-        if (activeSkill == 1)
-        {
-            AddVectorObs(_targetVelocityForward);
-            AddVectorObs(_currentVelocityForward);
-        }
+        AddVectorObs(_targetVelocityForward);
+        AddVectorObs(_currentVelocityForward);
+        
         base.CollectObservations();
     }
 
@@ -154,6 +151,9 @@ public class RobotMultiSkillAgent : RobotAgent
         {
             _reward = GetWalkerReward();
         }
+        Monitor.Log("VelocityReward", _velocityReward);
+        Monitor.Log("Curriculum lesson progress", curriculumController.GetLessonProgress());
+        Monitor.Log("reward: ", _reward);
         return _reward;
     }
 
@@ -165,39 +165,43 @@ public class RobotMultiSkillAgent : RobotAgent
     {
         float __reward = 0;
         //penalize forward axis movement
-        _velocityPenalty = 4 * Mathf.Abs(GetVelocity());
+        //_velocityPenalty = 4 * Mathf.Abs(GetVelocity());
+        _velocityReward = 1f - Mathf.Abs(_targetVelocityForward - _currentVelocityForward) * 1.3f;
+        
         _uprightBonus =
             ((GetUprightBonus(hips) / 4)//6
             + (GetUprightBonus(body) / 8)
-            + (GetUprightBonus(thighL) / 6)
+            /*+ (GetUprightBonus(thighL) / 6)
             + (GetUprightBonus(thighR) / 6)
             + (GetUprightBonus(shinL) / 8)
-            + (GetUprightBonus(shinR) / 8)
+            + (GetUprightBonus(shinR) / 8)*/
             + (GetUprightBonus(footL) / 6)
             + (GetUprightBonus(footR) / 6));
         _forwardBonus =
             ((GetForwardBonus(hips) / 4)//6
             + (GetForwardBonus(body) / 8)
-            + (GetForwardBonus(thighL)/ 6)
+            /*+ (GetForwardBonus(thighL)/ 6)
             + (GetForwardBonus(thighR)/ 6)
             + (GetForwardBonus(shinL) / 8)
-            + (GetForwardBonus(shinR) / 8)
+            + (GetForwardBonus(shinR) / 8)*/
             + (GetForwardBonus(footL) / 6)
             + (GetForwardBonus(footR) / 6));
         //float effort = GetEffort();
         //_finalPhasePenalty = GetPhaseBonus();
         //_effortPenality = 1e-2f * (float)effort;
         _heightPenality = 2 * GetHeightPenalty(1.4f);  //height of body
+        _deviationPenalty = GetAxisDeviation(hips.position, 0.1f);
 
         __reward = (
             +_uprightBonus
             + _forwardBonus
             //- _finalPhasePenalty
-            - _velocityPenalty
+            + _velocityReward
             //- _effortPenality
             - _heightPenality
+            - _deviationPenalty
             );
-
+        
         return __reward;
         
     }
@@ -210,7 +214,7 @@ public class RobotMultiSkillAgent : RobotAgent
         //_velocity = _velocity / 2;
         _currentVelocityForward = GetAverageVelocity();
         _velocityReward = 1f - Mathf.Abs(_targetVelocityForward - _currentVelocityForward) * 1.3f;
-        _velocityReward *= 2;
+        //_velocityReward *= 2;
         // Encourage uprightness of hips and body.
         _uprightBonus =
             ((GetUprightBonus(hips) / 4)//6
@@ -220,6 +224,7 @@ public class RobotMultiSkillAgent : RobotAgent
             + (GetForwardBonus(body) / 6));
         //bonus for async phase:
         _finalPhaseBonus = GetPhaseBonus();
+        _deviationPenalty = GetAxisDeviation(hips.position, 0.1f);
 
         // penalize synchron leg movement
         float leftThighPenality = Mathf.Abs(GetForwardBonus(thighL));
@@ -238,14 +243,14 @@ public class RobotMultiSkillAgent : RobotAgent
             + _forwardBonus
             + _finalPhaseBonus
 
+            - _deviationPenalty
             - _limbPenalty
             - _effortPenality
             - _jointsAtLimitPenality
             - _heightPenality
             );
 
-        Monitor.Log("VelocityReward", _velocityReward);
-        Monitor.Log("Curriculum lesson progress", curriculumController.GetLessonProgress());
+        
 
         return __reward;
     }

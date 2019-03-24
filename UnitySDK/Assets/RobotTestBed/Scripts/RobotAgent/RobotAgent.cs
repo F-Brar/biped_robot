@@ -42,6 +42,8 @@ public abstract class RobotAgent : Agent
     protected int currentDecisionStep;
     protected Dictionary<string, Quaternion> BodyPartsToFocalRotation = new Dictionary<string, Quaternion>();  //use this to determine the initial axis
     protected List<float> recentVelocity;
+    protected Vector3 _initialPosition;
+    protected bool phaseChange;
 
     public override void InitializeAgent()
     {
@@ -64,6 +66,7 @@ public abstract class RobotAgent : Agent
         jdController.SetupBodyPart(shinR);
         jdController.SetupBodyPart(footR);
 
+        _initialPosition = hips.position;
         // set body part directions
         foreach (var bodyPart in jdController.robotBodyPartsDict)
         {
@@ -275,6 +278,10 @@ public abstract class RobotAgent : Agent
     /// </summary>
     public float _targetVelocityForward;
     /// <summary>
+    /// returns penalty for deviating from forward axis
+    /// </summary>
+    public float _deviationPenalty;
+    /// <summary>
     /// the avarage velocity forward
     /// </summary>
     public float _currentVelocityForward;
@@ -322,6 +329,8 @@ public abstract class RobotAgent : Agent
     /// the angle used to terminate the agent for given skill
     /// </summary>
     public float _terminationAngle;
+    
+    
     
 
 
@@ -402,7 +411,20 @@ public abstract class RobotAgent : Agent
         return recentVelocity.Average();
     }
 
-
+    /// <summary>
+    /// if deviation >= threshold return deviation from forward axis
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns></returns>
+    internal float GetAxisDeviation(Vector3 position, float threshold)
+    {
+        threshold = 0;
+        _deviationPenalty = 0;
+        //initial position == hips.position
+        _deviationPenalty = Mathf.Abs(_initialPosition.x - position.x);
+        _deviationPenalty = _deviationPenalty >= threshold ? _deviationPenalty : 0;
+        return _deviationPenalty;
+    }
 
 
     /// <summary>
@@ -610,7 +632,7 @@ public abstract class RobotAgent : Agent
         bonus += max - min;
         return bonus;
     }
-
+    
     internal float GetPhaseBonus()
     {
         bool noPhaseChange = true;
@@ -618,6 +640,7 @@ public abstract class RobotAgent : Agent
         bool wasRightFootDown = _lastSensorState[1];
         noPhaseChange = noPhaseChange && isLeftFootDown == wasLeftFootDown;
         noPhaseChange = noPhaseChange && isRightFootDown == wasRightFootDown;
+        phaseChange = !noPhaseChange;
         bothFeetDown = isLeftFootDown && isRightFootDown;
         _lastSensorState[0] = isLeftFootDown;
         _lastSensorState[1] = isRightFootDown;

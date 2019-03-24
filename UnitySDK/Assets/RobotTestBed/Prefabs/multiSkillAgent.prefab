@@ -159,6 +159,7 @@ MonoBehaviour:
   _finalPhasePenalty: 0
   _velocity: 0
   _targetVelocityForward: 0
+  _deviationPenalty: 0
   _currentVelocityForward: 0
   _velocityPenalty: 0
   _velocityReward: 0
@@ -226,10 +227,11 @@ MonoBehaviour:
   playerBrain: {fileID: 11400000, guid: 7bb1c95e70a454645aaab6e717aefcf6, type: 2}
   heuristicBrain: {fileID: 11400000, guid: bbe50d65f4ea4ea41b39815653053cf7, type: 2}
   useMultiSkill: 0
-  stepsToTrainWalk: 2000000
-  stepsToTrainStand: 0
+  stepsToTrainWalk: 5000000
+  stepsToTrainStand: 5000000
   playerControl: 0
   Action: 0
+  _stepCountTillSkill: 0
 --- !u!1 &57454850
 GameObject:
   m_ObjectHideFlags: 0
