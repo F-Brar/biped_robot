@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: 6e6acce56ed0e894f8d9e90edd856e13
+ScriptedImporter:
+  fileIDToRecycleName:
+    11400000: Assets/RobotTestBed/Models/multiskill/walk/RobotWalkerBrain 4.nn
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 83221ad3db87f4b3b91b041047cb2bc5, type: 3}
