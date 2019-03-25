@@ -383,11 +383,11 @@ ConfigurableJoint:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 63661414}
-  m_ConnectedBody: {fileID: 272531642}
+  m_ConnectedBody: {fileID: 696376483}
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.48220098, y: -0.5466387, z: 0}
+  m_ConnectedAnchor: {x: 0.000000029802322, y: -0.5466387, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 0, z: 1}
   m_XMotion: 0

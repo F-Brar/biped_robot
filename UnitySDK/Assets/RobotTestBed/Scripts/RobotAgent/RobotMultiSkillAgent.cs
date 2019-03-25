@@ -107,7 +107,7 @@ public class RobotMultiSkillAgent : RobotAgent
                 _terminationAngle = .2f;
                 break;
             case Skills.Walk:
-                _targetVelocityForward = 3f;
+                _targetVelocityForward = 2f;
                 GiveBrain(_skill.skillBrain);
                 _terminationHeight = .9f;
                 _terminationAngle = .2f;
