@@ -30,7 +30,7 @@ public class VirtualAssistant : MonoBehaviour
         //frontal stability at 70% for standing agent
         else if(localVel.z >= .1f)
         {
-            hips.AddForce(-hips.transform.forward * breakForce * .7f, ForceMode.Acceleration);
+            hips.AddForce(-hips.transform.forward * breakForce, ForceMode.Acceleration);
         }
 
 

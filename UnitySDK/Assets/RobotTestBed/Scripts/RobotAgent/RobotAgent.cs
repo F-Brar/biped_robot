@@ -416,13 +416,12 @@ public abstract class RobotAgent : Agent
     /// </summary>
     /// <param name="position"></param>
     /// <returns></returns>
-    internal float GetAxisDeviation(Vector3 position, float threshold)
+    internal float GetAxisDeviation(Vector3 position, float threshold = 0f)
     {
-        threshold = 0;
         _deviationPenalty = 0;
         //initial position == hips.position
         _deviationPenalty = Mathf.Abs(_initialPosition.x - position.x);
-        _deviationPenalty = _deviationPenalty >= threshold ? _deviationPenalty : 0;
+        _deviationPenalty = _deviationPenalty >= threshold || _deviationPenalty <= -threshold ? _deviationPenalty : 0;
         return _deviationPenalty;
     }
 

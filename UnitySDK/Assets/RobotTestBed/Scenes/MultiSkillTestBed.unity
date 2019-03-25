@@ -1347,8 +1347,8 @@ MonoBehaviour:
     - {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
     - {fileID: 11400000, guid: bbe50d65f4ea4ea41b39815653053cf7, type: 2}
     _brainsToControl:
-    - {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
     - {fileID: 11400000, guid: 26a3a1998308de24a8985f2dd301cb67, type: 2}
+    - {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
   maxSteps: 0
   trainingConfiguration:
     width: 80
@@ -1394,24 +1394,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   curriculumList:
   - CurriculumName: STAND
-    mileStone: 7
-    reductionPercentage: 0.1
+    mileStone: 10
+    reductionPercentage: 0.2
     updateOnPercentage: 1
     initPropellingForce: 25
     initLateralForce: 20
-    initBreakForce: 25
+    initBreakForce: 20
     propellingForce: 0
     lateralForce: 0
     breakForce: 0
     expertReward: 0
     reward: 0
-    lesson: 0
+    _lesson: 0
     minimumStepsToReach: 50000
     stepCount: 0
   - CurriculumName: WALK
     mileStone: 5
     reductionPercentage: 0.2
-    updateOnPercentage: 0.7
+    updateOnPercentage: 0.8
     initPropellingForce: 25
     initLateralForce: 20
     initBreakForce: 0
@@ -1420,8 +1420,8 @@ MonoBehaviour:
     breakForce: 0
     expertReward: 0
     reward: 0
-    lesson: 0
-    minimumStepsToReach: 50000
+    _lesson: 0
+    minimumStepsToReach: 100000
     stepCount: 0
   shouldCurriculumLearning: 0
   academy: {fileID: 0}
