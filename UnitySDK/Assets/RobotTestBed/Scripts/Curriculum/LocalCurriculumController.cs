@@ -120,13 +120,19 @@ public class LocalCurriculumController : MonoBehaviour
     /// <summary>
     /// reduce assistant force with each lesson; reset stepCount
     /// </summary>
-    public void SetLesson(int lesson, float _newExpertReward )
+    public void SetLesson(int lesson, int _activeSkill, float _newExpertReward )
     {
-        var activeCurriculum = curriculumSkills[activeSkill];
-        _lesson = activeCurriculum.lesson = lesson;
-        activeCurriculum.expertReward = _newExpertReward;
+        var updateCurriculum = curriculumSkills[_activeSkill];
+        updateCurriculum.lesson = lesson;
+        if(_activeSkill == activeSkill)
+        {
+            _lesson = updateCurriculum.lesson = lesson;
+        }
+        updateCurriculum.expertReward = _newExpertReward;
+
+
         //if last lesson done:
-        if (_lesson * reductionPercentage >= 1)
+        if (isCurriculumLearningDone())
         {
             //end curriculum learning
             agent.curriculumLearning = false;
@@ -146,7 +152,7 @@ public class LocalCurriculumController : MonoBehaviour
             milestoneCounter += 1;
             if (milestoneCounter >= 2)
             {
-                globalCurriculumController.UpdateAll(reward, activeSkill);
+                StartCoroutine(globalCurriculumController.UpdateAll(reward, activeSkill));
                 ResetRollout();
             }
 
@@ -169,6 +175,18 @@ public class LocalCurriculumController : MonoBehaviour
     public float GetLessonProgress()
     {
         return _lesson * reductionPercentage;
+    }
+
+    public bool isCurriculumLearningDone()
+    {
+        bool done = false;
+
+        foreach (Curriculum curr in curriculumSkills)
+        {
+            done &= curr.isDone();
+        }
+
+        return done;
     }
 
     /// <summary>
