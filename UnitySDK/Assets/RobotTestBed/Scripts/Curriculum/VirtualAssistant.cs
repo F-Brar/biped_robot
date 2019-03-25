@@ -23,12 +23,12 @@ public class VirtualAssistant : MonoBehaviour
     void FixedUpdate()
     {
         var localVel = transform.InverseTransformDirection(hips.velocity);
-        if (localVel.z <= -.1f)
+        if (localVel.z <= -0f)
         {
             hips.AddForce(hips.transform.forward * propellingForce, ForceMode.Acceleration);
         }
         //frontal stability at 70% for standing agent
-        else if(localVel.z >= .1f)
+        else if(localVel.z >= .0f)
         {
             hips.AddForce(-hips.transform.forward * breakForce, ForceMode.Acceleration);
         }

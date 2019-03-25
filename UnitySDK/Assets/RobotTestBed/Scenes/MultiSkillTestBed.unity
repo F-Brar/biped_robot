@@ -465,14 +465,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 63661417, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
-      propertyPath: m_ConnectedBody
-      value: 
-      objectReference: {fileID: 1434899023}
-    - target: {fileID: 63661417, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
-      propertyPath: m_ConnectedAnchor.x
-      value: 0.000000029802322
-      objectReference: {fileID: 0}
     - target: {fileID: 2543176773027384878, guid: c017ba3de44c87b44a4ba3571d51fbd8,
         type: 3}
       propertyPath: CameraTarget
@@ -626,7 +618,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 63661417, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_ConnectedAnchor.x
-      value: -0.4822008
+      value: 0.0000001937151
       objectReference: {fileID: 0}
     - target: {fileID: 1657951249, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_ConnectedAnchor.x
@@ -865,7 +857,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 63661417, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_ConnectedAnchor.x
-      value: -0.4822008
+      value: 0.0000001937151
       objectReference: {fileID: 0}
     - target: {fileID: 1657951249, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_ConnectedAnchor.x
@@ -1234,12 +1226,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &1434899023 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 696376483, guid: c017ba3de44c87b44a4ba3571d51fbd8,
-    type: 3}
-  m_PrefabInstance: {fileID: 419829684}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1445613481
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1301,7 +1287,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 63661417, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_ConnectedAnchor.x
-      value: -0.4822008
+      value: 0.0000001937151
       objectReference: {fileID: 0}
     - target: {fileID: 1657951249, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_ConnectedAnchor.x
@@ -1686,7 +1672,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 63661417, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_ConnectedAnchor.x
-      value: -0.4822008
+      value: 0.0000001937151
       objectReference: {fileID: 0}
     - target: {fileID: 1657951249, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_ConnectedAnchor.x
