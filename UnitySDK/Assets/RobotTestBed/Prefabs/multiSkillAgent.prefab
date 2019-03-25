@@ -226,9 +226,9 @@ MonoBehaviour:
     numberOfActionsBetweenDecisions: 5
   playerBrain: {fileID: 11400000, guid: 7bb1c95e70a454645aaab6e717aefcf6, type: 2}
   heuristicBrain: {fileID: 11400000, guid: bbe50d65f4ea4ea41b39815653053cf7, type: 2}
-  useMultiSkill: 1
-  stepsToTrainWalk: 5000
-  stepsToTrainStand: 5000
+  useMultiSkill: 0
+  stepsToTrainWalk: 1000000
+  stepsToTrainStand: 1000000
   playerControl: 0
   Action: 0
   _stepCountTillSkill: 0
@@ -383,11 +383,11 @@ ConfigurableJoint:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 63661414}
-  m_ConnectedBody: {fileID: 696376483}
+  m_ConnectedBody: {fileID: 272531642}
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.000000029802322, y: -0.5466387, z: 0}
+  m_ConnectedAnchor: {x: -0.48220098, y: -0.5466387, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 0, z: 1}
   m_XMotion: 0
@@ -2157,8 +2157,6 @@ GameObject:
   - component: {fileID: 1431006819}
   - component: {fileID: 1431006818}
   - component: {fileID: 1431006817}
-  - component: {fileID: 1431006816}
-  - component: {fileID: 1603199160964964522}
   - component: {fileID: 660900525538576270}
   - component: {fileID: 195387784887654610}
   m_Layer: 0
@@ -2311,33 +2309,6 @@ MonoBehaviour:
   penalizeGroundContact: 0
   groundContactPenalty: 0
   touchingGround: 0
---- !u!136 &1431006816
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1431006814}
-  m_Material: {fileID: 13400000, guid: 1832b29a4a2dbca4280cc43eb02ab67c, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.085071996
-  m_Height: 0.45
-  m_Direction: 2
-  m_Center: {x: 0, y: -0.02, z: 0.08}
---- !u!65 &1603199160964964522
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1431006814}
-  m_Material: {fileID: 13400000, guid: 1832b29a4a2dbca4280cc43eb02ab67c, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 0.26931328, y: 0.17468572, z: 0.38996598}
-  m_Center: {x: -0.00095, y: -0.01, z: 0.075}
 --- !u!136 &660900525538576270
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2489,7 +2460,6 @@ GameObject:
   - component: {fileID: 1537048759}
   - component: {fileID: 1537048758}
   - component: {fileID: 1537048757}
-  - component: {fileID: 5877908855699035417}
   - component: {fileID: 9004898397141706349}
   m_Layer: 0
   m_Name: Foot_L
@@ -2655,19 +2625,6 @@ MonoBehaviour:
   penalizeGroundContact: 0
   groundContactPenalty: 0
   touchingGround: 0
---- !u!65 &5877908855699035417
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1537048755}
-  m_Material: {fileID: 13400000, guid: 1832b29a4a2dbca4280cc43eb02ab67c, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 0.26931328, y: 0.17468572, z: 0.38996598}
-  m_Center: {x: -0.00095, y: -0.01, z: 0.075}
 --- !u!136 &9004898397141706349
 CapsuleCollider:
   m_ObjectHideFlags: 0

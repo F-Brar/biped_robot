@@ -107,9 +107,9 @@ public class RobotMultiSkillAgent : RobotAgent
                 _terminationAngle = .2f;
                 break;
             case Skills.Walk:
-                _targetVelocityForward = 4f;
+                _targetVelocityForward = 3f;
                 GiveBrain(_skill.skillBrain);
-                _terminationHeight = 1f;
+                _terminationHeight = .9f;
                 _terminationAngle = .2f;
                 break;
         }
@@ -193,7 +193,7 @@ public class RobotMultiSkillAgent : RobotAgent
         //float effort = GetEffort();
         //_finalPhasePenalty = GetPhaseBonus();
         //_effortPenality = 1e-2f * (float)effort;
-        _heightPenality = 4 * GetHeightPenalty(1.4f);  //height of body
+        _heightPenality = 3 * GetHeightPenalty(1.4f);  //height of body
         _deviationPenalty = GetAxisDeviation(hips.position, 0.1f);
         float _timeAliveBonus = 0.001f;
         __reward = (
