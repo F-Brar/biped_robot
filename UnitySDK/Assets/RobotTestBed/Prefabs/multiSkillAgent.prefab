@@ -165,10 +165,10 @@ MonoBehaviour:
   _velocityReward: 0
   _uprightBonus: 0
   _forwardBonus: 0
-  _heightPenality: 0
+  _heightPenalty: 0
   _limbPenalty: 0
-  _jointsAtLimitPenality: 0
-  _effortPenality: 0
+  _jointsAtLimitPenalty: 0
+  _effortPenalty: 0
   _maxDistanceTravelled: 0
   _terminationHeight: 0
   _terminationAngle: 0
@@ -178,6 +178,7 @@ MonoBehaviour:
   LeftMax: 0
   RightMin: 0
   RightMax: 0
+  ShowMonitor: 1
   skillList:
   - skill: 0
     skillBrain: {fileID: 11400000, guid: 26a3a1998308de24a8985f2dd301cb67, type: 2}
