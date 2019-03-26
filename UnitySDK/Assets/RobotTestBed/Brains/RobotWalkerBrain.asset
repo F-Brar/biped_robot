@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: RobotWalkerBrain
   m_EditorClassIdentifier: 
   brainParameters:
-    vectorObservationSize: 88
-    numStackedVectorObservations: 5
+    vectorObservationSize: 90
+    numStackedVectorObservations: 1
     vectorActionSize: 15000000
     cameraResolutions: []
     vectorActionDescriptions:

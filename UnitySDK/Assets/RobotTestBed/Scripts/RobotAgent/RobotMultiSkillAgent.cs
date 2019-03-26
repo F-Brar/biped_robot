@@ -232,8 +232,8 @@ public class RobotMultiSkillAgent : RobotAgent
         _limbPenalty = leftThighPenalty + rightThighPenalty;
         _limbPenalty = Mathf.Min(0.5f, _limbPenalty);   //penalty for moving both legs in the same direction
 
-        //float effort = GetEffort();
-        //_effortPenalty = 1e-2f * (float)effort;
+        float effort = GetEffort(new string[] {shinL.name,shinR.name, });
+        _effortPenalty = 1e-2f * (float)effort;
         _jointsAtLimitPenalty = GetJointsAtLimitPenalty();
         _heightPenalty = GetHeightPenalty(1.3f);  //height of body
         _deviationPenalty = GetAxisDeviation(hips.position, 0.1f);
@@ -246,8 +246,8 @@ public class RobotMultiSkillAgent : RobotAgent
             + _forwardBonus
             + _finalPhaseBonus
             - _deviationPenalty
-            - _limbPenalty
-            //- _effortPenalty
+            //- _limbPenalty
+            - _effortPenalty
             - _jointsAtLimitPenalty
             - _heightPenalty
             );
