@@ -304,7 +304,7 @@ public abstract class RobotAgent : Agent
     /// <summary>
     /// penalty for falling below height over feet
     /// </summary>
-    public float _heightPenality;
+    public float _heightPenalty;
     /// <summary>
     /// penalty for moving legs irregular - max 0.5
     /// </summary>
@@ -312,11 +312,11 @@ public abstract class RobotAgent : Agent
     /// <summary>
     /// penalize joint actions at limit
     /// </summary>
-    public float _jointsAtLimitPenality;
+    public float _jointsAtLimitPenalty;
     /// <summary>
     /// penalize excessive joint actions
     /// </summary>
-    public float _effortPenality;
+    public float _effortPenalty;
     /// <summary>
     /// the maximum reached distance since training began
     /// </summary>
@@ -339,7 +339,7 @@ public abstract class RobotAgent : Agent
     /// </summary>
     /// <param name="ignorJoints"></param>
     /// <returns></returns>
-    internal float GetJointsAtLimitPenality(string[] ignorJoints = null)
+    internal float GetJointsAtLimitPenalty(string[] ignorJoints = null)
     {
         int atLimitCount = 0;
         for (int i = 0; i < Actions.Count; i++)

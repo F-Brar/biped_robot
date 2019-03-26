@@ -24,13 +24,12 @@ public class Skill
 
 public class RobotMultiSkillAgent : RobotAgent
 {
-
+    public bool ShowMonitor = true;
     [Header("Skill Setup Area")]
     [Tooltip("setup wich skills to learn")]
     public List<Skill> skillList;
     [Header("active skill => 0 : stand; 1 : walk;")]
     public int activeSkill;
-    public bool useMonitor;
 
     public bool curriculumLearning {
         get { return _curriculumLearning; }
@@ -154,8 +153,12 @@ public class RobotMultiSkillAgent : RobotAgent
         {
             _reward = GetWalkerReward();
         }
-        
+        //Monitor.Log()
+        //Monitor.Log("reward: ", _reward);
+        //Monitor.Log("lesson: ", curriculumController._lesson);
         return _reward;
+
+        
     }
 
     /// <summary>
@@ -188,18 +191,18 @@ public class RobotMultiSkillAgent : RobotAgent
             + (GetForwardBonus(shinR) / 8)
             + (GetForwardBonus(footL) / 6)
             + (GetForwardBonus(footR) / 6));
-        float effort = GetEffort();
+        //float effort = GetEffort();
         _finalPhasePenalty = GetPhaseBonus();
-        _effortPenality = 1e-2f * (float)effort;
-        _heightPenality = 2 * GetHeightPenalty(1.3f);  //height of body
+        //_effortPenalty = 1e-2f * (float)effort;
+        _heightPenalty = 2 * GetHeightPenalty(1.3f);  //height of body
         //_deviationPenalty = GetAxisDeviation(hips.position, 0.1f);
         __reward = (
             + _uprightBonus
             + _forwardBonus
             - _finalPhasePenalty
             - _velocityPenalty
-            - _effortPenality
-            - _heightPenality
+            //- _effortPenalty
+            - _heightPenalty
             //- _deviationPenalty
             );
         
@@ -220,24 +223,24 @@ public class RobotMultiSkillAgent : RobotAgent
         
         _uprightBonus =
             ((GetUprightBonus(hips) / 4)//6
-            + (GetUprightBonus(body) / 6));
+            + (GetUprightBonus(body) / 4));
         _forwardBonus =
-            ((GetForwardBonus(hips) / 6)//6
-            + (GetForwardBonus(body) / 6));
+            ((GetForwardBonus(hips) / 4)//6
+            + (GetForwardBonus(body) / 4));
         //bonus for async phase:
         _finalPhaseBonus = GetPhaseBonus();
         //_deviationPenalty = GetAxisDeviation(hips.position, 0.1f);
 
         // penalize synchron leg movement
-        float leftThighPenality = Mathf.Abs(GetForwardBonus(thighL));
-        float rightThighPenality = Mathf.Abs(GetBackwardsBonus(thighR));
-        _limbPenalty = leftThighPenality + rightThighPenality;
+        float leftThighPenalty = Mathf.Abs(GetForwardBonus(thighL));
+        float rightThighPenalty = Mathf.Abs(GetBackwardsBonus(thighR));
+        _limbPenalty = leftThighPenalty + rightThighPenalty;
         _limbPenalty = Mathf.Min(0.5f, _limbPenalty);   //penalty for moving both legs in the same direction
 
-        float effort = GetEffort(new string[] { shinL.name, shinR.name });
-        _effortPenality = 1e-2f * (float)effort;
-        _jointsAtLimitPenality = GetJointsAtLimitPenality();
-        _heightPenality = GetHeightPenalty(1.3f);  //height of body
+        //float effort = GetEffort();
+        //_effortPenalty = 1e-2f * (float)effort;
+        _jointsAtLimitPenalty = GetJointsAtLimitPenalty();
+        _heightPenalty = GetHeightPenalty(1.3f);  //height of body
 
         __reward = (
               //_velocityReward
@@ -245,12 +248,12 @@ public class RobotMultiSkillAgent : RobotAgent
              _velocity
             + _uprightBonus
             + _forwardBonus
-            + _timeAlive
+            + _finalPhaseBonus
             //- _deviationPenalty
             - _limbPenalty
-            - _effortPenality
-            - _jointsAtLimitPenality
-            - _heightPenality
+            //- _effortPenalty
+            - _jointsAtLimitPenalty
+            - _heightPenalty
             );
 
         

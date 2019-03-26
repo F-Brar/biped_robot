@@ -186,7 +186,6 @@ MonoBehaviour:
     skillBrain: {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
     active: 0
   activeSkill: 0
-  useMonitor: 1
   _curriculumLearning: 0
   curriculumController: {fileID: 0}
 --- !u!114 &45583562
@@ -226,10 +225,10 @@ MonoBehaviour:
     numberOfActionsBetweenDecisions: 5
   playerBrain: {fileID: 11400000, guid: 7bb1c95e70a454645aaab6e717aefcf6, type: 2}
   heuristicBrain: {fileID: 11400000, guid: bbe50d65f4ea4ea41b39815653053cf7, type: 2}
-  useMultiSkill: 1
+  useMultiSkill: 0
   stepsToTrainWalk: 10000000
   stepsToTrainStand: 10000000
-  playerControl: 1
+  playerControl: 0
   Action: 0
   _stepCountTillSkill: 0
 --- !u!1 &57454850
