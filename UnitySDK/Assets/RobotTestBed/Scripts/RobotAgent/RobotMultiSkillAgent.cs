@@ -100,15 +100,15 @@ public class RobotMultiSkillAgent : RobotAgent
                 _targetVelocityForward = 0f;
                 //recentVelocity = new List<float>();
                 GiveBrain(_skill.skillBrain);
-                _terminationHeight = .9f;
-                _terminationAngle = .2f;
+                _terminationHeight = .7f;
+                _terminationAngle = .25f;
                 break;
             case Skills.Walk:
-                _targetVelocityForward = 1f;
+                _targetVelocityForward = .6f;
                 //recentVelocity = new List<float>();
                 GiveBrain(_skill.skillBrain);
-                _terminationHeight = .9f;
-                _terminationAngle = .2f;
+                _terminationHeight = .7f;
+                _terminationAngle = .25f;
                 break;
         }
         if (curriculumLearning)
@@ -161,6 +161,8 @@ public class RobotMultiSkillAgent : RobotAgent
         
     }
 
+    
+
     /// <summary>
     /// encourage low velocity, uprightness of all bodyparts; penalize feet movement; penalize falling below height threshold; penalize overall joint effort
     /// </summary>
@@ -184,8 +186,8 @@ public class RobotMultiSkillAgent : RobotAgent
             + (GetForwardBonus(footL) / 6)
             + (GetForwardBonus(footR) / 6));
         //float effort = GetEffort();
-        _finalPhasePenalty = GetPhaseBonus();
-        //float _timeAliveBonus = 0.0001f;
+        //_finalPhasePenalty = GetPhaseBonus();
+        float _timeAliveBonus = 0.0001f;
         //_effortPenalty = 1e-2f * (float)effort;
         _heightPenalty = GetHeightPenalty(1.3f);  //height of body
         //_deviationPenalty = GetAxisDeviation(hips.position, 0.1f);
@@ -197,8 +199,8 @@ public class RobotMultiSkillAgent : RobotAgent
         __reward = (
             + _uprightBonus
             + _forwardBonus
-            + _finalPhasePenalty
-            //+ _timeAliveBonus
+            //+ _finalPhasePenalty
+            + _timeAliveBonus
             - _velocityPenalty
             - _limbPenalty
             //- _effortPenalty
