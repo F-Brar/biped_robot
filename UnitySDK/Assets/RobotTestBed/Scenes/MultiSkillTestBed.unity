@@ -287,35 +287,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 63661414, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 272531641, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 366016885, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 696376482, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1431006814, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1537048755, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1657951245, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1818394054, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
@@ -485,7 +485,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1136,35 +1136,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 63661414, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 272531641, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 366016885, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 696376482, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1431006814, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1537048755, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1657951245, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1818394054, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
@@ -1346,15 +1346,13 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 26a3a1998308de24a8985f2dd301cb67, type: 2}
     - {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
     - {fileID: 11400000, guid: bbe50d65f4ea4ea41b39815653053cf7, type: 2}
-    _brainsToControl:
-    - {fileID: 11400000, guid: 26a3a1998308de24a8985f2dd301cb67, type: 2}
-    - {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
+    _brainsToControl: []
   maxSteps: 0
   trainingConfiguration:
     width: 80
     height: 80
     qualityLevel: 1
-    timeScale: 25
+    timeScale: 20
     targetFrameRate: -1
   inferenceConfiguration:
     width: 1280
@@ -1394,7 +1392,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   curriculumList:
   - CurriculumName: STAND
-    mileStone: 10
+    mileStone: 7
     reductionPercentage: 0.2
     updateOnPercentage: 1
     initPropellingForce: 25
@@ -1406,7 +1404,7 @@ MonoBehaviour:
     expertReward: 0
     reward: 0
     _lesson: 0
-    minimumStepsToReach: 50000
+    minimumStepsToReach: 5000
     stepCount: 0
   - CurriculumName: WALK
     mileStone: 4
@@ -1421,7 +1419,7 @@ MonoBehaviour:
     expertReward: 0
     reward: 0
     _lesson: 0
-    minimumStepsToReach: 100000
+    minimumStepsToReach: 5000
     stepCount: 0
   shouldCurriculumLearning: 0
   academy: {fileID: 0}
@@ -1539,7 +1537,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x

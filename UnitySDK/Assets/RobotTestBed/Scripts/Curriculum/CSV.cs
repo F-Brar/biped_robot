@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class CSV
 {
-
+    
     private String fileLocation = Application.dataPath + "\\Curriculum_CSV\\";//"C:\\Users\\Telefon Mann\\Desktop\\MinfTogetherStudie\\outputData\\";
     private string folderName = "\\Data";
     private int folderCounter;
@@ -29,6 +29,7 @@ public class CSV
             Directory.CreateDirectory(fileLocation);
         }
         /*
+         * //string.Format("{0}/{1:D04} shot.png", folder, Time.frameCount);
         //create a new folder for new curriculum
         folderName += folderCounter;
         var result = fileLocation.Substring(fileLocation.Length - 3);

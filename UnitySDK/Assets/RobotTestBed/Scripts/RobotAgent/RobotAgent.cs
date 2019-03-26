@@ -392,8 +392,9 @@ public abstract class RobotAgent : Agent
             rawVelocity = jdController.robotBodyPartsDict[bodyPart].rb.velocity.z;
         else
             rawVelocity = jdController.robotBodyPartsDict[hips].rb.velocity.z;  //velocity in meters per seconds
-        var velocity = rawVelocity;
 
+        //var maxSpeed = 4f; // meters per second
+        var velocity = rawVelocity; // maxSpeed;
         return velocity;
     }
 
