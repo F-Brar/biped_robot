@@ -44,7 +44,7 @@ public class InputDecisionHeuristic : Decision
         {
             var rnd = UnityEngine.Random.value;
             bool repeateAction = false;
-            if (Action != 0 && rnd > .6f)
+            if (Action != 0 && rnd > .5f)
                 repeateAction = true;
             if (!repeateAction)
             {
@@ -54,7 +54,7 @@ public class InputDecisionHeuristic : Decision
                 else
                     Action = 0; // stand
             }
-            memory[0] = 40 + (int)(UnityEngine.Random.value * 200); //statt 40 / 200
+            memory[0] = 80 + (int)(UnityEngine.Random.value * 250); //statt 40 / 200
             memory[1] = (float)Action;
         }
         float[] ActionList = new float[1] { Action };

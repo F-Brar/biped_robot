@@ -59,11 +59,10 @@ public class RobotMultiSkillAgent : RobotAgent
 
     public override void CollectObservations()
     {
-        if (activeSkill == 1)
-        {
-            AddVectorObs(_targetVelocityForward);
-            AddVectorObs(_currentVelocityForward);
-        }
+        
+        AddVectorObs(_targetVelocityForward);
+        AddVectorObs(_currentVelocityForward);
+        
         base.CollectObservations();
     }
 
@@ -105,7 +104,7 @@ public class RobotMultiSkillAgent : RobotAgent
                 _terminationAngle = .2f;
                 break;
             case Skills.Walk:
-                _targetVelocityForward = 1.5f;
+                _targetVelocityForward = 1f;
                 //recentVelocity = new List<float>();
                 GiveBrain(_skill.skillBrain);
                 _terminationHeight = .9f;
@@ -170,10 +169,10 @@ public class RobotMultiSkillAgent : RobotAgent
     {
         float __reward = 0;
         //penalize forward axis movement
-        _velocityPenalty = 2 * Mathf.Abs(GetVelocity());
-        //_currentVelocityForward = GetAverageVelocity();
-        //_velocityReward = Mathf.Abs(1f - Mathf.Abs(_targetVelocityForward - _currentVelocityForward) * 1.3f);
-        //_velocityReward *= 2;
+        //_velocityPenalty = 2 * Mathf.Abs(GetVelocity());
+        _currentVelocityForward = GetAverageVelocity();
+        _velocityPenalty = Mathf.Abs(1f - Mathf.Abs(_targetVelocityForward - _currentVelocityForward) * 1.3f);
+        _velocityPenalty *= 2;
         _uprightBonus =
             ((GetUprightBonus(hips) / 4)//6
             + (GetUprightBonus(body) / 4)
@@ -181,24 +180,30 @@ public class RobotMultiSkillAgent : RobotAgent
             + (GetUprightBonus(footR) / 6));
         _forwardBonus =
             ((GetForwardBonus(hips) / 4)//6
-            + (GetForwardBonus(body) / 6)
+            + (GetForwardBonus(body) / 4)
             + (GetForwardBonus(footL) / 6)
             + (GetForwardBonus(footR) / 6));
         //float effort = GetEffort();
         _finalPhasePenalty = GetPhaseBonus();
-        float _timeAliveBonus = 0.0001f;
+        //float _timeAliveBonus = 0.0001f;
         //_effortPenalty = 1e-2f * (float)effort;
         _heightPenalty = GetHeightPenalty(1.3f);  //height of body
-        _deviationPenalty = GetAxisDeviation(hips.position, 0.1f);
+        //_deviationPenalty = GetAxisDeviation(hips.position, 0.1f);
+        float leftThighPenalty = Mathf.Abs(GetForwardBonus(thighL));
+        float rightThighPenalty = Mathf.Abs(GetForwardBonus(thighR));
+        _limbPenalty = leftThighPenalty + rightThighPenalty;
+        _limbPenalty = Mathf.Min(0.5f, _limbPenalty);   //penalty for moving both legs in the same direction
+
         __reward = (
             + _uprightBonus
             + _forwardBonus
             + _finalPhasePenalty
-            + _timeAliveBonus
+            //+ _timeAliveBonus
             - _velocityPenalty
+            - _limbPenalty
             //- _effortPenalty
             - _heightPenalty
-            - _deviationPenalty
+            //- _deviationPenalty
             );
         
         return __reward;
@@ -232,11 +237,11 @@ public class RobotMultiSkillAgent : RobotAgent
         _limbPenalty = leftThighPenalty + rightThighPenalty;
         _limbPenalty = Mathf.Min(0.5f, _limbPenalty);   //penalty for moving both legs in the same direction
 
-        float effort = GetEffort(new string[] {shinL.name,shinR.name, });
+        float effort = GetEffort(new string[] {shinL.name,shinR.name});
         _effortPenalty = 1e-2f * (float)effort;
         _jointsAtLimitPenalty = GetJointsAtLimitPenalty();
         _heightPenalty = GetHeightPenalty(1.3f);  //height of body
-        _deviationPenalty = GetAxisDeviation(hips.position, 0.1f);
+        //_deviationPenalty = GetAxisDeviation(hips.position, 0.1f);
 
         __reward = (
               //_velocityReward
@@ -245,8 +250,8 @@ public class RobotMultiSkillAgent : RobotAgent
             + _uprightBonus
             + _forwardBonus
             + _finalPhaseBonus
-            - _deviationPenalty
-            //- _limbPenalty
+            //- _deviationPenalty
+            - _limbPenalty
             - _effortPenalty
             - _jointsAtLimitPenalty
             - _heightPenalty
