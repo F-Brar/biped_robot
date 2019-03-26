@@ -1406,7 +1406,7 @@ MonoBehaviour:
     expertReward: 0
     reward: 0
     _lesson: 0
-    minimumStepsToReach: 5000
+    minimumStepsToReach: 20000
     stepCount: 0
   - CurriculumName: WALK
     mileStone: 4
@@ -1421,7 +1421,7 @@ MonoBehaviour:
     expertReward: 0
     reward: 0
     _lesson: 0
-    minimumStepsToReach: 5000
+    minimumStepsToReach: 20000
     stepCount: 0
   shouldCurriculumLearning: 0
   academy: {fileID: 0}
