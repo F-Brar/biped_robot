@@ -186,6 +186,9 @@ MonoBehaviour:
   - skill: 1
     skillBrain: {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
     active: 0
+  - skill: 2
+    skillBrain: {fileID: 11400000, guid: 321ae1348ff098441b2fac7084a4abc6, type: 2}
+    active: 0
   activeSkill: 0
   _curriculumLearning: 0
   curriculumController: {fileID: 0}

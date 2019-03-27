@@ -110,7 +110,7 @@ public class ControllerAgent : Agent
         if(Action != lastAction)
         {
             ApplyActionToAgents(Action);
-
+            Debug.Log("action: " + Action);
         }
         lastAction = Action;
     }

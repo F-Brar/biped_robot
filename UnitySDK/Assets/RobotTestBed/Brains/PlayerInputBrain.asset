@@ -24,6 +24,9 @@ MonoBehaviour:
   - key: 119
     index: 0
     value: 1
+  - key: 115
+    index: 0
+    value: 2
   axisContinuousPlayerActions: []
   discretePlayerActions:
   - key: 0

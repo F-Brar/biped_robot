@@ -7,7 +7,8 @@ using System.Linq;
 public enum Skills
 {
     Stand,
-    Walk
+    Walk,
+    WalkBack
 };
 
 [System.Serializable]
@@ -84,6 +85,7 @@ public class RobotMultiSkillAgent : RobotAgent
         {
             return;
         }
+        Debug.Log("action applied: " + _activeSkill);
         if (resetCurriculum)
         {
             curriculumController.globalCurriculumController.ResetCurriculumLearning(activeSkill);
@@ -109,6 +111,14 @@ public class RobotMultiSkillAgent : RobotAgent
             case Skills.Walk:
                 _targetVelocityForward = .4f;
                 recentVelocity = new List<float>();
+                GiveBrain(_skill.skillBrain);
+                _terminationHeight = .7f;
+                _terminationAngle = .25f;
+                break;
+            case Skills.WalkBack:
+                _targetVelocityForward = 0f;
+                recentVelocity = new List<float>();
+                Debug.Log("skillbrain: " + _skill.skillBrain.name);
                 GiveBrain(_skill.skillBrain);
                 _terminationHeight = .7f;
                 _terminationAngle = .25f;
@@ -148,7 +158,7 @@ public class RobotMultiSkillAgent : RobotAgent
     /// <returns></returns>
     public override float GetSkillReward()
     {
-        if (activeSkill == 0)
+        if (activeSkill == 0 || activeSkill == 2)
         {
             _reward = GetStandingReward();
         }
