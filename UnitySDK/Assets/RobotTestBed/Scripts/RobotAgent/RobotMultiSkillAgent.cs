@@ -59,7 +59,8 @@ public class RobotMultiSkillAgent : RobotAgent
 
     public override void CollectObservations()
     {
-        
+        AddVectorObs(_timeAliveBonus);
+        AddVectorObs(hips.position.z);
         AddVectorObs(_targetVelocityForward);
         AddVectorObs(_currentVelocityForward);
         
@@ -95,17 +96,19 @@ public class RobotMultiSkillAgent : RobotAgent
         Skill _skill = skillList[_activeSkill];
         _skill.active = true;
 
+        _timeAliveBonus = 0;
+
         switch (_skill.skill){
             case Skills.Stand:
                 _targetVelocityForward = 0f;
-                //recentVelocity = new List<float>();
+                recentVelocity = new List<float>();
                 GiveBrain(_skill.skillBrain);
                 _terminationHeight = .7f;
                 _terminationAngle = .25f;
                 break;
             case Skills.Walk:
-                _targetVelocityForward = .6f;
-                //recentVelocity = new List<float>();
+                _targetVelocityForward = .4f;
+                recentVelocity = new List<float>();
                 GiveBrain(_skill.skillBrain);
                 _terminationHeight = .7f;
                 _terminationAngle = .25f;
@@ -161,7 +164,7 @@ public class RobotMultiSkillAgent : RobotAgent
         
     }
 
-    
+    public float _timeAliveBonus;
 
     /// <summary>
     /// encourage low velocity, uprightness of all bodyparts; penalize feet movement; penalize falling below height threshold; penalize overall joint effort
@@ -174,7 +177,7 @@ public class RobotMultiSkillAgent : RobotAgent
         //_velocityPenalty = 2 * Mathf.Abs(GetVelocity());
         _currentVelocityForward = GetAverageVelocity();
         _velocityPenalty = Mathf.Abs(1f - Mathf.Abs(_targetVelocityForward - _currentVelocityForward) * 1.3f);
-        _velocityPenalty *= 2;
+        //_velocityPenalty *= 2;
         _uprightBonus =
             ((GetUprightBonus(hips) / 4)//6
             + (GetUprightBonus(body) / 4)
@@ -187,14 +190,14 @@ public class RobotMultiSkillAgent : RobotAgent
             + (GetForwardBonus(footR) / 6));
         //float effort = GetEffort();
         //_finalPhasePenalty = GetPhaseBonus();
-        float _timeAliveBonus = 0.0001f;
+        _timeAliveBonus += 0.0001f;
         //_effortPenalty = 1e-2f * (float)effort;
-        _heightPenalty = GetHeightPenalty(1.3f);  //height of body
+        _heightPenalty = GetHeightPenalty(1.3f)/2;  //height of body
         //_deviationPenalty = GetAxisDeviation(hips.position, 0.1f);
-        float leftThighPenalty = Mathf.Abs(GetForwardBonus(thighL));
-        float rightThighPenalty = Mathf.Abs(GetForwardBonus(thighR));
-        _limbPenalty = leftThighPenalty + rightThighPenalty;
-        _limbPenalty = Mathf.Min(0.5f, _limbPenalty);   //penalty for moving both legs in the same direction
+        //float leftThighPenalty = Mathf.Abs(GetForwardBonus(thighL));
+        //float rightThighPenalty = Mathf.Abs(GetForwardBonus(thighR));
+        //_limbPenalty = leftThighPenalty + rightThighPenalty;
+        //_limbPenalty = Mathf.Min(0.5f, _limbPenalty);   //penalty for moving both legs in the same direction
 
         __reward = (
             + _uprightBonus
@@ -202,7 +205,7 @@ public class RobotMultiSkillAgent : RobotAgent
             //+ _finalPhasePenalty
             + _timeAliveBonus
             - _velocityPenalty
-            - _limbPenalty
+            //- _limbPenalty
             //- _effortPenalty
             - _heightPenalty
             //- _deviationPenalty
@@ -232,9 +235,9 @@ public class RobotMultiSkillAgent : RobotAgent
         //bonus for async phase:
         _finalPhaseBonus = GetPhaseBonus();
         //_deviationPenalty = GetAxisDeviation(hips.position, 0.1f);
-
-        // penalize synchron leg movement
-        float leftThighPenalty = Mathf.Abs(GetForwardBonus(thighL));
+        _timeAliveBonus += 0.0001f;
+    // penalize synchron leg movement
+    float leftThighPenalty = Mathf.Abs(GetForwardBonus(thighL));
         float rightThighPenalty = Mathf.Abs(GetBackwardsBonus(thighR));
         _limbPenalty = leftThighPenalty + rightThighPenalty;
         _limbPenalty = Mathf.Min(0.5f, _limbPenalty);   //penalty for moving both legs in the same direction
@@ -252,6 +255,7 @@ public class RobotMultiSkillAgent : RobotAgent
             + _uprightBonus
             + _forwardBonus
             + _finalPhaseBonus
+            + _timeAliveBonus
             //- _deviationPenalty
             - _limbPenalty
             - _effortPenalty
@@ -271,7 +275,7 @@ public class RobotMultiSkillAgent : RobotAgent
     public override void AgentReset()
     {
         inputController.AgentReset();
-
+        _timeAliveBonus = 0;
         base.AgentReset();
 
         PhaseBonusInitalize();

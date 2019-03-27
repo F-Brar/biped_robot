@@ -36,25 +36,29 @@ public class InputDecisionHeuristic : Decision
         memory[0]--;
 
         //if last skill standing and failed --> choose new skill --> stand skill only executed till failure
-        if(lastActionFailed == 0)
+        /*if(lastActionFailed == 0)
         {
-            memory[0] = 0;
-        }
+            var rnd = UnityEngine.Random.value;
+            if (rnd < .5)
+            {
+                memory[0] = 0;
+            }
+        }*/
         if (memory[0] <= 0)
         {
             var rnd = UnityEngine.Random.value;
             bool repeateAction = false;
-            if (Action != 0 && rnd > .5f)
+            if (/*Action != 0 &&*/ rnd > .7f)
                 repeateAction = true;
             if (!repeateAction)
             {
                 rnd = UnityEngine.Random.value;
-                if (rnd <= .7f)
+                if (rnd <= .6f)
                     Action = 1; //walk
                 else
                     Action = 0; // stand
             }
-            memory[0] = 80 + (int)(UnityEngine.Random.value * 250); //statt 40 / 200
+            memory[0] = 40 + (int)(UnityEngine.Random.value * 200); //statt 40 / 200
             memory[1] = (float)Action;
         }
         float[] ActionList = new float[1] { Action };
