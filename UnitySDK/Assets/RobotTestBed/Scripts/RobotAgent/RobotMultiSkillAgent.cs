@@ -176,7 +176,7 @@ public class RobotMultiSkillAgent : RobotAgent
         //penalize forward axis movement
         //_velocityPenalty = 2 * Mathf.Abs(GetVelocity());
         _currentVelocityForward = GetAverageVelocity();
-        _velocityPenalty = Mathf.Abs(1f - Mathf.Abs(_targetVelocityForward - _currentVelocityForward) * 1.3f);
+        _velocityReward = Mathf.Abs(1f - Mathf.Abs(_targetVelocityForward - _currentVelocityForward) * 1.3f);
         //_velocityPenalty *= 2;
         _uprightBonus =
             ((GetUprightBonus(hips) / 4)//6
@@ -204,7 +204,7 @@ public class RobotMultiSkillAgent : RobotAgent
             + _forwardBonus
             //+ _finalPhasePenalty
             + _timeAliveBonus
-            - _velocityPenalty
+            + _velocityReward
             //- _limbPenalty
             //- _effortPenalty
             - _heightPenalty
