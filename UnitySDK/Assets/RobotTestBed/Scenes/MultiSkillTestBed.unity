@@ -1365,7 +1365,7 @@ MonoBehaviour:
   resetParameters:
     resetParameters: []
   stepCount: 0
-  shouldCurriculumLearning: 1
+  shouldCurriculumLearning: 0
 --- !u!4 &1626997144
 Transform:
   m_ObjectHideFlags: 0
