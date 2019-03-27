@@ -1,4 +1,4 @@
-<img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/Cloud-Machine-Learning-Engine-Logo.svg"></img>
+### <img src="https://drive.google.com/uc?export=download&id=1_wptefZOG6gH0MrJRHPOMjylXuqET5EW"></img>
 # biped_robot
 
 > Our project is to develop a physically based bipedal
@@ -27,6 +27,7 @@ to move independently.
 * Checkout the Inference branch
 * Start Unity and load the Project
 * Click the playbutton and watch the result
+### <img src="https://drive.google.com/uc?export=download&id=12URH-zMOtkVV_hX-7qfcYL27OHKedGXD"></img>
 
 ### How to start the learning-process inside the editor
 * Checkout the learning branch
@@ -35,6 +36,7 @@ to move independently.
 ```sh
 mlagents-learn config/robot_config.yaml —run-id=NAME OF THE RUN ID —train
 ```
+
 
 ### How to start the learning-process with a build project
 * Checkout the learning branch
