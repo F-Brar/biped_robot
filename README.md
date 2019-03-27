@@ -27,7 +27,10 @@ to move independently.
 * Checkout the Inference branch
 * Start Unity and load the Project
 * Click the playbutton and watch the result
-### <img src="https://drive.google.com/uc?export=download&id=12URH-zMOtkVV_hX-7qfcYL27OHKedGXD"></img>
+###
+walking bots             |  running
+:-------------------------:|:-------------------------:
+![](https://drive.google.com/uc?export=download&id=12URH-zMOtkVV_hX-7qfcYL27OHKedGXD)  |  ![](https://drive.google.com/uc?export=download&id=141jXqijxTQV_hPamyMyHKh608aAtpfrb)
 
 ### How to start the learning-process inside the editor
 * Checkout the learning branch
