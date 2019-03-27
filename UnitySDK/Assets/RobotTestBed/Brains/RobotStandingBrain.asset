@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RobotStandingBrain
   m_EditorClassIdentifier: 
   brainParameters:
-    vectorObservationSize: 88
+    vectorObservationSize: 92
     numStackedVectorObservations: 1
     vectorActionSize: 15000000
     cameraResolutions: []
@@ -40,5 +40,5 @@ MonoBehaviour:
     - 
     - 
     vectorActionSpaceType: 1
-  model: {fileID: 11400000, guid: d10621634556ebb4a892b7ec3dbee769, type: 3}
+  model: {fileID: 11400000, guid: 828449a8a7623ba41b0e33e33e0cd54b, type: 3}
   inferenceDevice: 0

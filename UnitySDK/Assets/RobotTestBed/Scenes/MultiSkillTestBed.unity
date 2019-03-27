@@ -470,11 +470,6 @@ PrefabInstance:
       propertyPath: CameraTarget
       value: 
       objectReference: {fileID: 1628795730}
-    - target: {fileID: 2543176773027384878, guid: c017ba3de44c87b44a4ba3571d51fbd8,
-        type: 3}
-      propertyPath: ShowMonitor
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
 --- !u!1001 &443271840
@@ -1351,15 +1346,13 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 26a3a1998308de24a8985f2dd301cb67, type: 2}
     - {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
     - {fileID: 11400000, guid: bbe50d65f4ea4ea41b39815653053cf7, type: 2}
-    _brainsToControl:
-    - {fileID: 11400000, guid: 26a3a1998308de24a8985f2dd301cb67, type: 2}
-    - {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
+    _brainsToControl: []
   maxSteps: 0
   trainingConfiguration:
     width: 80
     height: 80
     qualityLevel: 1
-    timeScale: 20
+    timeScale: 15
     targetFrameRate: -1
   inferenceConfiguration:
     width: 1280
@@ -1370,7 +1363,7 @@ MonoBehaviour:
   resetParameters:
     resetParameters: []
   stepCount: 0
-  shouldCurriculumLearning: 1
+  shouldCurriculumLearning: 0
 --- !u!4 &1626997144
 Transform:
   m_ObjectHideFlags: 0
@@ -1399,7 +1392,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   curriculumList:
   - CurriculumName: STAND
-    mileStone: 7
+    mileStone: 4
     reductionPercentage: 0.2
     updateOnPercentage: 1
     initPropellingForce: 25
@@ -1411,7 +1404,7 @@ MonoBehaviour:
     expertReward: 0
     reward: 0
     _lesson: 0
-    minimumStepsToReach: 5000
+    minimumStepsToReach: 20000
     stepCount: 0
   - CurriculumName: WALK
     mileStone: 4
@@ -1426,7 +1419,7 @@ MonoBehaviour:
     expertReward: 0
     reward: 0
     _lesson: 0
-    minimumStepsToReach: 5000
+    minimumStepsToReach: 20000
     stepCount: 0
   shouldCurriculumLearning: 0
   academy: {fileID: 0}
