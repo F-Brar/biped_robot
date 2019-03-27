@@ -9,9 +9,10 @@ using System.Linq;
 public abstract class RobotAgent : Agent
 {
     [Tooltip("wether the agent should be reset")]
-    public bool terminateNever;
+    public bool terminateNever;     //set to true if the agent should not use its termination function
 
-    public GameObject CameraTarget;
+    [Tooltip("place Camera here to follow this agent in gameview")]
+    public GameObject CameraTarget; 
 
     [Header("Sensors")]
     public bool bothFeetDown;
@@ -19,7 +20,7 @@ public abstract class RobotAgent : Agent
     public bool isRightFootDown;
 
     [Header("The robots bodyparts")]
-    public Transform head;  //rigid bp - for measuring height
+    public Transform head;  //a robot does not need a head...
     public Transform hips;
     public Transform body;
     public Transform thighL;
@@ -29,21 +30,19 @@ public abstract class RobotAgent : Agent
     public Transform shinR;
     public Transform footR;
 
-    
 
+    //local vars
     [Tooltip("Reward value to set on termination")]
     /**< \brief Reward value to set on termination*/
     protected float OnTerminateRewardValue = -1;
-
-    //local vars
-    protected List<float> Actions;            //last action values
+    protected List<float> Actions;                      //last action values
     protected RobotJointDriveController jdController;
-    protected bool isNewDecisionStep;
-    protected int currentDecisionStep;
+    protected bool isNewDecisionStep;                   //signals when actions should be requested
+    protected int currentDecisionStep;                  //check if decisionstep threshold is reached
     protected Dictionary<string, Quaternion> BodyPartsToFocalRotation = new Dictionary<string, Quaternion>();  //use this to determine the initial axis
-    protected List<float> recentVelocity;
-    protected Vector3 _initialPosition;
-    protected bool phaseChange;
+    protected List<float> recentVelocity;       //velocity list to calculate average over last steps
+    protected Vector3 _initialPosition;         // intial position captured to calculate position deviation
+    protected bool phaseChange;                 // true when leg phase changes
 
     public override void InitializeAgent()
     {
@@ -87,7 +86,7 @@ public abstract class RobotAgent : Agent
 
 
     /// <summary>
-    /// Add relevant information on each body part to observations.
+    /// Collect relevant observations for each bodypart.
     /// </summary>
     public void CollectObservationBodyPart(RobotBodyPart bp)
     {
@@ -95,8 +94,8 @@ public abstract class RobotAgent : Agent
         AddVectorObs(bp.groundContact.touchingGround ? 1 : 0); // Is this bp touching the ground
         AddVectorObs(rb.velocity);
         AddVectorObs(rb.angularVelocity);
-        //Vector3 localPosRelToHips = hips.InverseTransformPoint(rb.position);
-        //AddVectorObs(localPosRelToHips);
+
+
         if (bp.rb.transform != footL && bp.rb.transform != footR && bp.rb.transform != hips)
         {
             AddVectorObs(bp.currentXNormalizedRot);
@@ -107,7 +106,7 @@ public abstract class RobotAgent : Agent
     }
 
     /// <summary>
-    /// Loop over body parts to add them to observation.
+    /// Agents basic Observations
     /// </summary>
     public override void CollectObservations()
     {
@@ -121,6 +120,7 @@ public abstract class RobotAgent : Agent
         AddVectorObs(body.forward);
         AddVectorObs(body.up);
 
+        //Loop over body parts to add them to observation.
         foreach (var bodyPart in jdController.robotBodyPartsDict.Values)
         {
             CollectObservationBodyPart(bodyPart);
@@ -140,6 +140,10 @@ public abstract class RobotAgent : Agent
         return GetTerminationOnAngle() || GetTerminationOnHeight();
     }
 
+    /// <summary>
+    /// returns true if agent is to height is below termination threshold
+    /// </summary>
+    /// <returns></returns>
     public virtual bool GetTerminationOnHeight()
     {
         var height = GetHeightPenalty(_terminationHeight);
@@ -147,6 +151,10 @@ public abstract class RobotAgent : Agent
         return endOnHeight;
     }
 
+    /// <summary>
+    /// returns true if agent is to angle is below termination threshold
+    /// </summary>
+    /// <returns></returns>
     public virtual bool GetTerminationOnAngle()
     {
         var angle = GetForwardBonus(hips);
@@ -155,7 +163,7 @@ public abstract class RobotAgent : Agent
     }
 
     /// <summary>
-    /// Apply the action vector sent by the communicator to the joints --> send back the skill reward
+    /// Apply the action vector sent by the communicator to the joints --> send back the skill reward; Action values have the range (-1.1)
     /// </summary>
     /// <param name="vectorAction"></param>
     /// <param name="textAction"></param>
@@ -175,6 +183,7 @@ public abstract class RobotAgent : Agent
         // Apply action to all relevant body parts. 
         if (isNewDecisionStep)
         {
+            //save actions to list (used to compute actuation effort):
             Actions = vectorAction
             .Select(x => x)
             .ToList();
@@ -202,6 +211,7 @@ public abstract class RobotAgent : Agent
         IncrementDecisionTimer();
         var hipsRB = jdController.robotBodyPartsDict[hips].rb;
 
+        //send reward to brain
         AddReward(
             _reward = GetSkillReward()
         );
@@ -225,6 +235,10 @@ public abstract class RobotAgent : Agent
         }
     }
 
+    /// <summary>
+    /// override to calculate reward
+    /// </summary>
+    /// <returns></returns>
     public virtual float GetSkillReward()
     {
         return _reward;
@@ -610,7 +624,7 @@ public abstract class RobotAgent : Agent
     }
 
     /// <summary>
-    /// return the phase bonus
+    /// return the phase bonus in a given frame
     /// </summary>
     /// <param name="min"></param>
     /// <param name="max"></param>
@@ -633,6 +647,10 @@ public abstract class RobotAgent : Agent
         return bonus;
     }
     
+    /// <summary>
+    /// calculate the final phasebonus based on gait cycle
+    /// </summary>
+    /// <returns></returns>
     internal float GetPhaseBonus()
     {
         bool noPhaseChange = true;

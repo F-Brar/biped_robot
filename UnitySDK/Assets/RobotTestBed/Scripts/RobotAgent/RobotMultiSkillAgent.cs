@@ -177,7 +177,7 @@ public class RobotMultiSkillAgent : RobotAgent
         //_velocityPenalty = 2 * Mathf.Abs(GetVelocity());
         _currentVelocityForward = GetAverageVelocity();
         _velocityReward = Mathf.Abs(1f - Mathf.Abs(_targetVelocityForward - _currentVelocityForward) * 1.3f);
-        //_velocityPenalty *= 2;
+        _velocityPenalty *= 1.5f;
         _uprightBonus =
             ((GetUprightBonus(hips) / 4)//6
             + (GetUprightBonus(body) / 4)
@@ -188,10 +188,10 @@ public class RobotMultiSkillAgent : RobotAgent
             + (GetForwardBonus(body) / 4)
             + (GetForwardBonus(footL) / 6)
             + (GetForwardBonus(footR) / 6));
-        //float effort = GetEffort();
+        float effort = GetEffort();
         //_finalPhasePenalty = GetPhaseBonus();
         _timeAliveBonus += 0.0001f;
-        //_effortPenalty = 1e-2f * (float)effort;
+        _effortPenalty = 1e-2f * (float)effort;
         _heightPenalty = GetHeightPenalty(1.3f)/2;  //height of body
         //_deviationPenalty = GetAxisDeviation(hips.position, 0.1f);
         //float leftThighPenalty = Mathf.Abs(GetForwardBonus(thighL));
@@ -206,7 +206,7 @@ public class RobotMultiSkillAgent : RobotAgent
             + _timeAliveBonus
             + _velocityReward
             //- _limbPenalty
-            //- _effortPenalty
+            - _effortPenalty
             - _heightPenalty
             //- _deviationPenalty
             );
@@ -215,6 +215,16 @@ public class RobotMultiSkillAgent : RobotAgent
         
     }
 
+    /// <summary>
+    ///  Encourage uprightness of hips and body.
+    ///  Encourage targetvelocity
+    ///  Encourage natural gait and phase
+    ///  Encourage staying alive
+    ///  penalize synchron leg movement
+    ///  penalize high actuation
+    ///  penalize joint values at limit
+    /// </summary>
+    /// <returns></returns>
     float GetWalkerReward()
     {
         float __reward = 0;
@@ -224,33 +234,29 @@ public class RobotMultiSkillAgent : RobotAgent
         _currentVelocityForward = GetAverageVelocity();
         _velocityReward = 2 * ( 1f - Mathf.Abs(_targetVelocityForward - _currentVelocityForward));
         
-        // Encourage uprightness of hips and body.
-        
+        // 
         _uprightBonus =
             ((GetUprightBonus(hips) / 4)//6
             + (GetUprightBonus(body) / 4));
         _forwardBonus =
             ((GetForwardBonus(hips) / 4)//6
             + (GetForwardBonus(body) / 4));
-        //bonus for async phase:
+        
         _finalPhaseBonus = GetPhaseBonus();
-        //_deviationPenalty = GetAxisDeviation(hips.position, 0.1f);
         _timeAliveBonus += 0.0001f;
-    // penalize synchron leg movement
-    float leftThighPenalty = Mathf.Abs(GetForwardBonus(thighL));
+        float leftThighPenalty = Mathf.Abs(GetForwardBonus(thighL));
         float rightThighPenalty = Mathf.Abs(GetBackwardsBonus(thighR));
         _limbPenalty = leftThighPenalty + rightThighPenalty;
         _limbPenalty = Mathf.Min(0.5f, _limbPenalty);   //penalty for moving both legs in the same direction
-
         float effort = GetEffort(new string[] {shinL.name,shinR.name});
         _effortPenalty = 1e-2f * (float)effort;
         _jointsAtLimitPenalty = GetJointsAtLimitPenalty();
         _heightPenalty = GetHeightPenalty(1.3f);  //height of body
         //_deviationPenalty = GetAxisDeviation(hips.position, 0.1f);
 
-        __reward = (
-              //_velocityReward
 
+        //Add everything to final stepreward
+        __reward = (
              _velocityReward
             + _uprightBonus
             + _forwardBonus
