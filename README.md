@@ -5,6 +5,7 @@
 The current version includes both an Inference branch which features the latest version of a trained policy,
 as well as a Training branch, which holds the training configuration.
 Follow the installation instructions below to explore the project on your own.
+Checkout the threeSkills branch to see a exemplary implementation of using more than two skills. (Only in inference mode)
 
 ### Requirements
 - Unity version 2018.3.7f1
@@ -41,7 +42,6 @@ walking bots; three skills |  running
 ```sh
 mlagents-learn config/robot_config.yaml --train --run-id=<run-id> 
 ```
-
 
 ### How to start the learning-process with a build project
 * Checkout the learning branch
