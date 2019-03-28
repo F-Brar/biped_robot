@@ -107,7 +107,7 @@ public class RobotMultiSkillAgent : RobotAgent
                 _terminationAngle = .25f;
                 break;
             case Skills.Walk:
-                _targetVelocityForward = .4f;
+                _targetVelocityForward = .55f;
                 recentVelocity = new List<float>();
                 GiveBrain(_skill.skillBrain);
                 _terminationHeight = .7f;
@@ -216,44 +216,47 @@ public class RobotMultiSkillAgent : RobotAgent
     }
 
     /// <summary>
-    ///  Encourage uprightness of hips and body.
+    /// Calculates the final reward with the following objectives
     ///  Encourage targetvelocity
+    ///  Encourage uprightness of hips and body.
     ///  Encourage natural gait and phase
     ///  Encourage staying alive
     ///  penalize synchron leg movement
     ///  penalize high actuation
     ///  penalize joint values at limit
+    ///  penalize falling below height treshold
     /// </summary>
     /// <returns></returns>
     float GetWalkerReward()
     {
         float __reward = 0;
-
-        //_velocity = GetVelocity();
-        //_velocity = _velocity;
+        //
         _currentVelocityForward = GetAverageVelocity();
         _velocityReward = 2 * ( 1f - Mathf.Abs(_targetVelocityForward - _currentVelocityForward));
-        
-        // 
+        //
         _uprightBonus =
             ((GetUprightBonus(hips) / 4)//6
             + (GetUprightBonus(body) / 4));
         _forwardBonus =
             ((GetForwardBonus(hips) / 4)//6
             + (GetForwardBonus(body) / 4));
-        
+        //
         _finalPhaseBonus = GetPhaseBonus();
+        //
         _timeAliveBonus += 0.0001f;
+        //
         float leftThighPenalty = Mathf.Abs(GetForwardBonus(thighL));
         float rightThighPenalty = Mathf.Abs(GetBackwardsBonus(thighR));
         _limbPenalty = leftThighPenalty + rightThighPenalty;
         _limbPenalty = Mathf.Min(0.5f, _limbPenalty);   //penalty for moving both legs in the same direction
+        //
         float effort = GetEffort(new string[] {shinL.name,shinR.name});
         _effortPenalty = 1e-2f * (float)effort;
+        //
         _jointsAtLimitPenalty = GetJointsAtLimitPenalty();
+        //
         _heightPenalty = GetHeightPenalty(1.3f);  //height of body
         //_deviationPenalty = GetAxisDeviation(hips.position, 0.1f);
-
 
         //Add everything to final stepreward
         __reward = (
@@ -268,8 +271,6 @@ public class RobotMultiSkillAgent : RobotAgent
             - _jointsAtLimitPenalty
             - _heightPenalty
             );
-
-        
 
         return __reward;
     }
@@ -294,6 +295,9 @@ public class RobotMultiSkillAgent : RobotAgent
         recentVelocity = new List<float>();
     }
 
+    /// <summary>
+    /// Reset the relevant curriculum values for a new rollout
+    /// </summary>
     public void ResetCurriculumRollout()
     {
         _timeAlive = 0;
@@ -301,6 +305,10 @@ public class RobotMultiSkillAgent : RobotAgent
         curriculumController.ResetRollout();
     }
 
+    /// <summary>
+    /// returns the agents active skill
+    /// </summary>
+    /// <returns></returns>
     public int GetActiveSkill()
     {
         return activeSkill;

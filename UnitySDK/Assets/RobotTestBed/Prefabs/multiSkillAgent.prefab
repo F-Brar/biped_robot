@@ -230,7 +230,7 @@ MonoBehaviour:
   useMultiSkill: 1
   stepsToTrainWalk: 0
   stepsToTrainStand: 0
-  playerControl: 1
+  playerControl: 0
   Action: 0
   _stepCountTillSkill: 0
 --- !u!1 &57454850
