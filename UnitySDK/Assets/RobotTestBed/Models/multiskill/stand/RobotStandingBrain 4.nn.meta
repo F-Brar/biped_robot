@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: 969649bbc0ad7ee4fb94db3c97aa4673
+ScriptedImporter:
+  fileIDToRecycleName:
+    11400000: Assets/RobotTestBed/Models/multiskill/stand/RobotStandingBrain 4.nn
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 83221ad3db87f4b3b91b041047cb2bc5, type: 3}

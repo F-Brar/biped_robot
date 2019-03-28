@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: 3c053dc99e2e9f14e992b31b0b48f707
+ScriptedImporter:
+  fileIDToRecycleName:
+    11400000: Assets/RobotTestBed/Models/stand/RobotStandingBrain 2.nn
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 83221ad3db87f4b3b91b041047cb2bc5, type: 3}

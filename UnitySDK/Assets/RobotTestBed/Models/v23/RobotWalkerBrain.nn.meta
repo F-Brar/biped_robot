@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: c42ca5d2d083ce349b9760adf9442f96
+ScriptedImporter:
+  fileIDToRecycleName:
+    11400000: Assets/RobotTestBed/Models/v23/RobotWalkerBrain.nn
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 83221ad3db87f4b3b91b041047cb2bc5, type: 3}

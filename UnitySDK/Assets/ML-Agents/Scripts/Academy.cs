@@ -179,7 +179,7 @@ namespace MLAgents
         /// The number of steps completed within the current episide. Incremented
         /// each time a step is taken in the environment. Is reset to 0 during 
         /// <see cref="AcademyReset"/>.
-        int stepCount;
+        public int stepCount;
 
         /// Flag that indicates whether the inference/training mode of the
         /// environment was switched by the external Brain. This impacts the
