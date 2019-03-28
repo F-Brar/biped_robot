@@ -1,4 +1,4 @@
-### <img src="https://drive.google.com/uc?export=download&id=1_wptefZOG6gH0MrJRHPOMjylXuqET5EW"></img>
+### <img src="./cycle_banner_02.PNG"></img>
 # biped_robot
 
 >This project leverages the Unity ML-Agents to teach a physics based character various locomotion.
@@ -6,7 +6,7 @@ The current version includes both an Inference branch which features the latest 
 as well as a Training branch, which holds the training configuration.
 Follow the installation instructions below to explore the project on your own.
 
-![](https://drive.google.com/file/d/1V_eEfGcrBemsh_FHWkCPWw_WyhY2WZ7L/view?usp=sharing)
+![](./cycle_banner_02.PNG)
 
 ### Requirements
 - Unity version 2018.3.7f1
@@ -31,9 +31,9 @@ Follow the installation instructions below to explore the project on your own.
 * This branch features three skills: walking backwards; walking forward; standing still
 * Skills can be controlled by the 'S' and 'W' keys on the keyboard
 ###
-walking bots             |  running
+walking bots; three skills |  running
 :-------------------------:|:-------------------------:
-![](https://drive.google.com/uc?export=download&id=12URH-zMOtkVV_hX-7qfcYL27OHKedGXD)  |  ![](https://drive.google.com/uc?export=download&id=141jXqijxTQV_hPamyMyHKh608aAtpfrb)
+![](./threeSkills.gif)  |  ![](./marathonRob006.gif)
 
 ### How to start the learning-process inside the editor
 * Checkout the learning branch
@@ -56,4 +56,4 @@ mlagents-learn config/robot_config.yaml --env=<full/path/to/UnityEnvironment.exe
 
 Outtakes:
 
-![](https://drive.google.com/file/d/1aJiaq6BmjECC2FPUEsu0tkxxqwaZ4G5d/view?usp=sharing)
+![](./biped_robot_02.gif)
