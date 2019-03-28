@@ -52,6 +52,14 @@ mlagents-learn config/robot_config.yaml --train --run-id=<run-id>
 mlagents-learn config/robot_config.yaml --env=<full/path/to/UnityEnvironment.exe> --train --run-id=<run-id>
 ```
 
+### Curriculum Learning:
+turn on and off by checking the field on the LocoAcademy object:
+![](./resources/glob_curr.PNG)
+
+Alter the Curriculum values by changing the relevant values on the GlobaleCurriculumController (lives in the LocoAcademy) 
+
+![](./resources/editor_globalcurriculum.PNG)
+
 ### Outtakes:
 
 ![](./resources/biped_robot_02.gif)
