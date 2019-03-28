@@ -6,8 +6,6 @@ The current version includes both an Inference branch which features the latest 
 as well as a Training branch, which holds the training configuration.
 Follow the installation instructions below to explore the project on your own.
 
-![](./resources/cycle_banner_02.PNG)
-
 ### Requirements
 - Unity version 2018.3.7f1
 - ML-Agents version 0.7.0
@@ -54,6 +52,9 @@ mlagents-learn config/robot_config.yaml --train --run-id=<run-id>
 mlagents-learn config/robot_config.yaml --env=<full/path/to/UnityEnvironment.exe> --train --run-id=<run-id>
 ```
 
-Outtakes:
+### Outtakes:
 
 ![](./resources/biped_robot_02.gif)
+
+
+![](./resources/standingTest002.gif)
