@@ -174,10 +174,12 @@ public class RobotMultiSkillAgent : RobotAgent
     {
         float __reward = 0;
         //penalize forward axis movement
-        _velocityPenalty = 3 * Mathf.Abs(GetVelocity());
-        
-        //_currentVelocityForward = GetAverageVelocity();
-        //_velocityReward = Mathf.Abs(1f - Mathf.Abs(_targetVelocityForward - _currentVelocityForward) * 1.3f);
+        //_velocityPenalty = 3 * Mathf.Abs(GetVelocity());
+
+        _currentVelocityForward = GetAverageVelocity();
+        //_velocityReward = Mathf.Abs(1f - Mathf.Abs(_targetVelocityForward - Mathf.Abs(_currentVelocityForward)) * 1.3f);
+        _velocityReward = 2 * (1f - Mathf.Abs(_targetVelocityForward - _currentVelocityForward));
+
         _uprightBonus =
             ((GetUprightBonus(hips) / 4)//6
             + (GetUprightBonus(body) / 4)
@@ -191,8 +193,8 @@ public class RobotMultiSkillAgent : RobotAgent
         float effort = GetEffort();
         //_finalPhasePenalty = GetPhaseBonus();
         _timeAliveBonus += 0.0001f;
-        _effortPenalty = 1e-2f * (float)effort;
-        _heightPenalty = GetHeightPenalty(1.3f)/2;  //height of body
+        _effortPenalty = 1e-1f * (float)effort;
+        _heightPenalty = 1.5f * GetHeightPenalty(1.3f);  //height of body
         //_deviationPenalty = GetAxisDeviation(hips.position, 0.1f);
         //float leftThighPenalty = Mathf.Abs(GetForwardBonus(thighL));
         //float rightThighPenalty = Mathf.Abs(GetForwardBonus(thighR));
@@ -204,7 +206,7 @@ public class RobotMultiSkillAgent : RobotAgent
             + _forwardBonus
             //+ _finalPhasePenalty
             + _timeAliveBonus
-            - _velocityPenalty
+            + _velocityReward
             //- _limbPenalty
             - _effortPenalty
             - _heightPenalty

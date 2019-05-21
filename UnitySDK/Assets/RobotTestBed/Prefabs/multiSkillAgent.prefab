@@ -202,9 +202,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b31f96fd6fed26f439a0745b2e3ccee0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxJointSpring: 1500
-  jointDampen: 50
-  maxJointForceLimit: 3000
+  maxJointSpring: 950
+  jointDampen: 55
+  maxJointForceLimit: 2000
   robotBodyPartsList: []
 --- !u!114 &293561274
 MonoBehaviour:
@@ -227,9 +227,9 @@ MonoBehaviour:
     numberOfActionsBetweenDecisions: 5
   playerBrain: {fileID: 11400000, guid: 7bb1c95e70a454645aaab6e717aefcf6, type: 2}
   heuristicBrain: {fileID: 11400000, guid: bbe50d65f4ea4ea41b39815653053cf7, type: 2}
-  useMultiSkill: 1
+  useMultiSkill: 0
   stepsToTrainWalk: 0
-  stepsToTrainStand: 0
+  stepsToTrainStand: 200000000
   playerControl: 0
   Action: 0
   _stepCountTillSkill: 0
@@ -2240,7 +2240,7 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_AngularYLimit:
-    limit: 20
+    limit: 40
     bounciness: 0
     contactDistance: 0
   m_AngularZLimit:
@@ -2542,7 +2542,7 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_AngularYLimit:
-    limit: 20
+    limit: 40
     bounciness: 0
     contactDistance: 0
   m_AngularZLimit:
@@ -3114,18 +3114,18 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: -60
+    limit: -65
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 20
+    limit: 80
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
     spring: 0
     damper: 0
   m_AngularYLimit:
-    limit: 15
+    limit: 30
     bounciness: 0
     contactDistance: 0
   m_AngularZLimit:

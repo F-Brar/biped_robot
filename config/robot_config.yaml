@@ -28,7 +28,7 @@ BipedRobotLearning:
     batch_size: 2048
     buffer_size: 20480
     gamma: 0.995
-    max_steps: 2e6
+    max_steps: 3e6
     summary_freq: 3000
     num_layers: 3
     hidden_units: 512
