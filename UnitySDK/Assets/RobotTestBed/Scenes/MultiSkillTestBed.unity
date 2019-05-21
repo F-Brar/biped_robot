@@ -125,7 +125,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -195,6 +195,14 @@ PrefabInstance:
       propertyPath: m_ConnectedAnchor.x
       value: -0.0000001937151
       objectReference: {fileID: 0}
+    - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: stepsToTrainStand
+      value: 200000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: useMultiSkill
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
 --- !u!1001 &125955773
@@ -210,7 +218,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -316,6 +324,14 @@ PrefabInstance:
     - target: {fileID: 1818394054, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: stepsToTrainStand
+      value: 200000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: useMultiSkill
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
@@ -472,7 +488,15 @@ PrefabInstance:
       objectReference: {fileID: 1628795730}
     - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: playerControl
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: stepsToTrainStand
+      value: 200000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: useMultiSkill
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
@@ -489,7 +513,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -559,6 +583,14 @@ PrefabInstance:
       propertyPath: m_ConnectedAnchor.x
       value: -0.0000001937151
       objectReference: {fileID: 0}
+    - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: stepsToTrainStand
+      value: 200000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: useMultiSkill
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
 --- !u!1001 &761227139
@@ -574,7 +606,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -643,6 +675,14 @@ PrefabInstance:
     - target: {fileID: 1431006818, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_ConnectedAnchor.x
       value: -0.0000001937151
+      objectReference: {fileID: 0}
+    - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: stepsToTrainStand
+      value: 200000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: useMultiSkill
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
@@ -813,7 +853,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -882,6 +922,14 @@ PrefabInstance:
     - target: {fileID: 1431006818, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_ConnectedAnchor.x
       value: -0.0000001937151
+      objectReference: {fileID: 0}
+    - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: stepsToTrainStand
+      value: 200000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: useMultiSkill
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
@@ -1068,7 +1116,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1170,6 +1218,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: stepsToTrainStand
+      value: 200000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: useMultiSkill
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
 --- !u!1 &1402675351
@@ -1243,7 +1299,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1313,6 +1369,14 @@ PrefabInstance:
       propertyPath: m_ConnectedAnchor.x
       value: -0.0000001937151
       objectReference: {fileID: 0}
+    - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: stepsToTrainStand
+      value: 200000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: useMultiSkill
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
 --- !u!1 &1626997142
@@ -1350,7 +1414,8 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 26a3a1998308de24a8985f2dd301cb67, type: 2}
     - {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
     - {fileID: 11400000, guid: bbe50d65f4ea4ea41b39815653053cf7, type: 2}
-    _brainsToControl: []
+    _brainsToControl:
+    - {fileID: 11400000, guid: 26a3a1998308de24a8985f2dd301cb67, type: 2}
   maxSteps: 0
   trainingConfiguration:
     width: 80
@@ -1367,7 +1432,7 @@ MonoBehaviour:
   resetParameters:
     resetParameters: []
   stepCount: 0
-  shouldCurriculumLearning: 1
+  shouldCurriculumLearning: 0
 --- !u!4 &1626997144
 Transform:
   m_ObjectHideFlags: 0
@@ -1541,7 +1606,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1611,6 +1676,14 @@ PrefabInstance:
       propertyPath: m_ConnectedAnchor.x
       value: -0.0000001937151
       objectReference: {fileID: 0}
+    - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: stepsToTrainStand
+      value: 200000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: useMultiSkill
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
 --- !u!1001 &1747879353
@@ -1626,7 +1699,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 45583559, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 45583560, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1695,6 +1768,14 @@ PrefabInstance:
     - target: {fileID: 1431006818, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
       propertyPath: m_ConnectedAnchor.x
       value: -0.0000001937151
+      objectReference: {fileID: 0}
+    - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: stepsToTrainStand
+      value: 200000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 293561274, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
+      propertyPath: useMultiSkill
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c017ba3de44c87b44a4ba3571d51fbd8, type: 3}
