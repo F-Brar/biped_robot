@@ -9,6 +9,7 @@ using UnityEngine;
 public class VirtualAssistant : MonoBehaviour
 {
     public Rigidbody hips;
+    public Rigidbody body;
     [Tooltip("adjusted through curriculum learning")]
     public float propellingForce;       //propels forward velocity
     public float lateralBalanceForce;   //lateral balance
@@ -17,6 +18,7 @@ public class VirtualAssistant : MonoBehaviour
     private void Awake()
     {
         hips = transform.Find("hips").gameObject.GetComponent<Rigidbody>();
+        body = transform.Find("body").gameObject.GetComponent<Rigidbody>();
     }
 
     // fixedUpdate is called every physics step
@@ -25,23 +27,23 @@ public class VirtualAssistant : MonoBehaviour
         var localVel = transform.InverseTransformDirection(hips.velocity);
         if (localVel.z <= -0.05f)
         {
-            hips.AddForce(hips.transform.forward * propellingForce, ForceMode.Acceleration);
+            body.AddForce(hips.transform.forward * propellingForce, ForceMode.Acceleration);
         }
         //frontal stability at 70% for standing agent
         else if(localVel.z >= .1f)
         {
-            hips.AddForce(-hips.transform.forward * breakForce, ForceMode.Acceleration);
+            body.AddForce(-hips.transform.forward * breakForce, ForceMode.Acceleration);
         }
 
 
         if(localVel.x <= -.0f)
         {
-            hips.AddForce(hips.transform.right * lateralBalanceForce, ForceMode.Acceleration);
+            body.AddForce(hips.transform.right * lateralBalanceForce, ForceMode.Acceleration);
         }
         else if(localVel.x >= .0f)
         {
 
-            hips.AddForce( - hips.transform.right * lateralBalanceForce, ForceMode.Acceleration);
+            body.AddForce( - hips.transform.right * lateralBalanceForce, ForceMode.Acceleration);
         }
         
     }

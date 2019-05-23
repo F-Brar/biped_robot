@@ -107,7 +107,7 @@ public class RobotMultiSkillAgent : RobotAgent
                 _terminationAngle = .25f;
                 break;
             case Skills.Walk:
-                _targetVelocityForward = .55f;
+                _targetVelocityForward = 0.6f;
                 recentVelocity = new List<float>();
                 GiveBrain(_skill.skillBrain);
                 _terminationHeight = .7f;
@@ -234,7 +234,7 @@ public class RobotMultiSkillAgent : RobotAgent
         float __reward = 0;
         //
         _currentVelocityForward = GetAverageVelocity();
-        _velocityReward = 2 * ( 1f - Mathf.Abs(_targetVelocityForward - _currentVelocityForward));
+        _velocityReward = 1f - Mathf.Abs(_targetVelocityForward - _currentVelocityForward) * 2;
         //
         _uprightBonus =
             ((GetUprightBonus(hips) / 4)//6
