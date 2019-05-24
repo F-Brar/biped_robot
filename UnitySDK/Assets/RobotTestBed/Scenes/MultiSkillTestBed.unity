@@ -1027,8 +1027,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 26a3a1998308de24a8985f2dd301cb67, type: 2}
     - {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
     - {fileID: 11400000, guid: bbe50d65f4ea4ea41b39815653053cf7, type: 2}
-    _brainsToControl:
-    - {fileID: 11400000, guid: b0d177cf08984044c976086afa07f2ec, type: 2}
+    _brainsToControl: []
   maxSteps: 0
   trainingConfiguration:
     width: 80
@@ -1089,7 +1088,7 @@ MonoBehaviour:
     minimumStepsToReach: 20000
     stepCount: 0
   - CurriculumName: WALK
-    mileStone: 4
+    mileStone: 5
     reductionPercentage: 0.1
     updateOnPercentage: 1
     initPropellingForce: 25
@@ -1101,7 +1100,7 @@ MonoBehaviour:
     expertReward: 0
     reward: 0
     _lesson: 0
-    minimumStepsToReach: 20000
+    minimumStepsToReach: 30000
     stepCount: 0
   shouldCurriculumLearning: 0
   academy: {fileID: 0}
